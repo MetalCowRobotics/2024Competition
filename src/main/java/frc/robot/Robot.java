@@ -50,7 +50,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {}
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    s_Swerve.periodic();
+  }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
@@ -73,8 +75,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    configureButtonBindings();
-    m_TeleopSwerve.execute();
+    // configureButtonBindings();
+    // m_TeleopSwerve.execute();
   }
 
   @Override
