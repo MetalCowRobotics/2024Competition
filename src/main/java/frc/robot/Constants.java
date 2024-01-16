@@ -19,7 +19,7 @@ public final class Constants {
         public static final int pigeonID = 14;
 
         public static final COTSTalonFXSwerveConstants chosenModule =  //TODO: This must be tuned to specific robot
-        COTSTalonFXSwerveConstants.SDS.MK4i.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L3);
+        COTSTalonFXSwerveConstants.SDS.MK4.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L3);
 
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(19.50); //TODO: This must be tuned to specific robot
@@ -46,13 +46,13 @@ public final class Constants {
         public static final SensorDirectionValue cancoderInvert = chosenModule.cancoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 25;
-        public static final int angleCurrentThreshold = 40;
+        public static final int angleCurrentLimit = 15;
+        public static final int angleCurrentThreshold = 20;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
-        public static final int driveCurrentThreshold = 60;
+        public static final int driveCurrentLimit = 15;
+        public static final int driveCurrentThreshold = 30;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
@@ -62,12 +62,13 @@ public final class Constants {
         public static final double closedLoopRamp = 0.0;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = chosenModule.angleKP;
+       // public static final double angleKP = chosenModule.angleKP;
+        public static final double angleKP = 10;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.01; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
@@ -79,9 +80,9 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 1.5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 0; //TODO: This must be tuned to specific robot
         /** Radians per Second */
-        public static final double maxAngularVelocity = 5.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = (3 * Math.PI) / 2; //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;

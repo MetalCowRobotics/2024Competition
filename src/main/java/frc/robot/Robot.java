@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -20,7 +21,7 @@ public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
 
   /* Controllers */
-    private final XboxController driver = new XboxController(0);
+    private final Joystick driver = new Joystick(0);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
      // () -> robotCentric.getAsBoolean()
-      () -> false
+      () -> true
     );
       
   /**
