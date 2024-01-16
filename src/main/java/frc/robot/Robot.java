@@ -39,7 +39,8 @@ public class Robot extends TimedRobot {
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
-      () -> robotCentric.getAsBoolean()
+     // () -> robotCentric.getAsBoolean()
+      () -> false
     );
       
   /**
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    s_Swerve.periodic();
+    m_TeleopSwerve.getValues();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -76,7 +77,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // configureButtonBindings();
-    // m_TeleopSwerve.execute();
+    m_TeleopSwerve.execute();
   }
 
   @Override
