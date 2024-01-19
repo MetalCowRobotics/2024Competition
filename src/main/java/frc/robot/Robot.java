@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.TeleopSwerve;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
 
 /**
@@ -28,21 +28,15 @@ public class Robot extends TimedRobot {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
+    private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-
-    private final TeleopSwerve m_TeleopSwerve = new TeleopSwerve(
-      s_Swerve, 
-      () -> -driver.getRawAxis(translationAxis), 
-      () -> -driver.getRawAxis(strafeAxis), 
-      () -> -driver.getRawAxis(rotationAxis), 
-      () -> false
-    );
       
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -50,12 +44,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_TeleopSwerve.musicInit();
+    s_Swerve.musicInit();
   }
 
   @Override
   public void robotPeriodic() {
-    m_TeleopSwerve.getValues();
+    s_Swerve.periodicValues();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -80,7 +74,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
-    m_TeleopSwerve.execute();
+
+    s_Swerve.teleopSwerve(
+      () -> -driver.getRawAxis(translationAxis), 
+      () -> -driver.getRawAxis(strafeAxis), 
+      () -> -driver.getRawAxis(rotationAxis), 
+      () -> false /* Never Robot-Oriented */
+    );
+
   }
 
   @Override
@@ -96,7 +97,17 @@ public class Robot extends TimedRobot {
     }
 
     if (playMusic.getAsBoolean()) {
-      m_TeleopSwerve.musicPlay();
+      s_Swerve.musicPlay();
+    }
+
+    if (crawl.getAsBoolean()) {
+      s_Swerve.setCrawl();
+    }
+    else if (sprint.getAsBoolean()) {
+      s_Swerve.setSprint();
+    }
+    else {
+      s_Swerve.setBase();
     }
   }
 }
