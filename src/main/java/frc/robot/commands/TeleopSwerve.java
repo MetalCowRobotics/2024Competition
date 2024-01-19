@@ -41,14 +41,21 @@ public class TeleopSwerve extends Command {
         /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-            //new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
             rotationVal * Constants.Swerve.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
-            true
+            false
         );
     }
 
     public void getValues() {
         s_Swerve.periodic();
+    }
+
+    public void musicInit() {
+        s_Swerve.musicInit();
+    }
+
+    public void musicPlay() {
+        s_Swerve.musicPlay();
     }
 }

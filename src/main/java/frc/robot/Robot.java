@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     /* Subsystems */
@@ -40,8 +41,7 @@ public class Robot extends TimedRobot {
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
-     // () -> robotCentric.getAsBoolean()
-      () -> true
+      () -> false
     );
       
   /**
@@ -49,7 +49,9 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    m_TeleopSwerve.musicInit();
+  }
 
   @Override
   public void robotPeriodic() {
@@ -77,7 +79,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // configureButtonBindings();
+    configureButtonBindings();
     m_TeleopSwerve.execute();
   }
 
@@ -89,8 +91,12 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   private void configureButtonBindings() {
-    if (zeroGyro.getAsBoolean() == true) {
+    if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
+    }
+
+    if (playMusic.getAsBoolean()) {
+      m_TeleopSwerve.musicPlay();
     }
   }
 }
