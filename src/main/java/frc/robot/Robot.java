@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Intake s_Intake = new Intake(12,15);
       
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -97,9 +99,8 @@ public class Robot extends TimedRobot {
     }
 
     if (playMusic.getAsBoolean()) {
-      s_Swerve.musicPlay();
+      s_Intake.start(1);
     }
-
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
     }
