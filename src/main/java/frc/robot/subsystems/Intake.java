@@ -15,9 +15,9 @@ public class Intake {
         mot2 = new CANSparkMax(id2, CANSparkLowLevel.MotorType.kBrushless);
     }
 
-    public void start(int speed){
-        mot1.set(-speed);
-        mot2.set(speed);
+    public void start(double speed){
+        mot1.set(speed);
+        mot2.set(-speed);
     }
     public void stop(){
         mot1.set(0);
