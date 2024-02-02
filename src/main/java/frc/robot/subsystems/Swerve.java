@@ -5,37 +5,34 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Vision;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class Swerve {
-    public SwerveDriveOdometry swerveOdometry;
+    public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    public Transform3d robotToCamera = new Transform3d();
-    public PhotonCamera camera = new PhotonCamera("MicrosoftLifeCamHD-3000");
-    public PhotonPipelineResult pipeline = new PhotonPipelineResult();
+
+    private Vision m_vision = new Vision();
+    Pose2d apriltagWithGyro = new Pose2d();
+    Field2d poseEstimateField2d = new Field2d();
 
     private final double accelerationTime = 0.6;
     private double speedMultiplier = 1;
@@ -58,8 +55,6 @@ public class Swerve {
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
         
-        
-
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
             new SwerveModule(1, Constants.Swerve.Mod1.constants),
@@ -67,7 +62,7 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -148,11 +143,11 @@ public class Swerve {
     }
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return swervePoseEstimator.getEstimatedPosition();
     }
 
     public void setPose(Pose2d pose) {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
     public Rotation2d getHeading(){
@@ -160,11 +155,11 @@ public class Swerve {
     }
 
     public void setHeading(Rotation2d heading){
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
+        swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
     public void zeroGyro(){
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+        swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
     public Rotation2d getGyroYaw() {
@@ -174,6 +169,13 @@ public class Swerve {
     public void resetModulesToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
+        }
+    }
+
+    public void resetPoseEstimatorToAprilTag() {
+        m_vision.periodic();
+        if (m_vision.hasTargets()) {
+            swervePoseEstimator.resetPosition(m_vision.getAprilTagGyroYaw(), getModulePositions(), m_vision.getGlobalPoseEstimate());
         }
     }
 
@@ -202,7 +204,7 @@ public class Swerve {
     }
 
     public void periodicValues(){
-        swerveOdometry.update(getGyroYaw(), getModulePositions());
+        swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -254,5 +256,18 @@ public class Swerve {
             true, 
             false
         );
+    }
+
+    public void visionPeriodic() {
+        m_vision.periodic();
+        if (m_vision.hasTargets()) {
+            apriltagWithGyro = new Pose2d(new Translation2d(m_vision.getGlobalPoseEstimate().getTranslation().getX(), m_vision.getGlobalPoseEstimate().getTranslation().getY()), getPose().getRotation());
+            swervePoseEstimator.addVisionMeasurement(apriltagWithGyro, m_vision.getTimestampSeconds());
+            SmartDashboard.putBoolean("HasVision", true);
+        }
+        SmartDashboard.putNumber("AprilTag X (m)", swervePoseEstimator.getEstimatedPosition().getX());
+        SmartDashboard.putNumber("AprilTag Y (m)", swervePoseEstimator.getEstimatedPosition().getY());
+        SmartDashboard.putNumber("AprilTag Angle (°)", swervePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+
     }
 }
