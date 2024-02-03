@@ -146,17 +146,17 @@ public class Swerve {
         speedMultiplier = 1;
     }
 
-    public void musicInit() {
-        for(SwerveModule mod : mSwerveMods) {
-            mod.musicInit();
-        }
-    }
+    // public void musicInit() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicInit();
+    //     }
+    // }
 
-    public void musicPlay() {
-        for(SwerveModule mod : mSwerveMods) {
-            mod.musicPlay();
-        }
-    }
+    // public void musicPlay() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicPlay();
+    //     }
+    // }
 
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
