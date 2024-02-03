@@ -174,7 +174,7 @@ public class Swerve {
     public void resetPoseEstimatorToAprilTag() {
         m_vision.periodic();
         if (m_vision.hasTargets()) {
-            swervePoseEstimator.resetPosition(m_vision.getAprilTagGyroYaw(), getModulePositions(), m_vision.getGlobalPoseEstimate());
+            swervePoseEstimator.resetPosition(m_vision.getAprilTagGyroYaw(), getModulePositions(), m_vision.getaprilTagPoseEstimate());
         }
     }
 
@@ -260,7 +260,7 @@ public class Swerve {
     public void visionPeriodic() {
         m_vision.periodic();
         if (m_vision.hasTargets()) {
-            apriltagWithGyro = new Pose2d(new Translation2d(m_vision.getGlobalPoseEstimate().getTranslation().getX(), m_vision.getGlobalPoseEstimate().getTranslation().getY()), getPose().getRotation());
+            apriltagWithGyro = new Pose2d(new Translation2d(m_vision.getaprilTagPoseEstimate().getTranslation().getX(), m_vision.getaprilTagPoseEstimate().getTranslation().getY()), getPose().getRotation());
             swervePoseEstimator.addVisionMeasurement(apriltagWithGyro, m_vision.getTimestampSeconds());
             SmartDashboard.putBoolean("HasVision", true);
         }
