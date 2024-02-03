@@ -17,7 +17,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Vision;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -39,11 +38,11 @@ public class Swerve {
     private double desiredSpeed = Constants.Swerve.maxSpeed * speedMultiplier;
 
     private double linearAcceleration = desiredSpeed / accelerationTime;
-    private double angularAcceleration = Constants.Swerve.maxAngularVelocity / accelerationTime;
+    // private double angularAcceleration = Constants.Swerve.maxAngularVelocity / accelerationTime;
 
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
-    private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
+    // private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
 
     private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
     private PIDController xController = new PIDController(0.6, 0, 0);
@@ -191,17 +190,17 @@ public class Swerve {
         speedMultiplier = 1;
     }
 
-    public void musicInit() {
-        for(SwerveModule mod : mSwerveMods) {
-            mod.musicInit();
-        }
-    }
+    // public void musicInit() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicInit();
+    //     }
+    // }
 
-    public void musicPlay() {
-        for(SwerveModule mod : mSwerveMods) {
-            mod.musicPlay();
-        }
-    }
+    // public void musicPlay() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicPlay();
+    //     }
+    // }
 
     public void periodicValues(){
         swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());

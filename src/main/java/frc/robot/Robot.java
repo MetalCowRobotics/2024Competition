@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
+    // private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    s_Swerve.musicInit();
+    // s_Swerve.musicInit();
   }
 
   @Override
@@ -103,9 +103,9 @@ public class Robot extends TimedRobot {
       s_Swerve.zeroGyro();
     }
 
-    if (playMusic.getAsBoolean()) {
-      s_Swerve.musicPlay();
-    }
+    // if (playMusic.getAsBoolean()) {
+    //   s_Swerve.musicPlay();
+    // }
 
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
