@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 
-
 public class Vision {
     private PhotonCamera camera;
     private PhotonPipelineResult aprilTagResult;
@@ -74,7 +73,7 @@ public class Vision {
             aprilTagTargets = aprilTagResult.getTargets();
             aprilTagBestTarget = aprilTagResult.getBestTarget();
             globalPoseEstimate = new Pose2d(fieldToCamera.getX(), fieldToCamera.getY(), new Rotation2d(fieldToCamera.getRotation().getX(), fieldToCamera.getRotation().getY()));
-            
+
             fiducialID = aprilTagBestTarget.getFiducialId();
             aprilTagX = aprilTagBestTarget.getBestCameraToTarget().getX();
             aprilTagY = aprilTagBestTarget.getBestCameraToTarget().getY();
