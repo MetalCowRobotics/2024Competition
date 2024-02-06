@@ -264,9 +264,5 @@ public class Swerve {
             swervePoseEstimator.addVisionMeasurement(apriltagWithGyro, m_vision.getTimestampSeconds());
             SmartDashboard.putBoolean("HasVision", true);
         }
-        SmartDashboard.putNumber("AprilTag X (m)", swervePoseEstimator.getEstimatedPosition().getX());
-        SmartDashboard.putNumber("AprilTag Y (m)", swervePoseEstimator.getEstimatedPosition().getY());
-        SmartDashboard.putNumber("AprilTag Angle (°)", swervePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
-
     }
 }
