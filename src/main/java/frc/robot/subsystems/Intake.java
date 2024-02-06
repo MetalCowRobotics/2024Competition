@@ -2,52 +2,34 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 
-
 public class Intake {
-   private CANSparkMax motor1;   
-    private CANSparkMax motor2;
-    private DigitalInput Intake;
+    private CANSparkMax intakeMotor;   
+    private double speed = 0;
+    private DigitalInput noteDetector;
 
-
-    public Intake(){
-        motor1 = new CANSparkMax(12, CANSparkLowLevel.MotorType.kBrushless);
-        motor2 = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
-        Intake = new DigitalInput(0);
-        
+    public Intake() {
+        intakeMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
+        intakeMotor.setInverted(true);
+        noteDetector = new DigitalInput(0);
     }
 
-    public void rununtilnote(){
-        if (Intake.get()) {
-            stop();
-        }
-        else {
-            start(.5);
-        }
+    public void periodic() {
+        intakeMotor.set(speed);
     }
 
-    public void start(double speed){
-        motor1.set(speed);
-        motor2.set(-speed);
+    public void setIntakingSpeed() {
+        speed = 0.85;
     }
-    public void stop(){
-        motor1.set(0);
-        motor2.set(0);
+
+    public void setStopSpeed() {
+        speed = 0;
     }
+
+    // public void runUntilNote() {
+    //     if (!noteDetector.get()) {
+    //         periodic();
+    //     }
+    // }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

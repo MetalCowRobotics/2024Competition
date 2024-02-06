@@ -12,17 +12,17 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
 
-
-/**
+/*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
 
-  /* Controllers */
+    /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
 
@@ -33,24 +33,24 @@ public class Robot extends TimedRobot {
 
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final double shootervalue = XboxController.Axis.kRightTrigger.value;
 
-    /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton intkakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    
 
-
+    /* Operator Controls */
+    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Intake s_Intake = new Intake();
+    private final Intake m_Intake = new Intake();
+    private final Shooter m_Shooter = new Shooter();
       
-  /**
+  /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
   @Override
   public void robotInit() {
     // s_Swerve.musicInit();
@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     s_Swerve.periodicValues();
-    SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -74,8 +73,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {}
 
   /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
+  //@Override
 
   @Override
   public void teleopInit() {}
@@ -84,6 +82,19 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
+    m_Intake.periodic();
+    m_Shooter.periodic();
+ 
+    // if(SmartDashboard.getNumber("Shooter Value", shootervalue) > 0)
+    // {
+    //   shootervalue = 1;
+    //   m_Intake.setSpeed();
+    // }
+
+    // if(SmartDashboard.getNumber("Shooter Value", shootervalue) ==0)
+    //   m_Intake.stop();
+    //m_Intake.start();
+    //m_Shooter.start();
 
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
@@ -92,6 +103,12 @@ public class Robot extends TimedRobot {
       () -> false /* Never Robot-Oriented */
     );
 
+    // if (intkakeButton.getAsBoolean()) {
+    //   m_Intake.setSpeed();
+    // }
+    // else {
+    //   m_Intake.stop();
+    // }
   }
 
   @Override
@@ -106,12 +123,25 @@ public class Robot extends TimedRobot {
       s_Swerve.zeroGyro();
     }
 
-    if (intkakeButton.getAsBoolean()) {
-      s_Intake.start(shootervalue);
+    // if(Math.abs(shootervalue) > .8){
+    //    m_Shooter.setSpeed();
+    //  }
+    // else{
+    //    m_Shooter.stop();
+    //  }
+
+    if (shooterTrigger.getAsBoolean()) {
+      m_Shooter.setShootingSpeed();
+    }
+    else {
+      m_Shooter.setStopSpeed();
     }
 
+    if (intakeButton.getAsBoolean()) {
+      m_Intake.setIntakingSpeed();
+    }
     else {
-      s_Intake.start(0);
+      m_Intake.setStopSpeed();
     }
 
     if (crawl.getAsBoolean()) {
