@@ -33,14 +33,9 @@ public class Robot extends TimedRobot {
 
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final double shootervalue = XboxController.Axis.kRightTrigger.value;
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton intkakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    
-
-
 
     /* Operator Controls */
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
@@ -64,7 +59,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     s_Swerve.periodicValues();
-    SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -96,12 +90,7 @@ public class Robot extends TimedRobot {
     m_Intake.periodic();
     m_Shooter.periodic();
  
-    s_Swerve.teleopSwerve(
-      () -> -driver.getRawAxis(translationAxis), 
-      () -> -driver.getRawAxis(strafeAxis), 
-      () -> -driver.getRawAxis(rotationAxis), 
-      () -> false /* Never Robot-Oriented */
-    );
+    // }
   }
 
   @Override
@@ -117,7 +106,7 @@ public class Robot extends TimedRobot {
       s_Swerve.zeroGyro();
     }
 
-    if (intkakeButton.getAsBoolean()) {
+    if (intakeButton.getAsBoolean()) {
       m_Intake.setIntakeTrue();
     }
 

@@ -36,18 +36,10 @@ public class Intake {
     public void setIntakeFalse() {
         intakeStatus = false;
     }
+
+    // public void runUntilNote() {
+    //     if (!noteDetector.get()) {
+    //         periodic();
+    //     }
+    // }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
