@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
@@ -85,30 +84,12 @@ public class Robot extends TimedRobot {
     m_Intake.periodic();
     m_Shooter.periodic();
  
-    // if(SmartDashboard.getNumber("Shooter Value", shootervalue) > 0)
-    // {
-    //   shootervalue = 1;
-    //   m_Intake.setSpeed();
-    // }
-
-    // if(SmartDashboard.getNumber("Shooter Value", shootervalue) ==0)
-    //   m_Intake.stop();
-    //m_Intake.start();
-    //m_Shooter.start();
-
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
       () -> false /* Never Robot-Oriented */
     );
-
-    // if (intkakeButton.getAsBoolean()) {
-    //   m_Intake.setSpeed();
-    // }
-    // else {
-    //   m_Intake.stop();
-    // }
   }
 
   @Override
@@ -119,31 +100,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   private void configureButtonBindings() {
+    /* Driver Related */
     if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
     }
-
-    // if(Math.abs(shootervalue) > .8){
-    //    m_Shooter.setSpeed();
-    //  }
-    // else{
-    //    m_Shooter.stop();
-    //  }
-
-    if (shooterTrigger.getAsBoolean()) {
-      m_Shooter.setShootingSpeed();
-    }
-    else {
-      m_Shooter.setStopSpeed();
-    }
-
-    if (intakeButton.getAsBoolean()) {
-      m_Intake.setIntakingSpeed();
-    }
-    else {
-      m_Intake.setStopSpeed();
-    }
-
+    
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
     }
@@ -152,6 +113,21 @@ public class Robot extends TimedRobot {
     }
     else {
       s_Swerve.setBase();
+    }
+
+    /* Operator Related */
+    if (shooterTrigger.getAsBoolean()) {
+      m_Shooter.setShootingSpeed();
+    }
+    else {
+      m_Shooter.setStopSpeed();
+    }
+
+    if (intakeButton.getAsBoolean()) {
+      m_Intake.setIntakeTrue();
+    }
+    else {
+      m_Intake.setIntakeFalse();
     }
   }
 }

@@ -8,6 +8,7 @@ public class Intake {
     private CANSparkMax intakeMotor;   
     private double speed = 0;
     private DigitalInput noteDetector;
+    private boolean intakeStatus = false;
 
     public Intake() {
         intakeMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
@@ -16,20 +17,23 @@ public class Intake {
     }
 
     public void periodic() {
+        if (intakeStatus) {
+            if (!noteDetector.get()) {
+                speed = 0.85;
+            }
+            else {
+                speed = 0;
+                intakeStatus = false;
+            }
+        }
         intakeMotor.set(speed);
     }
 
-    public void setIntakingSpeed() {
-        speed = 0.85;
+    public void setIntakeTrue() {
+        intakeStatus = true;
     }
 
-    public void setStopSpeed() {
-        speed = 0;
+    public void setIntakeFalse() {
+        intakeStatus = false;
     }
-
-    // public void runUntilNote() {
-    //     if (!noteDetector.get()) {
-    //         periodic();
-    //     }
-    // }
 }
