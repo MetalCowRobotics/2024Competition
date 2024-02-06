@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
@@ -90,7 +89,12 @@ public class Robot extends TimedRobot {
     m_Intake.periodic();
     m_Shooter.periodic();
  
-    // }
+    s_Swerve.teleopSwerve(
+      () -> -driver.getRawAxis(translationAxis), 
+      () -> -driver.getRawAxis(strafeAxis), 
+      () -> -driver.getRawAxis(rotationAxis), 
+      () -> false /* Never Robot-Oriented */
+    );
   }
 
   @Override
