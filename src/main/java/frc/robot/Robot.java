@@ -61,11 +61,15 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    s_Swerve.zeroGyro();
+  }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+  }
 
   @Override
   public void teleopInit() {}

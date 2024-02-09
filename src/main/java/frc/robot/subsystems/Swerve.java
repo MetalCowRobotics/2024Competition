@@ -15,6 +15,7 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,6 +38,11 @@ public class Swerve {
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
+
+    private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
+    private PIDController xController = new PIDController(0.6, 0, 0);
+    private PIDController yController = new PIDController(0.6, 0, 0);
+    private PIDController thetaController = new PIDController(0.04, 0, 0.001);
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -78,6 +84,32 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }    
+
+    public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+        double xSpeed = translation.getX();
+        double ySpeed = translation.getY();
+        double angularVelocity = rotation;
+        angleHoldingPIDController.setSetpoint(getGyroYaw().getDegrees());
+        SwerveModuleState[] swerveModuleStates =
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                                    xSpeed, 
+                                    ySpeed, 
+                                    angularVelocity, 
+                                    getGyroYaw()
+                                )
+                                : new ChassisSpeeds(
+                                    xSpeed, 
+                                    ySpeed, 
+                                    angularVelocity
+                                )
+                                );
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed * speedMultiplier);
+
+        for(SwerveModule mod : mSwerveMods){
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+        }
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -180,6 +212,36 @@ public class Swerve {
             !robotCentricSup.getAsBoolean(), 
             false /* KEEP FALSE */
         );
+    }
 
+    public void driveToPoint(double targetX, double targetY, double targetTheta) {
+        double x = getPose().getX();
+        double y = getPose().getY();
+        double yaw = getGyroYaw().getDegrees();
+
+        xController.setSetpoint(targetX);
+        yController.setSetpoint(targetY);
+        yaw = yaw % 360;
+        if (yaw < 0) {
+            yaw += 360;
+        }
+        if (targetTheta == 0) {
+            if (yaw > 180) {
+                thetaController.setSetpoint(360);
+            } else {
+                thetaController.setSetpoint(0);
+            }
+        }
+
+        double xCorrection = xController.calculate(x);
+        double yCorrection = yController.calculate(y);
+        double rotation = thetaController.calculate(yaw);
+
+        driveAuto(
+            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
+            -rotation * Constants.Swerve.maxAngularVelocity, 
+            true, 
+            false
+        );
     }
 }
