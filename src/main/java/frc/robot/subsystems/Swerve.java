@@ -178,17 +178,17 @@ public class Swerve {
         speedMultiplier = 1;
     }
 
-    public void musicInit() {
-        for(SwerveModule mod : mSwerveMods) {
-            mod.musicInit();
-        }
-    }
+    // public void musicInit() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicInit();
+    //     }
+    // }
 
-    public void musicPlay() {
-        for(SwerveModule mod : mSwerveMods) {
-            mod.musicPlay();
-        }
-    }
+    // public void musicPlay() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicPlay();
+    //     }
+    // }
 
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
@@ -210,6 +210,15 @@ public class Swerve {
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
             rotationVal * Constants.Swerve.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
+            /*
+             *  _   __   _____    _____    ____              _____       _        __
+             * | |_/ /  | ____|  | ____|  | /\ \            |  ___|     /_\      |  | 
+             * |    /   | |___   | |___   | ||  |           | |___     //_\\     |  |
+             * |   <    |  ___|  |  ___|  | \/_/            |  ___|   / ___ \    |  |
+             * |  _ \   | |___   | |___   | |               | |      / /   \ \   |  |__
+             * |_| \_\  |_____|  |_____|  |_|               |_|     /_/     \_\  |_____|
+             * 
+             */
             false /* KEEP FALSE */
         );
     }
