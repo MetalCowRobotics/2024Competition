@@ -1,8 +1,5 @@
 package frc.robot;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -97,12 +94,11 @@ public class SwerveModule {
     }
 
     public void musicInit() {
-        ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
+        mOrchestra = new Orchestra("output.chrp");
 
-    for (int i = 0; i < musicMotors.length; i++) {
-      instruments.add(musicMotors[i]);
-    }
-    mOrchestra = new Orchestra((Collection)instruments, "output.chrp");
+        for (int i = 0; i < musicMotors.length; ++i) {
+            mOrchestra.addInstrument(musicMotors[i]);
+        }
     }
 
     public void musicPlay() {
