@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // s_Swerve.musicInit();
+    s_Swerve.musicInit();
   }
 
   @Override
@@ -125,6 +125,10 @@ public class Robot extends TimedRobot {
     }
     else {
       s_Swerve.setBase();
+    }
+
+    if (playMusic.getAsBoolean()) {
+      s_Swerve.musicPlay();
     }
 
     /* Operator Related */
