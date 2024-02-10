@@ -7,9 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
+import frc.robot.autos.Leave;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +22,7 @@ import frc.robot.subsystems.*;
  */
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
+  private Command autoCommand;
 
   /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -63,12 +67,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     s_Swerve.zeroGyro();
+    autoCommand = new Leave();
+    if (autoCommand != null) {
+      CommandScheduler.getInstance().schedule(autoCommand);
+    }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
   }
 
   @Override
