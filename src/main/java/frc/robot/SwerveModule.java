@@ -96,16 +96,16 @@ public class SwerveModule {
         );
     }
 
-    public void musicInit() {
-        ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
+    // public void musicInit() {
+    //     ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
 
-    for (int i = 0; i < musicMotors.length; i++) {
-      instruments.add(musicMotors[i]);
-    }
-    mOrchestra = new Orchestra((Collection)instruments, "output.chrp");
-    }
+    // for (int i = 0; i < musicMotors.length; i++) {
+    //   instruments.add(musicMotors[i]);
+    // }
+    // mOrchestra = new Orchestra((Collection)instruments, "output.chrp");
+    // }
 
-    public void musicPlay() {
-        mOrchestra.play();
-    }    
+    // public void musicPlay() {
+    //     mOrchestra.play();
+    // }    
 }
