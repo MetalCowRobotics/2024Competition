@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
-import frc.robot.autos.Leave;
+import frc.robot.autos.*;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     s_Swerve.zeroGyro();
-    autoCommand = new Leave();
+    autoCommand = new AutoTest();
     if (autoCommand != null) {
       CommandScheduler.getInstance().schedule(autoCommand);
     }

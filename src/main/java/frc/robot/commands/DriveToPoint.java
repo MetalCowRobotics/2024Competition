@@ -77,6 +77,7 @@ public class DriveToPoint extends Command{
         );
     }
 
+    @Override
     public boolean isFinished() {
         double x = m_swerve.getPose().getX();
         double y = m_swerve.getPose().getY();
@@ -95,6 +96,7 @@ public class DriveToPoint extends Command{
         return false;
     }
 
+    @Override
     public void end(boolean interrupted) {
         m_swerve.drive(
             new Translation2d(0, 0).times(Constants.Swerve.maxSpeed), 

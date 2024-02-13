@@ -36,4 +36,20 @@ public class Intake {
     public void setIntakeFalse() {
         intakeStatus = false;
     }
+
+    /* Methods for Commands */
+    public void runIntake() {
+        speed = 0.6;
+        intakeMotor.set(speed);
+    }
+
+    public void stopIntake() {
+        speed = 0;
+        intakeMotor.set(speed);
+    }
+    
+    public void runIntakeReverse() {
+        speed = -0.6;
+        intakeMotor.set(speed);
+    }
 }

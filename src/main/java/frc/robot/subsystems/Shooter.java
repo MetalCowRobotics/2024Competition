@@ -21,10 +21,23 @@ public class Shooter {
     }
 
     public void setShootingSpeed() {
-        motorSpeed = 0.4;
+        motorSpeed = 0.6;
     }
     
     public void setStopSpeed() {
         motorSpeed = 0;
+    }
+
+    /* Methods for Commands */
+    public void runShooter() {
+        motorSpeed = 0.6;
+        shooterMotor1.set(motorSpeed);
+        shooterMotor2.set(motorSpeed);
+    }
+
+    public void stopShooter() {
+        motorSpeed = 0;
+        shooterMotor1.set(motorSpeed);
+        shooterMotor2.set(motorSpeed);
     }
 }
