@@ -38,11 +38,11 @@ public class Swerve {
     private double desiredSpeed = Constants.Swerve.maxSpeed * speedMultiplier;
 
     private double linearAcceleration = desiredSpeed / accelerationTime;
-    // private double angularAcceleration = Constants.Swerve.maxAngularVelocity / accelerationTime;
+    private double angularAcceleration = Constants.Swerve.maxAngularVelocity / accelerationTime;
 
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
-    // private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
+    private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
 
     private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
     private PIDController xController = new PIDController(0.6, 0, 0);
@@ -67,21 +67,27 @@ public class Swerve {
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX());
         double ySpeed = m_ySlewRateLimiter.calculate(translation.getY());
-        /* Ramps for Angles too be added (look at 2023Comp.) */
-        // double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+        double angularSpeed;
+        if (rotation == 0) {
+            angularSpeed = angleHoldingPIDController.calculate(getGyroYaw().getDegrees());
+            angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+        } else {
+            angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+            angleHoldingPIDController.setSetpoint(getGyroYaw().getDegrees());
+        }
 
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    rotation, 
+                                    angularSpeed, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    rotation)
+                                    angularSpeed)
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, desiredSpeed);
 
@@ -190,17 +196,17 @@ public class Swerve {
         speedMultiplier = 1;
     }
 
-    // public void musicInit() {
-    //     for(SwerveModule mod : mSwerveMods) {
-    //         mod.musicInit();
-    //     }
-    // }
+    public void musicInit() {
+        for(SwerveModule mod : mSwerveMods) {
+            mod.musicInit();
+        }
+    }
 
-    // public void musicPlay() {
-    //     for(SwerveModule mod : mSwerveMods) {
-    //         mod.musicPlay();
-    //     }
-    // }
+    public void musicPlay() {
+        for(SwerveModule mod : mSwerveMods) {
+            mod.musicPlay();
+        }
+    }
 
     public void periodicValues(){
         swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
@@ -222,6 +228,15 @@ public class Swerve {
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
             rotationVal * Constants.Swerve.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
+            /*
+             *  _   __   _____    _____    ____              _____       _        __
+             * | |_/ /  | ____|  | ____|  | /\ \            |  ___|     /_\      |  | 
+             * |    /   | |___   | |___   | ||  |           | |___     //_\\     |  |
+             * |   <    |  ___|  |  ___|  | \/_/            |  ___|   / ___ \    |  |
+             * |  _ \   | |___   | |___   | |               | |      / /   \ \   |  |__
+             * |_| \_\  |_____|  |_____|  |_|               |_|     /_/     \_\  |_____|
+             * 
+             */
             false /* KEEP FALSE */
         );
     }

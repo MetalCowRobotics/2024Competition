@@ -7,22 +7,28 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
+import frc.robot.autos.*;
 
-/**
+/*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
+  private Command autoCommand;
 
-  /* Controllers */
+    /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -32,17 +38,23 @@ public class Robot extends TimedRobot {
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
-    /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    // private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
+
+    /* Operator Controls */
+    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Intake m_Intake = new Intake();
+    private final Shooter m_Shooter = new Shooter();
       
-  /**
+  /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
   @Override
   public void robotInit() {
     // s_Swerve.musicInit();
@@ -63,13 +75,16 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    s_Swerve.resetPoseEstimatorToAprilTag();
+    s_Swerve.zeroGyro();
+    autoCommand = new AutoTest();
+    if (autoCommand != null) {
+      CommandScheduler.getInstance().schedule(autoCommand);
+    }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
   }
 
   @Override
@@ -81,14 +96,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
-
+    m_Intake.periodic();
+    m_Shooter.periodic();
+ 
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
       () -> false /* Never Robot-Oriented */
     );
-
   }
 
   @Override
@@ -99,13 +115,14 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   private void configureButtonBindings() {
+    /* Driver Related */
     if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
     }
 
-    // if (playMusic.getAsBoolean()) {
-    //   s_Swerve.musicPlay();
-    // }
+    if (playMusic.getAsBoolean()) {
+      s_Swerve.musicPlay();
+    }
 
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
@@ -115,6 +132,25 @@ public class Robot extends TimedRobot {
     }
     else {
       s_Swerve.setBase();
+    }
+
+    if (playMusic.getAsBoolean()) {
+      s_Swerve.musicPlay();
+    }
+
+    /* Operator Related */
+    if (shooterTrigger.getAsBoolean()) {
+      m_Shooter.setShootingSpeed();
+    }
+    else {
+      m_Shooter.setStopSpeed();
+    }
+
+    if (intakeButton.getAsBoolean()) {
+      m_Intake.setIntakeTrue();
+    }
+    else {
+      m_Intake.setIntakeFalse();
     }
   }
 }

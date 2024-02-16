@@ -5,9 +5,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-// import com.ctre.phoenix6.Orchestra;
-// import java.util.ArrayList;
-// import java.util.Collection;
+import com.ctre.phoenix6.Orchestra;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,8 +21,8 @@ public class SwerveModule {
     private TalonFX mAngleMotor;
     private TalonFX mDriveMotor;
     private CANcoder angleEncoder;
-    // private Orchestra mOrchestra;
-    // private TalonFX[] musicMotors = {mDriveMotor, mAngleMotor};
+    private Orchestra mOrchestra;
+    private TalonFX[] musicMotors = {mDriveMotor, mAngleMotor};
 
     private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
@@ -95,16 +93,15 @@ public class SwerveModule {
         );
     }
 
-    // public void musicInit() {
-    //     ArrayList<TalonFX> instruments = new ArrayList<TalonFX>();
+    public void musicInit() {
+        mOrchestra = new Orchestra("output.chrp");
 
-    // for (int i = 0; i < musicMotors.length; i++) {
-    //   instruments.add(musicMotors[i]);
-    // }
-    // mOrchestra = new Orchestra((Collection)instruments, "output.chrp");
-    // }
+        for (int i = 0; i < musicMotors.length; ++i) {
+            mOrchestra.addInstrument(musicMotors[i]);
+        }
+    }
 
-    // public void musicPlay() {
-    //     mOrchestra.play();
-    // }    
+    public void musicPlay() {
+        mOrchestra.play();
+    }    
 }
