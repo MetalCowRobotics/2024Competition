@@ -146,4 +146,12 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+    public static final class SpeakerScoring {
+        public static final double ARM_ANGLE = 36;
+        public static final double WRIST_ANGLE = 70;
+    }
+    public static final class AmpScroing {
+        public static final double ARM_ANGLE = 0;
+        public static final double WRIST_ANGLE = 72;
+    }
 }
