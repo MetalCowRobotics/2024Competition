@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
@@ -32,9 +33,14 @@ public class Robot extends TimedRobot {
 
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    private final double shootervalue = XboxController.Axis.kRightTrigger.value;
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton intkakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    
+
+
 
     /* Operator Controls */
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
@@ -58,6 +64,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     s_Swerve.periodicValues();
+    SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -110,7 +117,7 @@ public class Robot extends TimedRobot {
       s_Swerve.zeroGyro();
     }
 
-    if (intakeButton.getAsBoolean()) {
+    if (intkakeButton.getAsBoolean()) {
       m_Intake.setIntakeTrue();
     }
 
