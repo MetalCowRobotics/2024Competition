@@ -63,7 +63,7 @@ public class Swerve {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX());
         double ySpeed = m_ySlewRateLimiter.calculate(translation.getY());
         /* Ramps for Angles too be added (look at 2023Comp.) */
-        // double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+        double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
 
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
