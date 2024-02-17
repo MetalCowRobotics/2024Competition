@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class ServoMotorSubsystem extends SubsystemBase {
+public abstract class ServoMotorSubsystem{
     private CANSparkMax m_motor;
     private RelativeEncoder encoder;
 
@@ -135,7 +135,6 @@ public abstract class ServoMotorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(subsystemName + " target encoder podition", setpoint);
     }
 
-    @Override
     public void periodic() {
         writeStatus();
 

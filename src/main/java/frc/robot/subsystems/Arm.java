@@ -9,8 +9,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class ArmSubsystem extends SubsystemBase {
-    private CANSparkMax m_motor;
+public abstract class Arm {
+    /*private CANSparkMax m_motor;
     private RelativeEncoder encoder;
 
     private PIDController m_pidController;
@@ -165,4 +165,5 @@ public abstract class ArmSubsystem extends SubsystemBase {
             m_motor.set(speed);
         }
     }
+    */
 }

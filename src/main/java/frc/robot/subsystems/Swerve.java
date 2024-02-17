@@ -110,7 +110,7 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }
-
+           
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, desiredSpeed);
@@ -222,7 +222,7 @@ public class Swerve {
             false /* KEEP FALSE */
         );
     }
-
+        
     public void driveToPoint(double targetX, double targetY, double targetTheta) {
         double x = getPose().getX();
         double y = getPose().getY();
