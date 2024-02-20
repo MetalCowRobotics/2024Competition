@@ -32,8 +32,9 @@ public class AutoTwoNoteCenter {
         Swerve m_swerve = new Swerve();
         Intake i_intake = new Intake();
         Shooter s_shooter = new Shooter();
-        WristSubsystem m_wristSubsystem = new WristSubsystem();
-        ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+        
+        Wrist m_wristSubsystem = new Wrist();
+        Arm m_ArmSubsystem = new Arm();
         int armMovementTimeout = 1;
 
         twoNoteCenter = new SequentialCommandGroup(
