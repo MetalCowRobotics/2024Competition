@@ -109,7 +109,15 @@ public class Robot extends TimedRobot {
     if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
     }
-    
+
+    if (intakeButton.getAsBoolean()) {
+      m_Intake.setIntakeTrue();
+    }
+
+    else {
+      m_Intake.setIntakeFalse();
+    }
+
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
     }
