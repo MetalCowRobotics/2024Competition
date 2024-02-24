@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.print.DocFlavor;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -148,11 +150,11 @@ public final class Constants {
     }
 
     public static final class FullArmConstants {
-        public static final double armSubsystem_Rest = 0;
-        public static final double wristSubsystem_Rest = -12;
-        public static final double armSubsystem_PickupRest = 130;
-        public static final double wristSubsystem_PickupRest = -54;
-        public static final double armSubsystem_Pickup = 280;
-        public static final double wristSubsystem_Pickup = 60;
+        public static final double[][] pickupPhases = {{0,0,130,280},{-12,-54,-54,60}};
+
+        //public static final double[][] speakerPhases = -12;
+        //public static final double[][] ampPhases = 130;
+        //public static final double[][] shooterPhases = -54;
+
     }
 }

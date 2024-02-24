@@ -42,11 +42,6 @@ public class Robot extends TimedRobot {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-<<<<<<< Updated upstream
-    private final Intake m_Intake = new Intake();
-    private final Shooter m_Shooter = new Shooter();
-      
-=======
     // private final Intake m_Intake = new Intake();
     // private final Shooter m_Shooter = new Shooter();
     // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
@@ -57,7 +52,6 @@ public class Robot extends TimedRobot {
     // private RestToShooter RestToShooter = new RestToShooter();
     //private InstantCommand ShooterToRest = new PickUpToRest();
     
->>>>>>> Stashed changes
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -99,10 +93,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
-<<<<<<< Updated upstream
-    m_Intake.periodic();
-    m_Shooter.periodic();
-=======
     // m_Intake.periodic();
     // m_Shooter.periodic();
       m_FullArmSubsystem.periodic();
@@ -113,7 +103,6 @@ public class Robot extends TimedRobot {
     // m_WristSubsystem.setTarget(SmartDashboard.getNumber("Wanted Wrist Angle", 0))
     // m_WristSubsystem.getArmAngle(m_ArmSubsystem.getEncoder1CurrentAngle());
     //m_WristSubsystem.periodic();
->>>>>>> Stashed changes
  
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
@@ -147,27 +136,9 @@ public class Robot extends TimedRobot {
     }
 
     /* Operator Related */
-<<<<<<< Updated upstream
     if (shooterTrigger.getAsBoolean()) {
-      m_Shooter.setShootingSpeed();
     }
     else {
-      m_Shooter.setStopSpeed();
-    }
-
-    if (intakeButton.getAsBoolean()) {
-      m_Intake.setIntakeTrue();
-    }
-    else {
-      m_Intake.setIntakeFalse();
-    }
-=======
-    // armWrist1.onTrue((m_RestToShooter.moveArm()).execute());
-    // armWrist1.onTrue(new InstantCommand(() -> SmartDashboard.putBoolean("Button", armWrist1.getAsBoolean())));
-    if (armWrist1.getAsBoolean()) {
-      m_FullArmSubsystem.setPositionIdentifier("RestToPickup");
-    }else{
-      m_FullArmSubsystem.setPositionIdentifier("Rest");
     }
 
     // if (armWrist2.getAsBoolean()) {
@@ -190,6 +161,6 @@ public class Robot extends TimedRobot {
     // else {
     //   m_Intake.setIntakeFalse();
     // }
->>>>>>> Stashed changes
+
   }
 }
