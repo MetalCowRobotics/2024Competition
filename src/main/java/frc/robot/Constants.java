@@ -146,4 +146,13 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class FullArmConstants {
+        public static final double armSubsystem_Rest = 0;
+        public static final double wristSubsystem_Rest = -12;
+        public static final double armSubsystem_PickupRest = 130;
+        public static final double wristSubsystem_PickupRest = -54;
+        public static final double armSubsystem_Pickup = 280;
+        public static final double wristSubsystem_Pickup = 60;
+    }
 }
