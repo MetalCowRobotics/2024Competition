@@ -28,6 +28,7 @@ public class FullArmSubsystem {
     }
 
     public int shortCircut(double[][] targetPhase){
+        System.out.println("Short Circuting");
         int closestPhase = 0;
         double minDiff = (Math.abs(phase[1][0] - m_WristSubsystem.getCurrentAngle()));
         if(targetPhase.equals(Constants.FullArmConstants.restPhases)){
@@ -80,7 +81,6 @@ public class FullArmSubsystem {
         }
         m_ArmSubsystem.periodic();
         m_WristSubsystem.periodic();
-
     }
 
 
