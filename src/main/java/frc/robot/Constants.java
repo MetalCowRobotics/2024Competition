@@ -151,12 +151,12 @@ public final class Constants {
 
     public static final class FullArmConstants {
        // public static final double[][] restPhases = {{0,0,0,0,0},{-54,-54,0,0,0}};
-        public static final double[][] restPhases = {{0,0},{-62,0}};
-        public static final double[][] pickupPhases = {{0,0,0,130,279,279},{-62,0,-62,-62,35,57.6}};
-        public static final double[][] climbPhases1 = {{0,0,0,180},{-62,0,-62,-62}};
-        public static final double[][] climbPhases2 = {{180,90},{-62,-62}};
-        public static final double[][] ampPhases = {{0,0,0,130,279,279},{-62,0,-62,-62,35,57.6}};
-        public static final double[][] speakerPhases = {{0,0,0,130,279,279},{-62,0,-62,-62,35,57.6}};
+        public static final double[][] restPhases = {{0,0},{-67,0}};
+        public static final double[][] pickupPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,45,60.6}};
+        public static final double[][] climbPhases1 = {{0,0,0,180},{-67,0,-67,-67}};
+        public static final double[][] climbPhases2 = {{180,90},{-67,-67}};
+        public static final double[][] ampPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,35,57.6}};
+        public static final double[][] speakerPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,35,57.6}};
 
 
 

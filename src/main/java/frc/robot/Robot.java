@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
     }
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
-      System.out.println(m_FullArmSubsystem.getPhase());
+      //System.out.println(m_FullArmSubsystem.getPhase());
     }
     if (operator.getYButtonReleased()) {
       m_FullArmSubsystem.setClimb1Position();

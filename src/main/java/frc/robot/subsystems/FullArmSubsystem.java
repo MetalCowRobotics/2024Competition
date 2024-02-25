@@ -26,21 +26,51 @@ public class FullArmSubsystem {
         }
         phaseNumber++;
     }
-
+//In terms of WRIST angle
+/* 
     public int shortCircut(double[][] targetPhase){
-        System.out.println("Short Circuting");
+        //System.out.print("Short Circuting: ");
         int closestPhase = 0;
-        double minDiff = (Math.abs(phase[1][0] - m_WristSubsystem.getCurrentAngle()));
+        double minDiff = (Math.abs(targetPhase[1][0] - m_WristSubsystem.getCurrentAngle()));
         if(targetPhase.equals(Constants.FullArmConstants.restPhases)){
             phaseNumber = 0;
         }
-        for(int i = 0; i<phase[1].length;i++){
-            if((Math.abs(phase[1][i] - m_WristSubsystem.getCurrentAngle())) < minDiff){
-                minDiff = (Math.abs(phase[1][i] - m_WristSubsystem.getCurrentAngle()));
-                closestPhase = i;
+        else{
+            for(int i = 0; i<targetPhase[1].length;i++){
+                if((Math.abs(targetPhase[1][i] - m_WristSubsystem.getCurrentAngle())) < minDiff){
+                    minDiff = (Math.abs(targetPhase[1][i] - m_WristSubsystem.getCurrentAngle()));
+                    closestPhase = i;
+                }
             }
         }
-        System.out.print(closestPhase);
+        m_ArmSubsystem.setTarget(phase[0][closestPhase]);
+        m_WristSubsystem.setTarget(phase[1][closestPhase]);
+        System.out.println("\nClosest Phase: " + closestPhase);
+        System.out.println("Current Angle: " + m_WristSubsystem.getCurrentAngle());
+        System.out.println("Phase Angle: " + phase[1][closestPhase]+"\n");
+        return closestPhase;
+    }
+    */
+    public int shortCircut(double[][] targetPhase){
+        //System.out.print("Short Circuting: ");
+        int closestPhase = 0;
+        double minDiff = (Math.abs(targetPhase[0][0] - m_ArmSubsystem.getAvgCurrentAngle()));
+        if(targetPhase.equals(Constants.FullArmConstants.restPhases)){
+            phaseNumber = 0;
+        }
+        else{
+            for(int i = 0; i<targetPhase[0].length;i++){
+                if((Math.abs(targetPhase[0][i] - m_ArmSubsystem.getAvgCurrentAngle())) < minDiff){
+                    minDiff = (Math.abs(targetPhase[0][i] - m_ArmSubsystem.getAvgCurrentAngle()));
+                    closestPhase = i;
+                }
+            }
+        }
+        m_ArmSubsystem.setTarget(phase[0][closestPhase]);
+        m_WristSubsystem.setTarget(phase[1][closestPhase]);
+        System.out.println("\nClosest Phase: " + closestPhase);
+        System.out.println("Current Angle: " + m_ArmSubsystem.getAvgCurrentAngle());
+        System.out.println("Phase Angle: " + phase[0][closestPhase]+"\n");
         return closestPhase;
     }
 
