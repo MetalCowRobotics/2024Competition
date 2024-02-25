@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    // private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
       
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    s_Swerve.periodicValues();
+    // s_Swerve.periodicValues();
     SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
 
@@ -77,13 +77,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    s_Swerve.zeroGyro();
+    // s_Swerve.zeroGyro();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
   }
 
   @Override
@@ -92,17 +92,17 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    LED.runDefault();
+    //LED.runDefault();
     configureButtonBindings();
     m_Intake.periodic();
     m_Shooter.periodic();
  
-    s_Swerve.teleopSwerve(
-      () -> -driver.getRawAxis(translationAxis), 
-      () -> -driver.getRawAxis(strafeAxis), 
-      () -> -driver.getRawAxis(rotationAxis), 
-      () -> false /* Never Robot-Oriented */
-    );
+    // s_Swerve.teleopSwerve(
+    //   () -> -driver.getRawAxis(translationAxis), 
+    //   () -> -driver.getRawAxis(strafeAxis), 
+    //   () -> -driver.getRawAxis(rotationAxis), 
+    //   () -> false /* Never Robot-Oriented */
+    // );
   }
 
   @Override
@@ -114,9 +114,9 @@ public class Robot extends TimedRobot {
 
   private void configureButtonBindings() {
     /* Driver Related */
-    if (zeroGyro.getAsBoolean()) {
-      s_Swerve.zeroGyro();
-    }
+    // if (zeroGyro.getAsBoolean()) {
+    //   s_Swerve.zeroGyro();
+    // }
 
     if (intkakeButton.getAsBoolean()) {
       m_Intake.setIntakeTrue();
@@ -126,15 +126,15 @@ public class Robot extends TimedRobot {
       m_Intake.setIntakeFalse();
     }
 
-    if (crawl.getAsBoolean()) {
-      s_Swerve.setCrawl();
-    }
-    else if (sprint.getAsBoolean()) {
-      s_Swerve.setSprint();
-    }
-    else {
-      s_Swerve.setBase();
-    }
+    // if (crawl.getAsBoolean()) {
+    //   s_Swerve.setCrawl();
+    // }
+    // else if (sprint.getAsBoolean()) {
+    //   s_Swerve.setSprint();
+    // }
+    // else {
+    //   s_Swerve.setBase();
+    // }
 
     /* Operator Related */
     if (shooterTrigger.getAsBoolean()) {
