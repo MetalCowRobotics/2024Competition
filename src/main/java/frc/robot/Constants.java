@@ -65,7 +65,7 @@ public final class Constants {
 
         /* Angle Motor PID Values */
        // public static final double angleKP = chosenModule.angleKP;
-        public static final double angleKP = 0.2;
+        public static final double angleKP = 10;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
 
@@ -150,10 +150,14 @@ public final class Constants {
     }
 
     public static final class FullArmConstants {
-        public static final double[][] restPhases = {{0,0,0,0,0},{-54,-54,0,0,0}};
-        public static final double[][] pickupPhases = {{0,0,130,280,280},{0,-54,-54,35,60}};
-        public static final double[][] climbPhases1 = {{0,0,180,180,180},{0,-54,-54,-54,-54}};
-        public static final double[][] climbPhases2 = {{180,90,90,90,90},{-54,-54,-54,-54,-54}};
+       // public static final double[][] restPhases = {{0,0,0,0,0},{-54,-54,0,0,0}};
+        public static final double[][] restPhases = {{0,0},{-62,0}};
+        public static final double[][] pickupPhases = {{0,0,0,130,279,279},{-62,0,-62,-62,35,57.6}};
+        public static final double[][] climbPhases1 = {{0,0,0,180},{-62,0,-62,-62}};
+        public static final double[][] climbPhases2 = {{180,90},{-62,-62}};
+        public static final double[][] ampPhases = {{0,0,0,130,279,279},{-62,0,-62,-62,35,57.6}};
+        public static final double[][] speakerPhases = {{0,0,0,130,279,279},{-62,0,-62,-62,35,57.6}};
+
 
 
         //public static final double[][] speakerPhases = -12;
