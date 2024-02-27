@@ -15,7 +15,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.BooleanSupplier;
@@ -28,10 +27,8 @@ public class Swerve {
     public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-
-    private Vision m_vision = new Vision();
-    Pose2d apriltagWithGyro = new Pose2d();
-    Field2d poseEstimateField2d = new Field2d();
+    private Vision m_vision;
+    private int lastTargetID;
 
     private final double accelerationTime = 0.6;
     private double speedMultiplier = 1;
@@ -53,6 +50,9 @@ public class Swerve {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
+
+        m_vision = new Vision();
+        lastTargetID = -1;
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -177,13 +177,6 @@ public class Swerve {
         }
     }
 
-    public void resetPoseEstimatorToAprilTag() {
-        m_vision.periodic();
-        if (m_vision.hasTargets()) {
-            swervePoseEstimator.resetPosition(m_vision.getAprilTagGyroYaw(), getModulePositions(), m_vision.getaprilTagPoseEstimate());
-        }
-    }
-
     public void setSprint() {
         speedMultiplier = 1.4;
     }
@@ -228,15 +221,6 @@ public class Swerve {
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
             rotationVal * Constants.Swerve.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
-            /*
-             *  _   __   _____    _____    ____              _____       _        __
-             * | |_/ /  | ____|  | ____|  | /\ \            |  ___|     /_\      |  | 
-             * |    /   | |___   | |___   | ||  |           | |___     //_\\     |  |
-             * |   <    |  ___|  |  ___|  | \/_/            |  ___|   / ___ \    |  |
-             * |  _ \   | |___   | |___   | |               | |      / /   \ \   |  |__
-             * |_| \_\  |_____|  |_____|  |_|               |_|     /_/     \_\  |_____|
-             * 
-             */
             false /* KEEP FALSE */
         );
     }
@@ -275,9 +259,15 @@ public class Swerve {
     public void visionPeriodic() {
         m_vision.periodic();
         if (m_vision.hasTargets()) {
-            apriltagWithGyro = new Pose2d(new Translation2d(m_vision.getaprilTagPoseEstimate().getTranslation().getX(), m_vision.getaprilTagPoseEstimate().getTranslation().getY()), getPose().getRotation());
-            swervePoseEstimator.addVisionMeasurement(apriltagWithGyro, m_vision.getTimestampSeconds());
-            SmartDashboard.putBoolean("HasVision", true);
+            if (lastTargetID != m_vision.getTagID()) {
+                setPose(m_vision.getVisionPoseEstimate());
+            }
+            swervePoseEstimator.addVisionMeasurement(m_vision.getVisionPoseEstimate(), m_vision.getTimestampSeconds());
+            lastTargetID = m_vision.getTagID();
         }
+        else {
+            lastTargetID = -1;
+        }
+        SmartDashboard.putNumber("AprilTagID", lastTargetID);
     }
 }

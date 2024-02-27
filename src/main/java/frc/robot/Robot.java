@@ -7,13 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
-import frc.robot.autos.*;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,7 +20,6 @@ import frc.robot.autos.*;
 
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
-  private Command autoCommand;
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -37,9 +32,6 @@ public class Robot extends TimedRobot {
 
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-
-    private final JoystickButton visionControl = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private boolean teleopSwerveStatus = true;
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
@@ -79,21 +71,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     s_Swerve.zeroGyro();
-    autoCommand = new AutoTest();
-    if (autoCommand != null) {
-      CommandScheduler.getInstance().schedule(autoCommand);
-    }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {
-    SmartDashboard.putBoolean("HasVision", false);
-  }
+  public void teleopInit() {}
 
   /** This function is called periodically during operator control. */
   @Override
@@ -102,14 +87,13 @@ public class Robot extends TimedRobot {
     m_Intake.periodic();
     m_Shooter.periodic();
  
-    if (teleopSwerveStatus) {
-      s_Swerve.teleopSwerve(
-      () -> -driver.getRawAxis(translationAxis), 
-      () -> -driver.getRawAxis(strafeAxis), 
-      () -> -driver.getRawAxis(rotationAxis), 
-      () -> false /* Never Robot-Oriented */
-      );
-    }
+    s_Swerve.visionPeriodic();
+    s_Swerve.teleopSwerve(
+    () -> -driver.getRawAxis(translationAxis), 
+    () -> -driver.getRawAxis(strafeAxis), 
+    () -> -driver.getRawAxis(rotationAxis), 
+    () -> false /* Never Robot-Oriented */
+    );
   }
 
   @Override
@@ -141,14 +125,6 @@ public class Robot extends TimedRobot {
 
     if (playMusic.getAsBoolean()) {
       s_Swerve.musicPlay();
-    }
-
-    if (visionControl.getAsBoolean()) {
-      teleopSwerveStatus = false;
-      // Command
-    }
-    else {
-      teleopSwerveStatus = true;
     }
 
     /* Operator Related */
