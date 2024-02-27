@@ -137,6 +137,20 @@ public final class Constants {
         /* In Meters (Currently half a meter forward of center, half a meter up from center). */
         public static final Transform3d robotToCamTranslation = new Transform3d(0.5, 0.0, 0.5, new Rotation3d());
         public static final class RobotCoordsForEachID {
+            public static final double[] redSpeakerCoords = {15.00, 5.50, 0};
+            public static final double[] blueSpeakerCoords = {1.50, 5.50, 180};
+
+            public static final double[] redAmpCoords = {14.70, 7.50, 90};
+            public static final double[] blueAmpCoords = {1.80, 7.50, 90};
+
+            public static final double[] redWolfTrapCoords = {12.25, 4.90, 225};
+            public static final double[] blueWolfTrapCoords = {4.35, 4.90, 315};
+
+            public static final double[] redSourceTrapCoords = {12.20, 3.25, 135};
+            public static final double[] blueSourceTrapCoords = {4.40, 3.25, 45};
+
+            public static final double[] redOuterTrapCoords = {10.75, 4.10, 0};
+            public static final double[] blueOuterTrapCoords = {5.85, 4.10, 180};
         }
     }
 
