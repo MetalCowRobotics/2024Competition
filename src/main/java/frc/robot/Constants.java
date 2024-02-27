@@ -63,7 +63,7 @@ public final class Constants {
 
         /* Angle Motor PID Values */
        // public static final double angleKP = chosenModule.angleKP;
-        public static final double angleKP = 0.2;
+        public static final double angleKP = 10;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
 
@@ -145,5 +145,13 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+    public static final class SpeakerScoring {
+        public static final double ARM_ANGLE = 36;
+        public static final double WRIST_ANGLE = 70;
+    }
+    public static final class AmpScroing {
+        public static final double ARM_ANGLE = 0;
+        public static final double WRIST_ANGLE = 72;
     }
 }

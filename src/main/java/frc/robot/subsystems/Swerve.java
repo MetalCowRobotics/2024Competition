@@ -63,7 +63,7 @@ public class Swerve {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX());
         double ySpeed = m_ySlewRateLimiter.calculate(translation.getY());
         /* Ramps for Angles too be added (look at 2023Comp.) */
-        // double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+        double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
 
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
@@ -110,7 +110,7 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }
-
+           
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, desiredSpeed);
@@ -222,7 +222,7 @@ public class Swerve {
             false /* KEEP FALSE */
         );
     }
-
+        
     public void driveToPoint(double targetX, double targetY, double targetTheta) {
         double x = getPose().getX();
         double y = getPose().getY();
