@@ -25,7 +25,7 @@ public class WristSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 1000; // 4000
     private double minRPM = 500; // 2000
-    private double reduction = 100 * (18 / 72);
+    private double reduction = 100 * (18 / 56);
     private double kP = 0.010; // 0.015
     private double kI = 0.0;
     private double kD = 0.0;

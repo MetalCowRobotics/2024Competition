@@ -158,6 +158,8 @@ public class FullArmSubsystem {
             m_WristSubsystem.setTarget(wristTarget);
         }
         keepWristIn();
+        System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
+        System.out.println(m_WristSubsystem.getTargetAngle());
         m_ArmSubsystem.periodic();
         m_WristSubsystem.periodic();
     }
