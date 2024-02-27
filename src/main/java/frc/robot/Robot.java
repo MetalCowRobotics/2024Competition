@@ -139,17 +139,17 @@ public class Robot extends TimedRobot {
 
     /* Operator Related */
     if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setIntakePosition();
+      m_FullArmSubsystem.setPickupPosition();
     }
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
       //System.out.println(m_FullArmSubsystem.getPhase());
     }
     if (operator.getYButtonReleased()) {
-      m_FullArmSubsystem.setClimb1Position();
+      m_FullArmSubsystem.setClimbVertPosition();
     }
     if (operator.getXButtonReleased()) {
-      m_FullArmSubsystem.setClimb2Position();
+      m_FullArmSubsystem.setClimbFinPosition();
     }
     // else {
     //   m_FullArmSubsystem.setRestPosition();
