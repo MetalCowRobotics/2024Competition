@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class FullArmSubsystem {
@@ -83,7 +84,7 @@ public class FullArmSubsystem {
     public void shortCircut(double targetPosArm, double targetPosWrist){
         if((targetPosArm == Constants.FullArmConstants.armRest) && (targetPosWrist == Constants.FullArmConstants.wristRest)){
             m_ArmSubsystem.setTarget(0);
-            m_WristSubsystem.setTarget(-67);    
+            m_WristSubsystem.setTarget(-30);    
         }else{
             m_ArmSubsystem.setTarget(targetPosArm);
             m_WristSubsystem.setTarget(targetPosWrist);
@@ -92,7 +93,7 @@ public class FullArmSubsystem {
 
     public void keepWristIn(){
         if((m_ArmSubsystem.getAvgCurrentAngle()>5)&&(m_ArmSubsystem.getAvgCurrentAngle()<70)){
-            m_WristSubsystem.setTarget(-67);
+            m_WristSubsystem.setTarget(-30);
         }
     }
 
@@ -152,13 +153,13 @@ public class FullArmSubsystem {
     //     phase = Constants.FullArmConstants.speakerPhases;
     // }
 
-    public void periodic() {
-        if(m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget()){
-
-            m_ArmSubsystem.setTarget(armTarget);
-            m_WristSubsystem.setTarget(wristTarget);
-        }
+    public void periodic() {    
+        SmartDashboard.putBoolean("Safe", !((m_ArmSubsystem.getAvgCurrentAngle()>5)&&(m_ArmSubsystem.getAvgCurrentAngle()<70)));
         keepWristIn();
+        if(m_WristSubsystem.atTarget()){
+            m_ArmSubsystem.setTarget(armTarget);
+        }
+        //
         System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
         System.out.println(m_WristSubsystem.getTargetAngle());
         m_WristSubsystem.periodic();
