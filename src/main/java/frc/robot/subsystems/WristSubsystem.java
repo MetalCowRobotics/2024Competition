@@ -23,9 +23,9 @@ public class WristSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 1000; // 4000
-    private double minRPM = 500; // 2000
-    private double reduction = 100 * (18 / 56);
+    private double maxRPM = 4000; // 4000
+    private double minRPM = 2000; // 2000
+    private double reduction = 100.0 * (12.0 / 56.0);
     private double kP = 0.010; // 0.015
     private double kI = 0.0;
     private double kD = 0.0;
@@ -48,7 +48,7 @@ public class WristSubsystem {
         wristMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
         encoder = wristMotor.getEncoder();
-
+        
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
 
@@ -131,7 +131,7 @@ public class WristSubsystem {
                 speed = 0;
             }
         }
-
+        SmartDashboard.putNumber("Wrist Encoder Output", encoder.getPosition());
         SmartDashboard.putNumber("Wrist Motor Output", speed);
 
         if (atTarget()) {

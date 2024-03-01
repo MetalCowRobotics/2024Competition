@@ -100,7 +100,7 @@ public class FullArmSubsystem {
     //     phaseNumber = shortCircut(Constants.FullArmConstants.pickupPhases);
     //     phase = Constants.FullArmConstants.pickupPhases;
         
-    // }
+    //}
     public void setPickupPosition(){
         armTarget = Constants.FullArmConstants.armPickup;
         wristTarget = Constants.FullArmConstants.wristPickup;
@@ -154,15 +154,24 @@ public class FullArmSubsystem {
 
     public void periodic() {
         if(m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget()){
+
             m_ArmSubsystem.setTarget(armTarget);
             m_WristSubsystem.setTarget(wristTarget);
         }
         keepWristIn();
         System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
         System.out.println(m_WristSubsystem.getTargetAngle());
-        m_ArmSubsystem.periodic();
         m_WristSubsystem.periodic();
+        m_ArmSubsystem.periodic();
+
     }
+    // public void periodic() {
+    //     if (m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget()) {
+    //         nextPhase();
+    //     }
+    //     m_ArmSubsystem.periodic();
+    //     m_WristSubsystem.periodic();
+    // }
 
 
 
