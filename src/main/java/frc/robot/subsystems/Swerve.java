@@ -270,4 +270,9 @@ public class Swerve {
         }
         SmartDashboard.putNumber("AprilTagID", lastTargetID);
     }
+
+    public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
+        visionPeriodic();
+        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+    }
 }

@@ -86,13 +86,11 @@ public class Robot extends TimedRobot {
     configureButtonBindings();
     m_Intake.periodic();
     m_Shooter.periodic();
- 
-    s_Swerve.visionPeriodic();
-    s_Swerve.teleopSwerve(
-    () -> -driver.getRawAxis(translationAxis), 
-    () -> -driver.getRawAxis(strafeAxis), 
-    () -> -driver.getRawAxis(rotationAxis), 
-    () -> false /* Never Robot-Oriented */
+    s_Swerve.periodic(
+      () -> -driver.getRawAxis(translationAxis), 
+      () -> -driver.getRawAxis(strafeAxis), 
+      () -> -driver.getRawAxis(rotationAxis), 
+      () -> false /* Never Robot-Oriented */
     );
   }
 
