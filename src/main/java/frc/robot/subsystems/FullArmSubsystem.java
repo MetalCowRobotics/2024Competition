@@ -84,7 +84,7 @@ public class FullArmSubsystem {
     public void shortCircut(double targetPosArm, double targetPosWrist){
         if((targetPosArm == Constants.FullArmConstants.armRest) && (targetPosWrist == Constants.FullArmConstants.wristRest)){
             m_ArmSubsystem.setTarget(0);
-            m_WristSubsystem.setTarget(-30);    
+            m_WristSubsystem.setTarget(-35);    
         }else{
             m_ArmSubsystem.setTarget(targetPosArm);
             m_WristSubsystem.setTarget(targetPosWrist);
@@ -92,8 +92,11 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if((m_ArmSubsystem.getAvgCurrentAngle()>5)&&(m_ArmSubsystem.getAvgCurrentAngle()<70)){
-            m_WristSubsystem.setTarget(-30);
+        if((m_ArmSubsystem.getAvgCurrentAngle()>5)&&(m_ArmSubsystem.getAvgCurrentAngle()<180)){
+            m_WristSubsystem.setTarget(-35);
+        }
+        else{
+            m_WristSubsystem.setTarget(wristTarget);
         }
     }
 
@@ -159,6 +162,7 @@ public class FullArmSubsystem {
         if(m_WristSubsystem.atTarget()){
             m_ArmSubsystem.setTarget(armTarget);
         }
+
         //
         System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
         System.out.println(m_WristSubsystem.getTargetAngle());
