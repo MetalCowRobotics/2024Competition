@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
+    private final XboxController operator = new XboxController(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -35,16 +35,31 @@ public class Robot extends TimedRobot {
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
+  
 
     /* Operator Controls */
-    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    /* Operator Controls */
+    private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
+    private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
+    // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
-      
+    // private final Intake m_Intake = new Intake();
+    // private final Shooter m_Shooter = new Shooter();
+    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+    // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
+    //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
+      private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    /* Commands */
+    // private RestToShooter RestToShooter = new RestToShooter();
+    //private InstantCommand ShooterToRest = new PickUpToRest();
+    
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -84,14 +99,16 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
-    m_Intake.periodic();
-    m_Shooter.periodic();
+
     s_Swerve.periodic(
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
       () -> false /* Never Robot-Oriented */
     );
+    m_FullArmSubsystem.periodic();
+    m_Intake.periodic();
+    m_Shooter.periodic();
   }
 
   @Override
@@ -126,6 +143,34 @@ public class Robot extends TimedRobot {
     }
 
     /* Operator Related */
+    if (operator.getBButtonReleased()) {
+      m_FullArmSubsystem.setPickupPosition();
+    }
+    if (operator.getAButtonReleased()) {
+      m_FullArmSubsystem.setRestPosition();
+      //System.out.println(m_FullArmSubsystem.getPhase());
+    }
+    if (operator.getYButtonReleased()) {
+      m_FullArmSubsystem.setClimbVertPosition();
+    }
+    if (operator.getXButtonReleased()) {
+      m_FullArmSubsystem.setClimbFinPosition();
+    }
+    if (operator.getLeftBumperReleased()) {
+      m_FullArmSubsystem.setSpeakerPosition();
+    }
+
+    if (intakeTrigger.getAsBoolean()) {
+      m_Intake.setspeed(.9);
+      m_Intake.setIntakeTrue();
+    } else if (intakeBackwards.getAsBoolean()) {
+      m_Intake.setspeed(-.9);
+      m_Intake.setIntakeTrue();
+    } else {
+      m_Intake.setIntakeFalse();
+    }
+
+
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();
     }
@@ -133,11 +178,43 @@ public class Robot extends TimedRobot {
       m_Shooter.setStopSpeed();
     }
 
-    if (intakeButton.getAsBoolean()) {
-      m_Intake.setIntakeTrue();
-    }
-    else {
-      m_Intake.setIntakeFalse();
-    }
+    // if (intakeTrigger.getAsBoolean()) {
+    //   m_Intake.setIntakeTrue();
+    // }
+    // else {
+    //   m_Intake.setIntakeFalse();
+    // }
   }
+    // else {
+    //   m_FullArmSubsystem.setRestPosition();
+    // }
+
+    // if (armWrist.getAsBoolean()) {
+    //   m_FullArmSubsystem.setIntakePosition();
+    // }
+    // else {
+    //   m_FullArmSubsystem.setRestPosition();
+    // }
+
+    // if (armWrist2.getAsBoolean()) {
+    //   m_FullArmSubsystem.move();
+    // }
+    // else {
+    //   m_FullArmSubsystem.no();
+    // }
+
+    // if (shooterTrigger.getAsBoolean()) {
+    //   m_Shooter.setShootingSpeed();
+    // }
+    // else {
+    //   m_Shooter.setStopSpeed();
+    // }
+
+    // if (intakeButton.getAsBoolean()) {
+    //   m_Intake.setIntakeTrue();
+    // }
+    // else {
+    //   m_Intake.setIntakeFalse();
+    // }
+
 }
