@@ -88,14 +88,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     s_Swerve.zeroGyro();
+    a_AutoTwoNoteCenter.TwoNoteInit();
 
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    a_AutoTwoNoteCenter.periodic();
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    a_AutoTwoNoteCenter.twoNoteCenter();
   }
 
   @Override

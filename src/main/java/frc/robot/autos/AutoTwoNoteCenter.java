@@ -13,21 +13,29 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 
-public class AutoTwoNoteCenter {    
+public class AutoTwoNoteCenter extends Command{    
+    Swerve m_swerve;
+    Intake i_intake;
+    Shooter s_shooter; 
+    FullArmSubsystem a_arm;
+    double armMovementTimeout; 
     Command twoNoteCenter;
-    Swerve m_swerve = new Swerve();
-    Intake i_intake = new Intake();
-    Shooter s_shooter = new Shooter();
-    FullArmSubsystem a_arm = new FullArmSubsystem();
-    double armMovementTimeout = .5;
+    public void TwoNoteInit(){
+        m_swerve = new Swerve();
+        // i_intake = new Intake();
+        s_shooter = new Shooter();;
+        a_arm= new FullArmSubsystem();
+        armMovementTimeout = .5; 
+    }
     
-    public void periodic(){
+    
+    public void twoNoteCenter(){
         // auto variables
-            
+
             new SequentialCommandGroup(
             //Auto Set Up
-            new InstantCommand(() -> m_swerve.setHeading(new Rotation2d(180))),
-            new InstantCommand(() -> m_swerve.resetModulesToAbsolute()),
+            // new InstantCommand(() -> m_swerve.setHeading(new Rotation2d(0))),
+            // new InstantCommand(() -> m_swerve.resetModulesToAbsolute()),
 
             // setting up speaker angles
             new ParallelRaceGroup(
