@@ -38,12 +38,17 @@ public class Robot extends TimedRobot {
   
 
     /* Operator Controls */
+    /* Operator Controls */
+    private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
     // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Intake m_Intake = new Intake();
+    private final Shooter m_Shooter = new Shooter();
     // private final Intake m_Intake = new Intake();
     // private final Shooter m_Shooter = new Shooter();
     // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
@@ -95,8 +100,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
-    // m_Intake.periodic();
-    // m_Shooter.periodic();
+    m_Intake.periodic();
+    m_Shooter.periodic();
       m_FullArmSubsystem.periodic();
     // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
     // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
@@ -151,6 +156,24 @@ public class Robot extends TimedRobot {
     if (operator.getXButtonReleased()) {
       m_FullArmSubsystem.setClimbFinPosition();
     }
+    if (operator.getLeftBumperReleased()) {
+      m_FullArmSubsystem.setSpeakerPosition();
+    }
+
+    if (shooterTrigger.getAsBoolean()) {
+      m_Shooter.setShootingSpeed();
+    }
+    else {
+      m_Shooter.setStopSpeed();
+    }
+
+    if (intakeTrigger.getAsBoolean()) {
+      m_Intake.setIntakeTrue();
+    }
+    else {
+      m_Intake.setIntakeFalse();
+    }
+  }
     // else {
     //   m_FullArmSubsystem.setRestPosition();
     // }
@@ -184,4 +207,4 @@ public class Robot extends TimedRobot {
     // }
 
   }
-}
+
