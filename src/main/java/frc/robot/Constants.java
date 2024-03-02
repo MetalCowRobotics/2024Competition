@@ -159,15 +159,15 @@ public final class Constants {
         public static final double[][] speakerPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,35,57.6}};
         public static final double armRest = 0.0;
         public static final double wristRest = 0.0;
-        public static final double armPickup = 287.0;
+        public static final double armPickup = 289.0;
         public static final double wristPickup = 47.0;
         public static final double armClimbVert = 180.0;
         public static final double wristClimbVert = -35.0;
-        public static final double armClimbFin = 90.0;
+        public static final double armClimbFin = 87.0;
         public static final double wristClimbFin = -35.0;
         public static final double armAmp = 279.0;
         public static final double wristAmp = 57.6;
-        public static final double armSpeaker = 135.0;
+        public static final double armSpeaker = 145.0;
         public static final double wristSpeaker = -35.0;
 
 

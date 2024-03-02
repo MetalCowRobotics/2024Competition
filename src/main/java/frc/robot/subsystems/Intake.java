@@ -17,42 +17,20 @@ public class Intake {
     }
 
     public void periodic() {
-
-
-        /*
-        if intakeStatus
-            speed = .9
-
-        else
-            speed = 0
-        if noteDetector
-             //   intake status = false
-        */
-
         if (intakeStatus) {
-            speed = .9;
+            intakeMotor.set(speed);
         }
         else {
-             speed = 0;
+             intakeMotor.set(0);
             }
 
         if (noteDetector.get()){
             intakeStatus = false;
         }    
 
-
-
-         
-       // if (!noteDetector.get()) {
-         //       speed = 0.90;
-         //   }
-          //   }
-          //  else {
-           //     speed = 0;
-          //       intakeStatus = false;
-          //  }
-
-        intakeMotor.set(speed);
+    }
+    public void setspeed(double i){
+            speed = i; 
     }
 
     public void setIntakeTrue() {

@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     /* Operator Controls */
     /* Operator Controls */
     private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
     // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
@@ -160,6 +161,17 @@ public class Robot extends TimedRobot {
       m_FullArmSubsystem.setSpeakerPosition();
     }
 
+    if (intakeTrigger.getAsBoolean()) {
+      m_Intake.setspeed(.9);
+      m_Intake.setIntakeTrue();
+    } else if (intakeBackwards.getAsBoolean()) {
+      m_Intake.setspeed(-.9);
+      m_Intake.setIntakeTrue();
+    } else {
+      m_Intake.setIntakeFalse();
+    }
+
+
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();
     }
@@ -167,12 +179,12 @@ public class Robot extends TimedRobot {
       m_Shooter.setStopSpeed();
     }
 
-    if (intakeTrigger.getAsBoolean()) {
-      m_Intake.setIntakeTrue();
-    }
-    else {
-      m_Intake.setIntakeFalse();
-    }
+    // if (intakeTrigger.getAsBoolean()) {
+    //   m_Intake.setIntakeTrue();
+    // }
+    // else {
+    //   m_Intake.setIntakeFalse();
+    // }
   }
     // else {
     //   m_FullArmSubsystem.setRestPosition();
