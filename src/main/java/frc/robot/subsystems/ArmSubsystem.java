@@ -122,7 +122,7 @@ public class ArmSubsystem {
     public boolean atTarget() {
         if (Math.abs(targetAngle - getEncoder1CurrentAngle()) < positionTolerance
             &&
-            Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance) {
+            Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance) {    
                 return true;
             }
         else {
