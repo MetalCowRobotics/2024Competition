@@ -9,10 +9,10 @@ public class Shooter {
    private double motorSpeed = 0;
 
     public Shooter() {
-        shooterMotor1 = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotor2 = new CANSparkMax(19, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotor1.setInverted(true);
-        shooterMotor2.setInverted(false);
+        shooterMotor1 = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
+        shooterMotor2 = new CANSparkMax(52, CANSparkLowLevel.MotorType.kBrushless);
+        shooterMotor1.setInverted(false);
+        shooterMotor2.setInverted(true);
     }
 
     public void periodic() {
@@ -21,7 +21,7 @@ public class Shooter {
     }
 
     public void setShootingSpeed() {
-        motorSpeed = 0.4;
+        motorSpeed = 0.9;
     }
     
     public void setStopSpeed() {
