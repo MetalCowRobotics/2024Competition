@@ -35,7 +35,6 @@ public class ArmSubsystem {
     private double kD = 0.0;
     private double positionTolerance = 5.0;
     private double initialPosition = 0.0;
-    private double wristAngle;
 
     public ArmSubsystem() {
         armMotor1 = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
@@ -100,10 +99,6 @@ public class ArmSubsystem {
 
     public double getAvgCurrentAngle(){
         return ((getEncoder1CurrentAngle()+getEncoder2CurrentAngle())/2);
-    }
-
-    public double getWristAngle(double angle) {
-        return this.wristAngle = angle;
     }
 
     public void resetEncoders(double angle) {
