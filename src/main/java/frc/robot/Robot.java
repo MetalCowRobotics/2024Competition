@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.subsystems.*;
 
 /*
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
     // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
     //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
       private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+      private final AutoTwoNoteCenter a_AutoTwoNoteCenter = new AutoTwoNoteCenter();
     /* Commands */
     // private RestToShooter RestToShooter = new RestToShooter();
     //private InstantCommand ShooterToRest = new PickUpToRest();
@@ -85,12 +87,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     s_Swerve.zeroGyro();
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    a_AutoTwoNoteCenter.periodic();
   }
 
   @Override
