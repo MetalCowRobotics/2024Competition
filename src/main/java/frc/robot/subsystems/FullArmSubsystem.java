@@ -33,7 +33,7 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if((m_ArmSubsystem.getAvgCurrentAngle()>5)&&(m_ArmSubsystem.getAvgCurrentAngle()<180)){
+        if((m_ArmSubsystem.getAvgCurrentAngle()>5)&&(m_ArmSubsystem.getAvgCurrentAngle()<100)){
             m_WristSubsystem.setTarget(-35);
         }
         else{
@@ -82,11 +82,4 @@ public class FullArmSubsystem {
         m_ArmSubsystem.periodic();
 
     }
-
-
-
-
-
-
-
 }

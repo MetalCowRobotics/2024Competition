@@ -27,8 +27,8 @@ public class ArmSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 2000; 
-    private double minRPM = 1000;
+    private double maxRPM = 4000; 
+    private double minRPM = 2000;
     private double reduction = 100 * (24.0 / 12.0);
     private double kP = 0.05; // 0.07
     private double kI = 0.0;
