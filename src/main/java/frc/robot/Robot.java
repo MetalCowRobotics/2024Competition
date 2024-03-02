@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
 
     /* Operator Controls */
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton intakeButton2 = new JoystickButton(operator, XboxController.Button.kA.value);
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
     /* Subsystems */
@@ -119,12 +120,16 @@ public class Robot extends TimedRobot {
     // }
 
     if (intkakeButton.getAsBoolean()) {
+      m_Intake.setspeed(.9);
       m_Intake.setIntakeTrue();
-    }
-
-    else {
+    } else if (intakeButton2.getAsBoolean()) {
+      m_Intake.setspeed(-.9);
+      m_Intake.setIntakeTrue();
+    } else {
       m_Intake.setIntakeFalse();
     }
+
+
 
     // if (crawl.getAsBoolean()) {
     //   s_Swerve.setCrawl();
@@ -142,13 +147,6 @@ public class Robot extends TimedRobot {
     }
     else {
       m_Shooter.setStopSpeed();
-    }
-
-    if (intakeButton.getAsBoolean()) {
-      m_Intake.setIntakeTrue();
-    }
-    else {
-      m_Intake.setIntakeFalse();
     }
   }
 }

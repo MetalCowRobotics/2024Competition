@@ -21,7 +21,7 @@ public class Shooter {
     }
 
     public void setShootingSpeed() {
-        motorSpeed = 0.5;
+        motorSpeed = 0.9;
     }
     
     public void setStopSpeed() {
