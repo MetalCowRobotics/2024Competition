@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.print.DocFlavor;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -63,7 +65,7 @@ public final class Constants {
 
         /* Angle Motor PID Values */
        // public static final double angleKP = chosenModule.angleKP;
-        public static final double angleKP = 0.2;
+        public static final double angleKP = 10;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
 
@@ -145,5 +147,33 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    }
+
+    public static final class FullArmConstants {
+       // public static final double[][] restPhases = {{0,0,0,0,0},{-54,-54,0,0,0}};
+        public static final double[][] restPhases = {{0,0},{-67,0}};
+        public static final double[][] pickupPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,45,60.6}};
+        public static final double[][] climbPhases1 = {{0,0,0,180},{-67,0,-67,-67}};
+        public static final double[][] climbPhases2 = {{180,90},{-67,-67}};
+        public static final double[][] ampPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,35,57.6}};
+        public static final double[][] speakerPhases = {{0,0,0,130,279,279},{-67,0,-67,-67,35,57.6}};
+        public static final double armRest = 0.0;
+        public static final double wristRest = 0.0;
+        public static final double armPickup = 287.0;
+        public static final double wristPickup = 47.0;
+        public static final double armClimbVert = 180.0;
+        public static final double wristClimbVert = -35.0;
+        public static final double armClimbFin = 90.0;
+        public static final double wristClimbFin = -35.0;
+        public static final double armAmp = 279.0;
+        public static final double wristAmp = 57.6;
+        public static final double armSpeaker = 135.0;
+        public static final double wristSpeaker = -35.0;
+
+
+        //public static final double[][] speakerPhases = -12;
+        //public static final double[][] ampPhases = 130;
+        //public static final double[][] shooterPhases = -54;
+
     }
 }

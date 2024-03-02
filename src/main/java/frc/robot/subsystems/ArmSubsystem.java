@@ -7,86 +7,78 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class ArmSubsystem extends SubsystemBase {
-    private CANSparkMax m_motor;
-    private RelativeEncoder encoder;
+public class ArmSubsystem {
+    private CANSparkMax armMotor1;
+    private CANSparkMax armMotor2;
+    private RelativeEncoder encoder1;
+    private RelativeEncoder encoder2;
 
-    private PIDController m_pidController;
+    private PIDController pidController1;
+    private PIDController pidController2;
 
     private double maxSetpoint;
     private double minSetpoint;
-
     private double setpoint;
-
     private double targetAngle;
 
-    private double positionTolerance;
+    private double nominalVoltage = 12.6;
+    private double rampTime = 0.125;
+    private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
+    private int stallCurrentLimit = 30;
+    private int freeCurrentLimit = 30;
+    private double maxRPM = 2000; 
+    private double minRPM = 1000;
+    private double reduction = 100 * (24.0 / 12.0);
+    private double kP = 0.05; // 0.07
+    private double kI = 0.0;
+    private double kD = 0.0;
+    private double positionTolerance = 5.0;
+    private double initialPosition = 0.0;
+    private double wristAngle;
 
-    private double initialPosition;
+    public ArmSubsystem() {
+        armMotor1 = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
+        armMotor2 = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
 
-    private double reduction;
+        armMotor1.enableVoltageCompensation(nominalVoltage);
+        armMotor2.enableVoltageCompensation(nominalVoltage);
 
-    private String subsystemName;
+        armMotor1.setOpenLoopRampRate(rampTime);
+        armMotor2.setOpenLoopRampRate(rampTime);
 
-    public static class ServoMotorSubsystemConfig {
-        public double nominalVoltage = 12.6;
-        public double rampTime = 0.125;
-        public int motorCanID;
-        public boolean inverted = false;
-        public CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
-        public int stallCurentLimit;
-        public int freeCurentLimit;
+        armMotor1.setClosedLoopRampRate(rampTime);
+        armMotor2.setClosedLoopRampRate(rampTime);
 
-        public double kP;
-        public double kI;
-        public double kD;
+        armMotor1.setInverted(false);
+        armMotor2.setInverted(true);
 
-        public double positionTolerance;
+        armMotor1.setIdleMode(idleMode);
+        armMotor2.setIdleMode(idleMode);
 
-        public double maxRPM;
-        public double minRPM;
+        armMotor1.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+        armMotor2.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
-        public double initialPosition;
+        encoder1 = armMotor1.getEncoder();
+        encoder2 = armMotor2.getEncoder();
 
-        public double reduction = 1;
+        maxSetpoint = maxRPM / 5820;
+        minSetpoint = minRPM / 5820;
 
-        public String subsystemName;
+        pidController1 = new PIDController(kP, kI, kD);
+        pidController2 = new PIDController(kP, kI, kD);
+
+        pidController1.setIntegratorRange(-0.6, 0.6);
+        pidController2.setIntegratorRange(-0.6, 0.6);
     }
 
-    public ArmSubsystem(ServoMotorSubsystemConfig config) {
-        m_motor = new CANSparkMax(config.motorCanID, CANSparkLowLevel.MotorType.kBrushless);
-        m_motor.enableVoltageCompensation(config.nominalVoltage);
-        // m_motor.disableVoltageCompensation();
-        m_motor.setOpenLoopRampRate(config.rampTime);
-        m_motor.setClosedLoopRampRate(config.rampTime);
-        m_motor.setInverted(config.inverted);
-        m_motor.setIdleMode(config.idleMode);
-        m_motor.setSmartCurrentLimit(config.stallCurentLimit, config.freeCurentLimit);
-
-        encoder = m_motor.getEncoder();
-        // encoder.setPosition(0);
-        //encoder.setInverted(config.inverted);
-
-        maxSetpoint = config.maxRPM / 5820;
-        minSetpoint = config.minRPM / 5820;
-
-        this.reduction = config.reduction;
-
-        m_pidController = new PIDController(config.kP, config.kI, config.kD);
-        m_pidController.setIntegratorRange(-0.6, 0.6);
-
-        this.positionTolerance = config.positionTolerance;
-
-        this.initialPosition = config.initialPosition;
-
-        this.subsystemName = config.subsystemName;
+    private boolean allowPositiveMotion(double angle) {
+        return angle >= 0;
     }
 
-    protected abstract boolean allowPositiveMotion(double angle);
-
-    protected abstract boolean allowNegativeMotion(double angle);
+    private boolean allowNegativeMotion(double angle) {
+         return angle <= 180;
+    }
 
     private double limitSpeed(double speed) {
         if (speed == 0) {
@@ -97,72 +89,137 @@ public abstract class ArmSubsystem extends SubsystemBase {
 		absSpeed = Math.min(absSpeed, maxSetpoint);
 		return Math.copySign(absSpeed, speed);
     }
-    
-    public double getCurrentAngle() {
-        return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
+
+    public double getEncoder1CurrentAngle() {
+        return Units.rotationsToDegrees(encoder1.getPosition() / reduction) + initialPosition;
     }
 
-    public void resetEncoder(double angle) {
-        encoder.setPosition(angle);
+    public double getEncoder2CurrentAngle() {
+        return Units.rotationsToDegrees(encoder2.getPosition() / reduction) + initialPosition;
+    }
+
+    public double getAvgCurrentAngle(){
+        return ((getEncoder1CurrentAngle()+getEncoder2CurrentAngle())/2);
+    }
+
+    public double getWristAngle(double angle) {
+        return this.wristAngle = angle;
+    }
+
+    public void resetEncoders(double angle) {
+        encoder1.setPosition(angle);
+        encoder2.setPosition(angle);
+    }
+
+    public void setTarget(double target) {
+        this.targetAngle = target;
     }
 
     public double getTargetAngle() {
         return this.targetAngle;
     }
 
-    public double getCurrentVelocity() {
-        return Units.rotationsToDegrees(encoder.getVelocity() / reduction);
-    }
-
-    public void setTarget(double target) {
-        this.targetAngle = target;
-        // this.setpoint = Units.degreesToRotations(target * reduction);
-        m_pidController.setSetpoint(targetAngle);
-    }
-
     public boolean atTarget() {
-        return Math.abs(targetAngle - getCurrentAngle()) < positionTolerance;
+        if (Math.abs(targetAngle - getEncoder1CurrentAngle()) < positionTolerance
+            &&
+            Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance) {
+                return true;
+            }
+        else {
+            return false;
+        }
     }
 
+   public boolean atAngle(double desiredAngle) {
+        if (Math.abs(desiredAngle - getEncoder1CurrentAngle()) < positionTolerance
+            &&
+            Math.abs(desiredAngle - getEncoder2CurrentAngle()) < positionTolerance) {
+                return true;
+            }
+        else {
+            return false;
+        }
+    }
     private void writeStatus() {
-        SmartDashboard.putNumber(subsystemName + " angle", getCurrentAngle());
-        SmartDashboard.putNumber(subsystemName + " angular velocity", getCurrentVelocity());
+        SmartDashboard.putNumber("Arm 1 Angle", getEncoder1CurrentAngle());
+        SmartDashboard.putNumber("Arm 2 Angle", getEncoder2CurrentAngle());
 
-        SmartDashboard.putNumber(subsystemName + " encoder position", encoder.getPosition());
-        SmartDashboard.putNumber(subsystemName + " encoder velocity", encoder.getVelocity());
+        // SmartDashboard.putNumber("Arm 1 Angular Velocity", Units.rotationsToDegrees(encoder1.getVelocity() / reduction));
+        // SmartDashboard.putNumber("Arm 2 Angular Velocity", Units.rotationsToDegrees(encoder2.getVelocity() / reduction));
 
-        SmartDashboard.putNumber(subsystemName + " target angle", targetAngle);
-        SmartDashboard.putNumber(subsystemName + " target encoder podition", setpoint);
+        // SmartDashboard.putNumber("Arm 1 Encoder Position", encoder1.getPosition());
+        // SmartDashboard.putNumber("Arm 2 Encoder Position", encoder2.getPosition());
+
+        // SmartDashboard.putNumber("Arm 1 encoder Velocity", encoder1.getVelocity());
+        // SmartDashboard.putNumber("Arm 2 encoder Velocity", encoder2.getVelocity());
+
+        // SmartDashboard.putNumber("Arm Target Angle", targetAngle);
+        SmartDashboard.putNumber("Arm Target Encoder Podition", setpoint);
     }
 
-    @Override
     public void periodic() {
         writeStatus();
 
-        double speed = 0;
+        double speed1 = 0;
+        double speed2 = 0;
+
+        // if (wristAngle > -18) {
+        //     pidController1.setSetpoint(0);
+        //     pidController2.setSetpoint(0);
+        // }
+        // else {
+        //     pidController1.setSetpoint(targetAngle);
+        //     pidController2.setSetpoint(targetAngle);
+        // }
+
+        pidController1.setSetpoint(targetAngle);
+        pidController2.setSetpoint(targetAngle);
 
         if (!atTarget()) {
-            speed = m_pidController.calculate(getCurrentAngle());
+            speed1 = pidController1.calculate(getEncoder1CurrentAngle());
+            speed2 = pidController2.calculate(getEncoder2CurrentAngle());
         }
 
-        speed = limitSpeed(speed);
-        if (speed < 0) {
-            if (!allowNegativeMotion(speed)) {
-                speed = 0;
+        speed1 = limitSpeed(speed1);
+        if (speed1 < 0) {
+            if (!allowNegativeMotion(speed1)) {
+                speed1 = 0;
             }
         }
 
-        if (speed > 0) {
-            if (!allowPositiveMotion(speed)) {
-                speed = 0;
+        speed2 = limitSpeed(speed2);
+        if (speed2 < 0) {
+            if (!allowNegativeMotion(speed2)) {
+                speed2 = 0;
             }
         }
 
-        SmartDashboard.putNumber(subsystemName + " motor output", speed);
-        if(atTarget()) {
-            m_motor.set(0);
+        if (speed1 > 0) {
+            if (!allowPositiveMotion(speed1)) {
+                speed1 = 0;
+            }
+        }
+
+        if (speed2 > 0) {
+            if (!allowPositiveMotion(speed2)) {
+                speed2 = 0;
+            }
+        }
+
+        // if (wristAngle > 0) {
+        //     speed1 = 0;
+        //     speed2 = 0;
+        // }
+
+        SmartDashboard.putNumber("Arm 1 Motor Output", speed1);
+        SmartDashboard.putNumber("Arm 2 Motor Output", speed2);
+
+        if (atTarget()) {
+            armMotor1.set(0);
+            armMotor2.set(0);
         } else {
-            m_motor.set(speed);
+            armMotor1.set(speed1);
+            armMotor2.set(speed2);
         }
     }
 }
