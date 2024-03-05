@@ -17,30 +17,13 @@ import frc.lib14.SequentialCommands;
 import frc.lib14.ParallelCommands;
 import frc.lib14.InstantCommandBase;
 
-
-class Turn180 extends InstantCommandBase{
-    Swerve s_swerve;
-    Intake i_intake;
-    public Turn180(Intake m_intake){
-        i_intake = m_intake;
-        }
-    @Override
-    public void run(){
-        // s_swerve.setHeading(new Rotation2d(180));
-        i_intake.setspeed(.2);
-    }
-
-}
-
 public class AutoTwoNoteCenter implements MCRCommand{    
     boolean first = true;
     double armMovementTimeout = .5;
-    MCRCommand twoNoteCenter;
-    Turn180 turn180;
     
     public AutoTwoNoteCenter(Swerve m_swerve, Intake i_intake, Shooter s_shooter, FullArmSubsystem a_arm){
         
-        turn180 = new Turn180(i_intake);
+        
 
         // auto variables
             // if(m_swerve==null) m_swerve = new Swerve();
@@ -121,12 +104,10 @@ public class AutoTwoNoteCenter implements MCRCommand{
     
     @Override
     public void run(){
-        turn180.run();
-        // LED.runOrange();
     }
     
     @Override
     public boolean isFinished(){
-        return turn180.isFinished();
+        return false;
     }
 }
