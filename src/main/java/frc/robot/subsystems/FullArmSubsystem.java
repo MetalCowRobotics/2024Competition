@@ -73,6 +73,13 @@ public class FullArmSubsystem {
         shortCircut(armTarget, wristTarget);
 
     }
+    public void setAmpPosition(){
+        armTarget = Constants.FullArmConstants.armAmp;
+        wristTarget = Constants.FullArmConstants.wristAmp;
+        shortCircut(armTarget, wristTarget);
+    }
+    
+
     
     public void periodic() {    
         keepWristIn();
