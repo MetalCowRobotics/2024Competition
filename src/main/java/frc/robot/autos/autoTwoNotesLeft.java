@@ -22,7 +22,7 @@ import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import frc.lib14.ParallelCommands;
 import frc.lib14.InstantCommandBase;
-import frc.robot.autos.SetShootingSpeed;
+import frc.robot.autos.*;
 
 
 abstract class RotateToSpeaker extends InstantCommandBase{
@@ -72,9 +72,9 @@ public class AutoTwoNotesLeft implements MCRCommand {
             //new setHeading(leftSpeakerHeading)), // face the speaker from left
             RotateRobot.run(),
             swerve.resetModulesToAbsolute(),
-            new SetShootingSpeed(swerve).run(),
-            new TimedCommandSet(shooter.setStopSpeed(),0.5),
-            //new InstantCommand(() -> shooter.setStopSpeed()),
+            new SetShootingSpeed(shooter).run(),
+            //new TimedCommandSet(shooter.setStopSpeed(),0.5),
+            new SetStopSpeed(shooter).run(),
             new InstantCommand(() -> swerve.zeroGyro()),
             new ParallelCommands(
 
