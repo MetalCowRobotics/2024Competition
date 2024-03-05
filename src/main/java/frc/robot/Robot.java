@@ -7,10 +7,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib14.CommandPause;
+import frc.lib14.MCRCommand;
 import frc.robot.autos.AutoTwoNoteCenter;
+import frc.robot.autos.DriveToPointA;
+import frc.robot.autos.StartIntake;
+import frc.robot.autos.StopIntake;
 import frc.robot.subsystems.*;
+import frc.lib14.*;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -43,21 +50,24 @@ public class Robot extends TimedRobot {
     private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
+    
     // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
     // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
 
+    MCRCommand autoMission;
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
+
     // private final Intake m_Intake = new Intake();
     // private final Shooter m_Shooter = new Shooter();
     // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
     // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
     //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
       private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
-      private final AutoTwoNoteCenter a_AutoTwoNoteCenter = new AutoTwoNoteCenter();
+      private AutoTwoNoteCenter autoTwoNoteCenter; 
     /* Commands */
     // private RestToShooter RestToShooter = new RestToShooter();
     //private InstantCommand ShooterToRest = new PickUpToRest();
@@ -88,15 +98,24 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     s_Swerve.zeroGyro();
-    a_AutoTwoNoteCenter.TwoNoteInit();
-
+    s_Swerve.resetModulesToAbsolute();
+    autoMission = new SequentialCommands(
+      new StartIntake(m_Intake),
+      new DriveToPointA(s_Swerve),
+      new CommandPause(5),
+      new StopIntake(m_Intake));
+    SmartDashboard.putString("auto", "stopped");
+    // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    a_AutoTwoNoteCenter.twoNoteCenter();
+    // autoTwoNoteCenter.run();
+    autoMission.run();
+    m_Intake.periodic();
   }
 
   @Override
