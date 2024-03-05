@@ -34,10 +34,9 @@ public class Robot extends TimedRobot {
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton visionAlignment = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
   
-
-    /* Operator Controls */
     /* Operator Controls */
     private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
@@ -85,7 +84,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    s_Swerve.zeroGyro();
+    s_Swerve.visionToGyro();
   }
 
   /** This function is called periodically during autonomous. */
@@ -93,7 +92,9 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    s_Swerve.visionToGyro();
+  }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -138,6 +139,13 @@ public class Robot extends TimedRobot {
       s_Swerve.setBase();
     }
 
+    if (visionAlignment.getAsBoolean()) {
+      s_Swerve.enableVisionControl();
+    }
+    else {
+      s_Swerve.disableVisionControl();
+    }
+
     if (playMusic.getAsBoolean()) {
       s_Swerve.musicPlay();
     }
@@ -148,7 +156,6 @@ public class Robot extends TimedRobot {
     }
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
-      //System.out.println(m_FullArmSubsystem.getPhase());
     }
     if (operator.getYButtonReleased()) {
       m_FullArmSubsystem.setClimbVertPosition();

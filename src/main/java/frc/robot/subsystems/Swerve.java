@@ -29,6 +29,7 @@ public class Swerve {
     public Pigeon2 gyro;
     private Vision m_vision;
     private int lastTargetID;
+    private boolean visionControl;
 
     private final double accelerationTime = 0.6;
     private double speedMultiplier = 1;
@@ -42,6 +43,7 @@ public class Swerve {
     private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
 
     private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
+    private PIDController angleVisionPIDController = new PIDController(0.04, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
     private PIDController thetaController = new PIDController(0.04, 0, 0.001);
@@ -53,6 +55,8 @@ public class Swerve {
 
         m_vision = new Vision();
         lastTargetID = -1;
+        visionControl = false;
+        angleVisionPIDController.setTolerance(2);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -163,8 +167,13 @@ public class Swerve {
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), heading));
     }
 
-    public void zeroGyro(){
+    public void zeroGyro() {
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    }
+
+    public void visionToGyro() {
+        m_vision.periodic();
+        swervePoseEstimator.resetPosition(new Rotation2d(m_vision.getVisionAngleEstimate()), getModulePositions(), m_vision.getVisionPoseEstimate());
     }
 
     public Rotation2d getGyroYaw() {
@@ -187,6 +196,14 @@ public class Swerve {
 
     public void setBase() {
         speedMultiplier = 1;
+    }
+
+    public void enableVisionControl() {
+        visionControl = true;
+    }
+
+    public void disableVisionControl() {
+        visionControl = false;
     }
 
     public void musicInit() {
@@ -232,6 +249,7 @@ public class Swerve {
 
         xController.setSetpoint(targetX);
         yController.setSetpoint(targetY);
+
         yaw = yaw % 360;
         if (yaw < 0) {
             yaw += 360;
@@ -273,6 +291,10 @@ public class Swerve {
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
         visionPeriodic();
-        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+        if (visionControl) {
+            driveToPoint(getPose().getX(), getPose().getY(), m_vision.getVisionAngleEstimate());
+        } else {
+            teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+        }
     }
 }

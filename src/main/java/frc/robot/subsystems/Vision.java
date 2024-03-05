@@ -65,6 +65,10 @@ public class Vision extends SubsystemBase {
         return photonPoseEstimator.getReferencePose().toPose2d();
     }
 
+    public double getVisionAngleEstimate() {
+        return aprilTagBestTarget.getYaw();
+    }
+
     public int getTagID(){
         return fiducialID;
     }
