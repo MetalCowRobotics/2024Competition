@@ -23,11 +23,6 @@ public class Intake {
         else {
              intakeMotor.set(0);
             }
-
-        if (noteDetector.get()){
-            intakeStatus = false;
-        }    
-
     }
     public void setspeed(double i){
             speed = i; 
