@@ -15,21 +15,4 @@ public class LED {
     public static void runGradient(){
         ledController.set(.41);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

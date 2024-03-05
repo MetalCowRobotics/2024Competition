@@ -11,22 +11,21 @@ public class Intake {
     private boolean intakeStatus = false;
 
     public Intake() {
-        intakeMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.setInverted(true);
         noteDetector = new DigitalInput(0);
     }
 
     public void periodic() {
         if (intakeStatus) {
-            if (!noteDetector.get()) {
-                speed = 0.85;
-            }
-            else {
-                speed = 0;
-                intakeStatus = false;
-            }
+            intakeMotor.set(speed);
         }
-        intakeMotor.set(speed);
+        else {
+             intakeMotor.set(0);
+            }
+    }
+    public void setspeed(double i){
+            speed = i; 
     }
 
     public void setIntakeTrue() {
@@ -37,3 +36,5 @@ public class Intake {
         intakeStatus = false;
     }
 }
+
+//The only good code!!
