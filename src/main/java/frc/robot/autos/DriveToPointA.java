@@ -5,11 +5,17 @@ import frc.robot.subsystems.Swerve;
 
 public class DriveToPointA extends InstantCommandBase{
     Swerve s_swerve;
-    public DriveToPointA(Swerve m_swerve){
+    double xCor;
+    double yCor;
+    double targetAngle;
+    public DriveToPointA(Swerve m_swerve, double x, double y, double theta){
         s_swerve = m_swerve;
+        xCor = x;
+        yCor = y;
+        targetAngle = theta;
         }
     @Override
     public void run(){
-        s_swerve.driveToPoint(1, 1, 0);
+        s_swerve.driveToPoint(xCor, yCor, targetAngle);
     }
 }
