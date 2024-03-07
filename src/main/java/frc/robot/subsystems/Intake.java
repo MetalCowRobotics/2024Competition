@@ -14,31 +14,38 @@ public class Intake {
         intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.setInverted(true);
         noteDetector = new DigitalInput(0);
+        // set up the intake motor and the note detector
     }
 
     public void periodic() {
         if (intakeStatus) {
             intakeMotor.set(speed);
+            // set speed of intake to 0.5
         }
         else {
              intakeMotor.set(0);
             }
-
+            // set speed of intake to 0
         if (noteDetector.get()){
             intakeStatus = false;
+            // if the note detector is pressed, then set the intake to false
         }    
 
     }
+
     public void setspeed(double i){
             speed = i; 
+            // set speed to i
     }
 
     public void setIntakeTrue() {
         intakeStatus = true;
+        // set intake to true
     }
 
     public void setIntakeFalse() {
         intakeStatus = false;
+        // set intake to false
     }
 }
 
