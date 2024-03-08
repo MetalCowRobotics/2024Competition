@@ -17,7 +17,7 @@ public class Intake {
     private RelativeEncoder intakeEncoder;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
-    private double expectedTime = 1;
+    private double expectedTime = .18;
     private boolean notedetected = false;
     //private DigitalInput noteDetector;
     //private boolean notePresent = false; 
