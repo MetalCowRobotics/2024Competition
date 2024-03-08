@@ -23,7 +23,7 @@ public class WristSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 5000; // 4000
+    private double maxRPM = 5800; // 4000
     private double minRPM = 3000; // 2000
     private double reduction = 100.0 * (60.0 / 18.0);
     private double kP = 0.010; // 0.015
