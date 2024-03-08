@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Intake {
     private CANSparkMax intakeMotor;   
@@ -15,6 +16,9 @@ public class Intake {
     private boolean intakeStatus = false;
     private RelativeEncoder intakeEncoder;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
+    private Timer timer = new Timer();
+    private double expectedTime = 1;
+    private boolean notedetected = false;
     //private DigitalInput noteDetector;
     //private boolean notePresent = false; 
 
@@ -27,9 +31,17 @@ public class Intake {
     }
 
     public void periodic() {
-        if (notePresent()) {
-             stopintake();
+        if (notePresent() && !notedetected) {
+            notedetected = true;
+             timer.reset();
+            timer.start();
+
         }
+        if (notedetected&& timer.get() > expectedTime){
+        stopintake();
+         timer.stop();
+        }
+
 
         SmartDashboard.putNumber("Current",pdp.getCurrent(6));
 
@@ -56,6 +68,7 @@ public class Intake {
     public void setIntakeTrue() {
         intakeStatus = true;
         // set intake to true
+        notedetected = false;
     }
 
     public void setIntakeFalse() {
