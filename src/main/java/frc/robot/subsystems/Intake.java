@@ -2,17 +2,27 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
     private CANSparkMax intakeMotor;   
     private double speed = 0;
-    private DigitalInput noteDetector;
     private boolean intakeStatus = false;
+    private RelativeEncoder intakeEncoder;
+    private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
+    //private DigitalInput noteDetector;
+    //private boolean notePresent = false; 
 
     public Intake() {
         intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
+        intakeEncoder = intakeMotor.getEncoder();
         intakeMotor.setInverted(true);
+<<<<<<< Updated upstream
         noteDetector = new DigitalInput(0);
         // set up the intake motor and the note detector
     }
@@ -30,12 +40,42 @@ public class Intake {
             intakeStatus = false;
             // if the note detector is pressed, then set the intake to false
         }    
+=======
+        //noteDetector = new DigitalInput(0);
+        SmartDashboard.putNumber("Velocity",intakeEncoder.getVelocity());
+    }
+
+    public void periodic() {
+        if (notePresent()) {
+             stopintake();
+        }
+
+        SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+>>>>>>> Stashed changes
 
     }
 
     public void setspeed(double i){
+<<<<<<< Updated upstream
             speed = i; 
             // set speed to i
+=======
+           // if (speed == 0) {
+                speed = i;
+            // } else {
+            //     speed = 0;
+            // }
+            //speed = i; 
+            intakeMotor.set(speed);
+    }
+
+    private boolean notePresent(){
+        return pdp.getCurrent(6)>15;
+    }
+
+    private void stopintake(){
+        intakeMotor.set(0);
+>>>>>>> Stashed changes
     }
 
     public void setIntakeTrue() {
@@ -49,4 +89,4 @@ public class Intake {
     }
 }
 
-//The only good code!!
+//Travvypaddyepicgamer was here!!!!!

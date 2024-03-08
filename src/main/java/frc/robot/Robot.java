@@ -4,12 +4,18 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
+import com.revrobotics.CANSparkLowLevel;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,6 +26,8 @@ import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
+  //private CANSparkMax testMotor = new CANSparkMax(42, CANSparkLowLevel.MotorType.kBrushless);
+  private PowerDistribution pdp = new PowerDistribution(10,ModuleType.kCTRE);
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -29,6 +37,7 @@ public class Robot extends TimedRobot {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
+  
 
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
@@ -81,6 +90,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    //testMotor.set(.15);
+    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
   }
 
   @Override
