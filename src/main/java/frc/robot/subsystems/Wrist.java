@@ -2,12 +2,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import frc.robot.Constants;
+import frc.robot.subsystems.ServoMotorSubsystem.ServoMotorSubsystemConfig;
 
-public class WristSubsystem extends ServoMotorSubsystem {
+public class Wrist{
 
     AnalogPotentiometer pot;
 
-    public WristSubsystem(ServoMotorSubsystemConfig config) {
+    public Wrist(ServoMotorSubsystemConfig config) {
         super(config);
         pot = new AnalogPotentiometer(Constants.ArmConstants.Offsets.WRIST_POT_ANALOG_ID, 3600, -Constants.ArmConstants.Offsets.WRIST_POT_OFFSET);
     }
