@@ -25,61 +25,41 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class AutoTwoNoteRight {
+public class AutoTwoNoteRight implements MCRCommand{
+    MCRCommand twoNoteCenter;
+    Swerve m_swerve = new Swerve();
+    Intake i_intake = new Intake();
+    Shooter s_shooter = new Shooter();
+    FullArm m_FullArmSubsytem = new FullArmSubsystem()
+
     public AutoTwoNoteRight(){
-        // auto variables
-        Command twoNoteRight;
-        Swerve m_swerve = new Swerve();
-        Intake i_intake = new Intake();
-        Shooter s_shooter = new Shooter();
-        WristSubsystem m_wristSubsystem = new WristSubsystem();
-        ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-        int armMovementTimeout = 1;
-
-        twoNoteCenter = new SequentialCommandGroup(
-            //Auto Set Up
-            new InstantCommand(() -> m_swerve.setHeading(new Rotation2d(180))),
-            new InstantCommand(() -> m_swerve.resetModulesToAbsolute()),
-
-            new ParallelRaceGroup(
-                new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                new WaitCommand(armMovementTimeout)
-            ),
-
-            new InstantCommand(() -> s_shooter.setShootingSpeed()),
-            new WaitCommand(.5);
-            new InstantCommand(() -> s_shooter.setStopSpeed()),
-
-            new ParallelRaceGroup(
-                new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                new WaitCommand(armMovementTimeout)
-            ),
-
-            new InstantCommand(() -> i_intake.setIntakeTrue()),
-            new ParallelCommandGroup(
-                    new ParallelRaceGroup(
-                        new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                        new WaitCommand(armMovementTimeout)
-                    ),
-                    new ParallelRaceGroup (
-                        new InstantCommand(() -> m_swerve.driveToPoint(2.91, 4.11, -14.04)),
-                        new WaitCommand(3)
-                    ),
-
-            ),
-                new InstantCommand(() -> i_intake.setIntakeFalse()),
-                new ParallelRaceGroup(
-                        new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                        new WaitCommand(armMovementTimeout)
-                ),
-                new InstantCommand(() -> m_swerve.setHeading(new Roation2d(40))),
-                new InstantCommand(() -> i_intake.setShootingSpeed()),
-                new WaitCommand(0.5),
-                new InstantCommand(() -> s_shooter.setStopSpeed()),
-                new ParallelRaceGroup(
-                        new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                        new WaitCommand(armMovementTimeout)
-                ),
-            ), 
+        new SequentialCommands(
+        new turn(m_swerve,45),
+        new ArmToAngles(m_FullArmSubsystem, "speaker"),
+        new StartIntake(m_Intake),
+        new setShootingSpeed(s_shooter),
+        new WaitCommand(armMovementTimeout),
+        new StopIntake(m_Intake),
+        new setStopSpeed(s_shooter),
+        new ArmtoAngles(m_FullArmSubsystem, "rest"),
+        new ParallelCommands(
+            new ArmtoAngles(m_FullArmSubsystem, "pickup"),
+            new StartIntake(m_Intake),
+            new DriveToPointA(2.56, 6.90, 0.00),
+        ),
+        new StopIntake(m_Intake),
+        new ArmToAngles(m_FullArmSubsystem, "speaker"),
+        new turn(m_swerve, 55),
+        new setShootingSpeed(s_shooter),
+        new WaitCommand(.5),
+        new setStopSpeed(s_shooter),
+        );
+        @Override
+        public void run(){
+        }
+        @Override boolean isFinished(){
+            return false
+        }  
+        
     }
 }

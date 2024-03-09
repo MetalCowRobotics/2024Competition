@@ -25,55 +25,34 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class AutoOneNoteLeft{
+public class AutoOneNoteCenter implements MCRCommand{
+    MCRCommand twoNoteCenter;
+    Swerve m_swerve = new Swerve();
+    Intake i_intake = new Intake();
+    Shooter s_shooter = new Shooter();
+    FullArm m_FullArmSubsytem = new FullArmSubsystem()
+
     public AutoOneNoteLeft(){
-        // auto variables
-        Command twoNoteRight;
-        Swerve m_swerve = new Swerve();
-        Intake i_intake = new Intake();
-        Shooter s_shooter = new Shooter();
-        WristSubsystem m_wristSubsystem = new WristSubsystem();
-        ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-        int armMovementTimeout = 1;
+    autoMission = new SequentialCommands(
+        new turn(45),
+        new ArmtoAngles(m_FullArmSubsystem, "speaker"),
+        new StartIntake(m_Intake),
+        new setShootingSpeed(s_shooter),
+        new WaitCommand(.5),
+        new setStopSpeed(s_shooter),
+        new StopIntake(m_Intake),
+        new StopIntake(m_Intake),
+        new ArmToAngles(m_FullArmSubsystem, "rest")),        
 
-        OneNoteCenter = new SequentialCommandGroup(
-            //Auto Set Up
-            new InstantCommand(() -> m_swerve.setHeading(new Rotation2d(0))),
-            new InstantCommand(() -> m_swerve.resetModulesToAbsolute()),
-            new ParallelRaceGroup(
-                new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                new WaitCommand(armMovementTimeout)
-            ),
-            new InstantCommand(() -> i_intake.setIntakeTrue()),
-            new ParallelRaceGroup(
-                new ParallelRaceGroup(
-                        new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                        new WaitCommand(armMovementTimeout)
-                    ),
-                new ParallelRaceGroup (
-                        new InstantCommand(() -> m_swerve.driveToPoint(2.56, 6.90, 0.00)),
-                        new WaitCommand(3)
-                    ),
-            ),
-
-            new InstantCommand(() -> i_intake.setIntakeFakse()),
-            new ParallelRaceGroup(
-                new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                new WaitCommand(armMovementTimeout)
-            ),
-            new InstantCommand(() -> m_swerve.setHeading(new Rotation2d(180))),
-            new InstantCommand(() -> m_swerve.resetModulesToAbsolute()),
-
-            new InstantCommand(() -> s_shooter.setShootingSpeed()),
-            new WaitCommand(.5),
-            new InstantCommand(() -> s_shooter.setStopSpeed()),
-
-            new ParallelRaceGroup(
-                new ArmToAngles(m_wristSubsystem, m_ArmSubsystem, 0, 0),
-                new WaitCommand(armMovementTimeout)
-            ),
-        
-            
-        );  
+        @Override
+        public void run(){
+        }
+        @Override boolean isFinished(){
+            return false
+        }
     }
+    
 }
+    
+
+
