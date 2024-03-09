@@ -54,7 +54,7 @@ public class WristSubsystem {
 
         pidController = new PIDController(kP, kI, kD);
 
-        pidController.setIntegratorRange(-0.35, 0.35);
+        pidController.setIntegratorRange(-0.65, 0.65);
     }
 
     private boolean allowPositiveMotion(double angle) {

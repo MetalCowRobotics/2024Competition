@@ -65,15 +65,9 @@ public class FullArmSubsystem {
         // telling wrist to go to rest position
         shortCircut(armTarget, wristTarget);
     }
-
-    public void setPickupPosition(){
-        armTarget = Constants.FullArmConstants.armPickup;
-        // telling arm to go to pickup position
-        wristTarget = Constants.FullArmConstants.wristPickup;
-        // telling wrist to go to pickup position
-        shortCircut(armTarget, wristTarget);
+    public boolean atTarget(){
+        return m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget();
     }
-    
     public void setSpeakerPosition(){
         armTarget = Constants.FullArmConstants.armSpeaker;
         // telling arm to go to speaker position
@@ -103,6 +97,7 @@ public class FullArmSubsystem {
         keepArmIn();
         System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
         System.out.println(m_WristSubsystem.getTargetAngle());
+        
         m_WristSubsystem.periodic();
         m_ArmSubsystem.periodic();
         // Calls the periodic method of the arm and wrist subsystems
