@@ -106,6 +106,7 @@ public class FullArmSubsystem {
         keepArmIn();
         System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
         System.out.println(m_WristSubsystem.getTargetAngle());
+        
         m_WristSubsystem.periodic();
         m_ArmSubsystem.periodic();
         // Calls the periodic method of the arm and wrist subsystems
