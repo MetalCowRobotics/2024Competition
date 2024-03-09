@@ -139,7 +139,6 @@ public class ArmSubsystem {
             return false;
         }
     }
-
     private void writeStatus() {
         SmartDashboard.putNumber("Arm 1 Angle", getEncoder1CurrentAngle());
         SmartDashboard.putNumber("Arm 2 Angle", getEncoder2CurrentAngle());
