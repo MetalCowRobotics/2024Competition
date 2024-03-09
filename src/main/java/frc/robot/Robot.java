@@ -4,18 +4,14 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
+// import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.*;
-import com.revrobotics.CANSparkLowLevel;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,7 +23,7 @@ import com.revrobotics.CANSparkLowLevel;
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
   //private CANSparkMax testMotor = new CANSparkMax(42, CANSparkLowLevel.MotorType.kBrushless);
-  private PowerDistribution pdp = new PowerDistribution(10,ModuleType.kCTRE);
+  // private PowerDistribution pdp = new PowerDistribution(10,ModuleType.kCTRE);
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -44,11 +40,11 @@ public class Robot extends TimedRobot {
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton visionAlignment = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
+    // private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
   
     /* Operator Controls */
-    private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
+    // private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    // private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
 
     /* Subsystems */
@@ -178,18 +174,18 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (intakeTrigger.getAsBoolean()) {
-      m_Intake.setspeed(.9);
-      m_Intake.setIntakeTrue();
-      // if the right trigger is pressed, the intake will intake
-    } else if (intakeBackwards.getAsBoolean()) {
-      m_Intake.setspeed(-.9);
-      m_Intake.setIntakeTrue();
-      // if the back button is pressed, the intake will outtake
-    } else {
-      m_Intake.setIntakeFalse();
-      // if neither the right trigger or the back button is pressed, the intake will stop
-    }
+    // if (intakeTrigger.getAsBoolean()) {
+    //   m_Intake.setspeed(.9);
+    //   m_Intake.setIntakeTrue();
+    //   // if the right trigger is pressed, the intake will intake
+    // } else if (intakeBackwards.getAsBoolean()) {
+    //   m_Intake.setspeed(-.9);
+    //   m_Intake.setIntakeTrue();
+    //   // if the back button is pressed, the intake will outtake
+    // } else {
+    //   m_Intake.setIntakeFalse();
+    //   // if neither the right trigger or the back button is pressed, the intake will stop
+    // }
 
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();
