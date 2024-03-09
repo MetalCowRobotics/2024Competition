@@ -14,14 +14,13 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib14.MCRCommand;
-import frc.lib14.SequentialCommands;
-import frc.robot.autos.ArmtoAngles;
+import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.autos.DriveToPointA;
 import frc.robot.autos.ResetModulesToAbsolute;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
+import frc.robot.autos.TestAuto;
 import frc.robot.autos.Turn;
 import frc.robot.autos.StartShooter;
 import frc.robot.autos.StopShooter;
@@ -65,15 +64,10 @@ public class Robot extends TimedRobot {
     MCRCommand autoMission;
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    // private final Intake m_Intake = new Intake();
+    private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
-
-    // private final Intake m_Intake = new Intake();
-    // private final Shooter m_Shooter = new Shooter();
-    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-    // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
-    //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
-      private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    
     /* Commands */
     
   /*
@@ -88,8 +82,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // s_Swerve.periodicValues();
-    s_Swerve.pose();
+    s_Swerve.periodicValues();
+    SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -104,12 +98,17 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
-    // s_Swerve.resetModulesToAbsolute();
+    s_Swerve.resetModulesToAbsolute();
     autoMission = new SequentialCommands(
-            // new DriveToPointA(s_Swerve, 0, 0, 0),
-            // new DriveToPointA(s_Swerve, 1, 0, 0)
-            // new DriveToPointA(s_Swerve, 0, 0, s_Swerve.getGyroYaw().getDegrees()),
-            new DriveToPointA(s_Swerve, 1, 0, s_Swerve.getGyroYaw().getDegrees())
+            // new ResetModulesToAbsolute(s_Swerve),
+            new ArmToAngles(m_FullArmSubsystem, "speaker"),
+            new StartShooter(m_Shooter),
+            new CommandPause(3),
+            new StartIntake(m_Intake),
+            new CommandPause(2),
+            new StopShooter(m_Shooter),
+            new StopIntake(m_Intake),
+            new ArmToAngles(m_FullArmSubsystem, "rest")
         );
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
@@ -119,11 +118,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    // autoTwoNoteCenter.run();
-    autoMission.run();
-    // callPeriodic();
-
+    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    //testMotor.set(.15);
+    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
   }
 
   @Override
@@ -184,7 +182,7 @@ public class Robot extends TimedRobot {
 
     /* Operator Related */
     if (operator.getBButtonReleased()) {
-      // m_FullArmSubsystem.setPickupPosition();
+      m_FullArmSubsystem.setPickupPosition();
       // if Button B is released, the arm and wrist will go to the pickup position
     }
 
@@ -208,18 +206,18 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    // if (intakeTrigger.getAsBoolean()) {
-    //   m_Intake.setspeed(.9);
-    //   m_Intake.setIntakeTrue();
-    //   // if the right trigger is pressed, the intake will intake
-    // } else if (intakeBackwards.getAsBoolean()) {
-    //   m_Intake.setspeed(-.9);
-    //   m_Intake.setIntakeTrue();
-    //   // if the back button is pressed, the intake will outtake
-    // } else {
-    //   m_Intake.setIntakeFalse();
-    //   // if neither the right trigger or the back button is pressed, the intake will stop
-    // }
+    if (intakeTrigger.getAsBoolean()) {
+      m_Intake.setspeed(.9);
+      m_Intake.setIntakeTrue();
+      // if the right trigger is pressed, the intake will intake
+    } else if (intakeBackwards.getAsBoolean()) {
+      m_Intake.setspeed(-.9);
+      m_Intake.setIntakeTrue();
+      // if the back button is pressed, the intake will outtake
+    } else {
+      m_Intake.setIntakeFalse();
+      // if neither the right trigger or the back button is pressed, the intake will stop
+    }
 
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();
@@ -264,7 +262,7 @@ public class Robot extends TimedRobot {
 
     public void callPeriodic(){
       m_FullArmSubsystem.periodic();
-      // m_Intake.periodic();
+      m_Intake.periodic();
       m_Shooter.periodic();
 
     }

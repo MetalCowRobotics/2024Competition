@@ -3,13 +3,13 @@ package frc.robot.autos;
 import frc.robot.subsystems.FullArmSubsystem;
 import frc.lib14.MCRCommand;
 
-public class ArmtoAngles implements MCRCommand{
+public class ArmToAngles implements MCRCommand{
     
     FullArmSubsystem m_fullarm;
     String pos;
     boolean finished_flag = false;
 
-    public ArmtoAngles(FullArmSubsystem m_fullarmSub, String position) {
+    public ArmToAngles(FullArmSubsystem m_fullarmSub, String position) {
         this.m_fullarm = m_fullarmSub;
         this.pos = position;
     }
