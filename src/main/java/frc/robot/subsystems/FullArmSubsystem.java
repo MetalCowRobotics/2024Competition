@@ -60,7 +60,9 @@ public class FullArmSubsystem {
         wristTarget = Constants.FullArmConstants.wristClimbVert;
         shortCircut(armTarget, wristTarget);
     }
-
+    public boolean atTarget(){
+        return m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget();
+    }
     public void setSpeakerPosition(){
         armTarget = Constants.FullArmConstants.armSpeaker;
         wristTarget = Constants.FullArmConstants.wristSpeaker;

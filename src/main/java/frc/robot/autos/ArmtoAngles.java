@@ -1,39 +1,44 @@
-package frc.robot.commands;
+package frc.robot.autos;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.FullArmSubsystem;
+import frc.lib14.MCRCommand;
 
-public class ArmToAngles extends InstantCommand {
+public class ArmToAngles implements MCRCommand{
     
     FullArmSubsystem m_fullarm;
     String pos;
+    boolean finished_flag = false;
 
-    public ArmToAngles(FullArmSubsystem m_fullarm, String pos) {
-        this.m_fullarm = m_fullarm;
-        this.pos = pos
+    public ArmToAngles(FullArmSubsystem m_fullarmSub, String position) {
+        this.m_fullarm = m_fullarmSub;
+        this.pos = position;
     }
 
     @Override
     public void run() {
         // if String pos is equal pickup
-        if(pos == "pickup"){
+        if(pos.equals("pickup")){
             m_fullarm.setPickupPosition();
         }
-        if(pos == "rest"){
+        if(pos.equals("rest")){
             m_fullarm.setRestPosition();
         }
-        if(pos == "climb_start"){
+        if(pos.equals("climb_start")){
             m_fullarm.setClimbVertPosition();
         }
-        if(pos == "speaker"){
+        if(pos.equals("speaker")){
             m_fullarm.setSpeakerPosition();
         }
-        if(pos == "climb_fin"){
+        if(pos.equals("climb_fin")){
             m_fullarm.setClimbFinPosition();
         }
-        if(pos = "amp"){
-            m_fullarm.setAmpPosition();
-        }
+    }
+
+    @Override
+    public boolean isFinished(){
+        if (!finished_flag && m_fullarm.atTarget()) 
+            finished_flag = true;
+        return finished_flag;
     }
 
 }
