@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
             // new StopShooter(m_Shooter),
             // new StopIntake(m_Intake),
             // new ArmToAngles(m_FullArmSubsystem, "rest")
-            new DriveToPointA(s_Swerve, -0.5, 0, s_Swerve.getGyroYaw().getDegrees())
+            new DriveToPointA(s_Swerve, -0.5, 0, 180)
         );
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
