@@ -164,6 +164,11 @@ public class Robot extends TimedRobot {
       // if Button Y is released, the arm and wrist will go to the climb vertical position
     }
 
+    if (operator.getStartButtonReleased()) {
+      m_FullArmSubsystem.setAmpPosition();
+      // if Button Start is released, the arm and wrist will go to the Amp position
+    }
+
     if (operator.getXButtonReleased()) {
       m_FullArmSubsystem.setClimbFinPosition();
       // if Button X is released, the arm and wrist will go to the climb final position

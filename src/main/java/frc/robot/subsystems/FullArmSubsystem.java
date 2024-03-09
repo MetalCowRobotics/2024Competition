@@ -65,7 +65,13 @@ public class FullArmSubsystem {
         // telling wrist to go to rest position
         shortCircut(armTarget, wristTarget);
     }
-
+    public void setAmpPosition(){
+        armTarget = Constants.FullArmConstants.armAmp;
+        // telling arm to go to rest position
+        wristTarget = Constants.FullArmConstants.wristAmp;
+        // telling wrist to go to rest position
+        shortCircut(armTarget, wristTarget);
+    }
     public void setPickupPosition(){
         armTarget = Constants.FullArmConstants.armPickup;
         // telling arm to go to pickup position
