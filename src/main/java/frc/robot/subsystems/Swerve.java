@@ -63,7 +63,7 @@ public class Swerve {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX());
         double ySpeed = m_ySlewRateLimiter.calculate(translation.getY());
         /* Ramps for Angles too be added (look at 2023Comp.) */
-        // double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+        double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
 
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
@@ -110,7 +110,7 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }
-
+           
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, desiredSpeed);
@@ -213,18 +213,18 @@ public class Swerve {
             rotationVal * Constants.Swerve.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
             /*
-             *  _   __   _____    _____    ____              _____       _        __
-             * | |_/ /  | ____|  | ____|  | /\ \            |  ___|     /_\      |  | 
-             * |    /   | |___   | |___   | ||  |           | |___     //_\\     |  |
-             * |   <    |  ___|  |  ___|  | \/_/            |  ___|   / ___ \    |  |
-             * |  _ \   | |___   | |___   | |               | |      / /   \ \   |  |__
-             * |_| \_\  |_____|  |_____|  |_|               |_|     /_/     \_\  |_____|
+             *  _   __   _____    _____    ____              _____       _        __     ________   ________
+             * | |_/ /  | ____|  | ____|  | /\ \            |  ___|     /_\      |  |   |  ______| |  ______|
+             * |    /   | |___   | |___   | ||  |           | |___     //_\\     |  |   |  |_____  |  |_____
+             * |   <    |  ___|  |  ___|  | \/_/            |  ___|   / ___ \    |  |   |______  | |  ______|
+             * |  _ \   | |___   | |___   | |               | |      / /   \ \   |  |__  ______| | |  |_____
+             * |_| \_\  |_____|  |_____|  |_|               |_|     /_/     \_\  |_____||________| |________|
              * 
              */
             false /* KEEP FALSE */
         );
     }
-
+        
     public void driveToPoint(double targetX, double targetY, double targetTheta) {
         double x = getPose().getX();
         double y = getPose().getY();
