@@ -86,7 +86,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
     //testMotor.set(.15);
     //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
     //SmartDashboard.putNumber("Voltage",pdp.getVoltage());

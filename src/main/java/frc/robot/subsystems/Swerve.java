@@ -65,7 +65,7 @@ public class Swerve {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
+        swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), new Pose2d());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -225,8 +225,6 @@ public class Swerve {
     }
 
     public void periodicValues(){
-        swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
-
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
@@ -280,7 +278,9 @@ public class Swerve {
         );
     }
 
-    public void visionPeriodic() {
+    public void visionAndPosePeriodic() {
+        swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+
         m_vision.periodic();
         if (m_vision.hasTargets()) {
             if (lastTargetID != m_vision.getTagID()) {
@@ -293,10 +293,13 @@ public class Swerve {
             lastTargetID = -1;
         }
         SmartDashboard.putNumber("AprilTagID", lastTargetID);
+        SmartDashboard.putNumber("X Pose", swervePoseEstimator.getEstimatedPosition().getX());
+        SmartDashboard.putNumber("Y Pose", swervePoseEstimator.getEstimatedPosition().getY());
+        SmartDashboard.putNumber("Pose Angle", swervePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        visionPeriodic();
+        visionAndPosePeriodic();
         if (visionControl) {
             driveToPoint(getPose().getX(), getPose().getY(), m_vision.getVisionAngleEstimate());
         } else {
