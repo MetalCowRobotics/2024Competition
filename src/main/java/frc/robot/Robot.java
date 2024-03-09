@@ -14,12 +14,16 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib14.CommandPause;
-import frc.lib14.MCRCommand;
+import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.autos.DriveToPointA;
+import frc.robot.autos.ResetModulesToAbsolute;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
+import frc.robot.autos.TestAuto;
+import frc.robot.autos.Turn;
+import frc.robot.autos.StartShooter;
+import frc.robot.autos.StopShooter;
 import frc.robot.subsystems.*;
 import com.revrobotics.CANSparkLowLevel;
 
@@ -62,8 +66,14 @@ public class Robot extends TimedRobot {
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
-    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
-    
+
+    // private final Intake m_Intake = new Intake();
+    // private final Shooter m_Shooter = new Shooter();
+    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+    // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
+    //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
+      private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+      private TestAuto testAuto;
     /* Commands */
     
   /*
@@ -92,13 +102,20 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
     s_Swerve.resetModulesToAbsolute();
     autoMission = new SequentialCommands(
-      new StartIntake(m_Intake),
-      new DriveToPointA(s_Swerve),
-      new CommandPause(5),
-      new StopIntake(m_Intake));
+            // new ResetModulesToAbsolute(s_Swerve),
+            new ArmToAngles(m_FullArmSubsystem, "speaker"),
+            new StartShooter(m_Shooter),
+            new CommandPause(3),
+            new StartIntake(m_Intake),
+            new CommandPause(2),
+            new StopShooter(m_Shooter),
+            new StopIntake(m_Intake),
+            new ArmToAngles(m_FullArmSubsystem, "rest")
+        );
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -107,10 +124,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    //testMotor.set(.15);
-    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
-    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    // autoTwoNoteCenter.run();
+    autoMission.run();
+    callPeriodic();
+
   }
 
   @Override
@@ -121,9 +139,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     LED.runDefault();
     configureButtonBindings();
-    m_Intake.periodic();
-    m_Shooter.periodic();
-    m_FullArmSubsystem.periodic();
+    callPeriodic();
+    // m_Intake.periodic();
+    // m_Shooter.periodic();
+    //   m_FullArmSubsystem.periodic();
+    
     // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
     // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
     //m_ArmSubsystem.periodic();
@@ -152,14 +172,6 @@ public class Robot extends TimedRobot {
     if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
       // if the Y button is pressed, the gyro will reset
-    }
-
-    if (intkakeButton.getAsBoolean()) {
-      m_Intake.setIntakeTrue();
-    }
-
-    else {
-      m_Intake.setIntakeFalse();
     }
 
     if (crawl.getAsBoolean()) {
@@ -223,5 +235,43 @@ public class Robot extends TimedRobot {
       // if the left trigger is not pressed, the shooter will stop
     }
   }
+    // else {
+    //   m_FullArmSubsystem.setRestPosition();
+    // }
+
+    // if (armWrist.getAsBoolean()) {
+    //   m_FullArmSubsystem.setIntakePosition();
+    // }
+    // else {
+    //   m_FullArmSubsystem.setRestPosition();
+    // }
+
+    // if (armWrist2.getAsBoolean()) {
+    //   m_FullArmSubsystem.move();
+    // }
+    // else {
+    //   m_FullArmSubsystem.no();
+    // }
+
+    // if (shooterTrigger.getAsBoolean()) {
+    //   m_Shooter.setShootingSpeed();
+    // }
+    // else {
+    //   m_Shooter.setStopSpeed();
+    // }
+
+    // if (intakeButton.getAsBoolean()) {
+    //   m_Intake.setIntakeTrue();
+    // }
+    // else {
+    //   m_Intake.setIntakeFalse();
+    // }
+
+    public void callPeriodic(){
+      m_FullArmSubsystem.periodic();
+      m_Intake.periodic();
+      m_Shooter.periodic();
+
+    }
   }
 
