@@ -14,13 +14,15 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.ArmToAngles;
+import frc.lib14.MCRCommand;
+import frc.lib14.SequentialCommands;
+// import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.autos.DriveToPointA;
 import frc.robot.autos.ResetModulesToAbsolute;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
-import frc.robot.autos.TestAuto;
+// import frc.robot.autos.TestAuto;
 import frc.robot.autos.Turn;
 import frc.robot.autos.StartShooter;
 import frc.robot.autos.StopShooter;
@@ -62,6 +64,7 @@ public class Robot extends TimedRobot {
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
 
     MCRCommand autoMission;
+
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
@@ -101,14 +104,15 @@ public class Robot extends TimedRobot {
     s_Swerve.resetModulesToAbsolute();
     autoMission = new SequentialCommands(
             // new ResetModulesToAbsolute(s_Swerve),
-            new ArmToAngles(m_FullArmSubsystem, "speaker"),
-            new StartShooter(m_Shooter),
-            new CommandPause(3),
-            new StartIntake(m_Intake),
-            new CommandPause(2),
-            new StopShooter(m_Shooter),
-            new StopIntake(m_Intake),
-            new ArmToAngles(m_FullArmSubsystem, "rest")
+            // new ArmToAngles(m_FullArmSubsystem, "speaker"),
+            // new StartShooter(m_Shooter),
+            // new CommandPause(3),
+            // new StartIntake(m_Intake),
+            // new CommandPause(2),
+            // new StopShooter(m_Shooter),
+            // new StopIntake(m_Intake),
+            // new ArmToAngles(m_FullArmSubsystem, "rest")
+            new DriveToPointA(s_Swerve, -0.5, 0, s_Swerve.getGyroYaw().getDegrees())
         );
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
@@ -118,7 +122,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    autoMission.run();
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
     //testMotor.set(.15);
     //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
     //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
@@ -181,10 +186,10 @@ public class Robot extends TimedRobot {
     }
 
     /* Operator Related */
-    if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setPickupPosition();
-      // if Button B is released, the arm and wrist will go to the pickup position
-    }
+    // if (operator.getBButtonReleased()) {
+    //   m_FullArmSubsystem.setPickupPosition();
+    //   // if Button B is released, the arm and wrist will go to the pickup position
+    // }
 
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
