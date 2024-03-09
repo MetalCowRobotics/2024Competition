@@ -39,15 +39,16 @@ public class Swerve {
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
 
-    private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
+    private PIDController angleHoldingPIDController = new PIDController(0.00004, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
-    private PIDController thetaController = new PIDController(0.04, 0, 0.001);
+    private PIDController thetaController = new PIDController(0.004, 0, 0.001);
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
+        thetaController.setTolerance(4);
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -236,23 +237,33 @@ public class Swerve {
         if (yaw < 0) {
             yaw += 360;
         }
-        if (targetTheta == 0) {
+        
             if (yaw > 180) {
                 thetaController.setSetpoint(360);
             } else {
                 thetaController.setSetpoint(0);
             }
-        }
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
         double rotation = thetaController.calculate(yaw);
 
-        driveAuto(
+        // Check if the robot is close enough to the target position
+    if (Math.abs(x - targetX) < Constants.targetPositionTolerance &&
+        Math.abs(y - targetY) < Constants.targetPositionTolerance &&
+        Math.abs(yaw - targetTheta) < Constants.targetAngleTolerance) {
+        // Stop the robot by setting the desired states to zero
+        SwerveModuleState[] stopStates = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            stopStates[i] = new SwerveModuleState(0, new Rotation2d());
+        }
+        setModuleStates(stopStates);
+    } else {driveAuto(
             new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
             -rotation * Constants.Swerve.maxAngularVelocity, 
             true, 
             false
         );
     }
+}
 }

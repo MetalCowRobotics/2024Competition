@@ -118,12 +118,11 @@ public class Robot extends TimedRobot {
             // new StopShooter(m_Shooter),
             // new StopIntake(m_Intake),
             // new ArmToAngles(m_FullArmSubsystem, "rest")
-            new DriveToPointA(s_Swerve, -0.5, 0, s_Swerve.getGyroYaw().getDegrees())
+            new DriveToPointA(s_Swerve, -0.5, 0, 180)
         );
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
-    s_Swerve.setHeading(new Rotation2d(Math.PI));
   }
 
   /** This function is called periodically during autonomous. */
@@ -160,7 +159,6 @@ public class Robot extends TimedRobot {
     }else{
       LED.runDefault();
     }
-
     // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
     // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
     //m_ArmSubsystem.periodic();
@@ -237,7 +235,7 @@ public class Robot extends TimedRobot {
       m_Intake.startIntakeReverse();
       // if the back button is pressed, the intake will outtake
     } else {
-      m_Intake.stopIntake();
+      m_Intake.stopintake();
       // if neither the right trigger or the back button is pressed, the intake will stop
     }
 
