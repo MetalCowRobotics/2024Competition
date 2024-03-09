@@ -13,7 +13,7 @@ public class StopIntake extends InstantCommandBase{
     public void run(){
         // s_swerve.setHeading(new Rotation2d(180));
         i_intake.setspeed(0);
-        i_intake.setIntakeFalse();
+        // i_intake.setIntakeFalse();
         SmartDashboard.putString("auto", "stopped");
     }
 }
