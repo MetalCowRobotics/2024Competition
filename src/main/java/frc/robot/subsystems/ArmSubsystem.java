@@ -35,7 +35,7 @@ public class ArmSubsystem {
     private double kD = 0.0;
     private double positionTolerance = 5.0;
     private double initialPosition = 0.0;
-
+    
     public ArmSubsystem() {
         armMotor1 = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
         armMotor2 = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
@@ -101,6 +101,10 @@ public class ArmSubsystem {
         return ((getEncoder1CurrentAngle()+getEncoder2CurrentAngle())/2);
     }
 
+    public double getWristAngle(double angle) {
+        return angle;
+    }
+
     public void resetEncoders(double angle) {
         encoder1.setPosition(angle);
         encoder2.setPosition(angle);
@@ -117,7 +121,7 @@ public class ArmSubsystem {
     public boolean atTarget() {
         if (Math.abs(targetAngle - getEncoder1CurrentAngle()) < positionTolerance
             &&
-            Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance) {
+            Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance) {    
                 return true;
             }
         else {

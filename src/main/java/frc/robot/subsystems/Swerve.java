@@ -202,6 +202,12 @@ public class Swerve {
         visionControl = true;
     }
 
+    // public void musicInit() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicInit();
+    //     }
+    // }
+
     public void disableVisionControl() {
         visionControl = false;
     }

@@ -18,14 +18,17 @@ public class Shooter {
     public void periodic() {
         shooterMotor1.set(motorSpeed);
         shooterMotor2.set(motorSpeed);
+        // set the speed of the shooter motors to motorSpeed
     }
 
     public void setShootingSpeed() {
         motorSpeed = 0.9;
+        // set the speed of the shooter motors to 0.9
     }
     
     public void setStopSpeed() {
         motorSpeed = 0;
+        // set the speed of the shooter motors to 0
     }
 
     /* Methods for Commands */

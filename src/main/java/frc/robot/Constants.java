@@ -170,7 +170,7 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
-
+    // Arm and Wrist angles for each position in degrees
     public static final class FullArmConstants {
         public static final double armRest = 0.0;
         public static final double wristRest = 0.0;
