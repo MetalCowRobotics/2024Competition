@@ -37,7 +37,7 @@ public class Shooter {
     }
 
     public void setShootingSpeed() {
-        motorSpeed = 0.9;
+        motorSpeed = 1;
         // set the speed of the shooter motors to 0.9
     }
     
