@@ -22,7 +22,6 @@ public class Intake {
         intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
         intakeEncoder = intakeMotor.getEncoder();
         intakeMotor.setInverted(true);
-
         noteDetector = new DigitalInput(0);
         // set up the intake motor and the note detector
     }
@@ -40,7 +39,6 @@ public class Intake {
             intakeStatus = false;
             // if the note detector is pressed, then set the intake to false
         }    
-
         //noteDetector = new DigitalInput(0);
         SmartDashboard.putNumber("Velocity",intakeEncoder.getVelocity());
     }
@@ -51,11 +49,10 @@ public class Intake {
         }
 
         SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+
     }
 
     public void setspeed(double i){
-            speed = i; 
-            // set speed to i
            // if (speed == 0) {
                 speed = i;
             // } else {
@@ -71,7 +68,6 @@ public class Intake {
 
     private void stopintake(){
         intakeMotor.set(0);
-
     }
 
     public void setIntakeTrue() {

@@ -66,14 +66,8 @@ public class Robot extends TimedRobot {
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
-
-    // private final Intake m_Intake = new Intake();
-    // private final Shooter m_Shooter = new Shooter();
-    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-    // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
-    //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
-      private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
-      private TestAuto testAuto;
+    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    
     /* Commands */
     
   /*
@@ -124,11 +118,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    // autoTwoNoteCenter.run();
-    autoMission.run();
-    callPeriodic();
-
+    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    //testMotor.set(.15);
+    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
   }
 
   @Override
