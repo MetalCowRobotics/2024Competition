@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot {
 
     /* Operator Controls */
     private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
+    private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButton(XboxController.Button.kBack.value));
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
 
     MCRCommand autoMission;
@@ -142,6 +143,16 @@ public class Robot extends TimedRobot {
     // m_Shooter.periodic();
     //   m_FullArmSubsystem.periodic();
     
+    if(m_Intake.getRetractReady()){
+      m_FullArmSubsystem.setRestPosition();
+      m_Intake.setRetractReady(false);
+      LED.runOrange();
+    }else{
+      LED.runDefault();
+    }
+    m_Intake.periodic();
+    m_Shooter.periodic();
+    m_FullArmSubsystem.periodic();
     // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
     // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
     //m_ArmSubsystem.periodic();
@@ -212,15 +223,13 @@ public class Robot extends TimedRobot {
     }
 
     if (intakeTrigger.getAsBoolean()) {
-      m_Intake.setspeed(.9);
-      m_Intake.setIntakeTrue();
+      m_Intake.startIntake();
       // if the right trigger is pressed, the intake will intake
     } else if (intakeBackwards.getAsBoolean()) {
-      m_Intake.setspeed(-.9);
-      m_Intake.setIntakeTrue();
+      m_Intake.startIntakeReverse();
       // if the back button is pressed, the intake will outtake
     } else {
-      m_Intake.setIntakeFalse();
+      m_Intake.stopintake();
       // if neither the right trigger or the back button is pressed, the intake will stop
     }
 
