@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -16,12 +20,13 @@ import frc.robot.autos.DriveToPointA;
 import frc.robot.autos.ResetModulesToAbsolute;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
-import frc.robot.autos.TestAuto;
+// import frc.robot.autos.TestAuto;
 import frc.robot.autos.Turn;
 import frc.robot.autos.StartShooter;
 import frc.robot.autos.StopShooter;
 import frc.robot.subsystems.*;
 import frc.lib14.*;
+import com.revrobotics.CANSparkLowLevel;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,6 +37,8 @@ import frc.lib14.*;
 
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
+  //private CANSparkMax testMotor = new CANSparkMax(42, CANSparkLowLevel.MotorType.kBrushless);
+  private PowerDistribution pdp = new PowerDistribution(10,ModuleType.kCTRE);
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -41,15 +48,14 @@ public class Robot extends TimedRobot {
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
+  
 
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
-  
 
-    /* Operator Controls */
     /* Operator Controls */
     private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButtonPressed(XboxController.Button.kBack.value));
@@ -64,17 +70,9 @@ public class Robot extends TimedRobot {
     private final Swerve s_Swerve = new Swerve();
     private final Intake m_Intake = new Intake();
     private final Shooter m_Shooter = new Shooter();
-
-    // private final Intake m_Intake = new Intake();
-    // private final Shooter m_Shooter = new Shooter();
-    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-    // private final WristSubsystem m_WristSubsystem = new WristSubsystem();
-    //private final RestToPickUp m_RestToShooter = new RestToPickUp(m_ArmSubsystem,m_WristSubsystem);
-      private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
-      private TestAuto testAuto;
+    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    
     /* Commands */
-    // private RestToShooter RestToShooter = new RestToShooter();
-    //private InstantCommand ShooterToRest = new PickUpToRest();
     
   /*
    * This function is run when the robot is first started up and should be used for any
@@ -128,6 +126,10 @@ public class Robot extends TimedRobot {
     autoMission.run();
     callPeriodic();
 
+    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    //testMotor.set(.15);
+    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
   }
 
   @Override
@@ -169,60 +171,69 @@ public class Robot extends TimedRobot {
     /* Driver Related */
     if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
+      // if the Y button is pressed, the gyro will reset
     }
 
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
+      // if the left trigger is pressed, the robot will crawl
     }
     else if (sprint.getAsBoolean()) {
       s_Swerve.setSprint();
+      // if the right trigger is pressed, the robot will sprint
     }
     else {
       s_Swerve.setBase();
+      // if neither the left trigger or the right trigger is pressed, the robot will be in the base state
     }
 
     /* Operator Related */
     if (operator.getBButtonReleased()) {
       m_FullArmSubsystem.setPickupPosition();
+      // if Button B is released, the arm and wrist will go to the pickup position
     }
+
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
-      //System.out.println(m_FullArmSubsystem.getPhase());
+      // if Button A is released, the arm and wrist will go to the rest position
     }
+
     if (operator.getYButtonReleased()) {
       m_FullArmSubsystem.setClimbVertPosition();
+      // if Button Y is released, the arm and wrist will go to the climb vertical position
     }
+
     if (operator.getXButtonReleased()) {
       m_FullArmSubsystem.setClimbFinPosition();
+      // if Button X is released, the arm and wrist will go to the climb final position
     }
+
     if (operator.getLeftBumperReleased()) {
       m_FullArmSubsystem.setSpeakerPosition();
+      // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
     if (intakeTrigger.getAsBoolean()) {
       m_Intake.setspeed(.9);
       m_Intake.setIntakeTrue();
+      // if the right trigger is pressed, the intake will intake
     } else if (intakeBackwards.getAsBoolean()) {
       m_Intake.setspeed(-.9);
       m_Intake.setIntakeTrue();
+      // if the back button is pressed, the intake will outtake
     } else {
       m_Intake.setIntakeFalse();
+      // if neither the right trigger or the back button is pressed, the intake will stop
     }
-
 
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();
+      // if the left trigger is pressed, the shooter will shoot
     }
     else {
       m_Shooter.setStopSpeed();
+      // if the left trigger is not pressed, the shooter will stop
     }
-
-    // if (intakeTrigger.getAsBoolean()) {
-    //   m_Intake.setIntakeTrue();
-    // }
-    // else {
-    //   m_Intake.setIntakeFalse();
-    // }
   }
     // else {
     //   m_FullArmSubsystem.setRestPosition();
