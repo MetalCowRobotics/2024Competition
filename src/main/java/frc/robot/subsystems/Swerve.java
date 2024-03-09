@@ -192,6 +192,13 @@ public class Swerve {
     //     }
     // }
 
+    public void pose(){
+        swerveOdometry.update(getGyroYaw(), getModulePositions());
+        SmartDashboard.putNumber("X Pose", getPose().getX());
+        SmartDashboard.putNumber("Y Pose", getPose().getY());
+        SmartDashboard.putNumber("Angle Heading", getGyroYaw().getDegrees());
+    }
+
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
