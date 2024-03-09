@@ -73,6 +73,14 @@ public class Intake {
         return pdp.getCurrent(6)>15;
     }
 
+    public void startIntakeForward(){
+        intakeMotor.set(.9);
+    }
+
+    public void startIntakeBackward(){
+        intakeMotor.set(-.9);
+    }
+
     private void stopintake(){
         intakeMotor.set(0);
 >>>>>>> Stashed changes

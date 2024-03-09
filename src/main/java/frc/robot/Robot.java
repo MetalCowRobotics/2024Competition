@@ -176,14 +176,12 @@ public class Robot extends TimedRobot {
 
     if (intakeTrigger.getAsBoolean()) {
       m_Intake.setspeed(.9);
-      m_Intake.setIntakeTrue();
       // if the right trigger is pressed, the intake will intake
     } else if (intakeBackwards.getAsBoolean()) {
       m_Intake.setspeed(-.9);
-      m_Intake.setIntakeTrue();
       // if the back button is pressed, the intake will outtake
     } else {
-      m_Intake.setIntakeFalse();
+      m_Intake.setspeed(0);
       // if neither the right trigger or the back button is pressed, the intake will stop
     }
 
