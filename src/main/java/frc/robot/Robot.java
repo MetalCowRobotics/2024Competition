@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
-// import frc.robot.autos.ArmToAngles;
+import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.autos.DriveToPointA;
 import frc.robot.autos.ResetModulesToAbsolute;
@@ -77,7 +77,8 @@ public class Robot extends TimedRobot {
     private final Shooter m_Shooter = new Shooter();
     private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
     
-    /* Commands */
+    /* autos */
+    MCRCommand twoNoteCenter;
     
   /*
    * This function is run when the robot is first started up and should be used for any
@@ -108,18 +109,21 @@ public class Robot extends TimedRobot {
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
     s_Swerve.resetModulesToAbsolute();
-    autoMission = new SequentialCommands(
-            // new ResetModulesToAbsolute(s_Swerve),
-            // new ArmToAngles(m_FullArmSubsystem, "speaker"),
-            // new StartShooter(m_Shooter),
-            // new CommandPause(3),
-            // new StartIntake(m_Intake),
-            // new CommandPause(2),
-            // new StopShooter(m_Shooter),
-            // new StopIntake(m_Intake),
-            // new ArmToAngles(m_FullArmSubsystem, "rest")
-            new DriveToPointA(s_Swerve, -0.5, 0, 180)
-        );
+    // m_Intake.setAutoMode();
+    twoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
+    // autoMission = new SequentialCommands(
+    //         new ResetModulesToAbsolute(s_Swerve),
+    //         new StartShooter(m_Shooter),
+    //         new ArmToAngles(m_FullArmSubsystem, "speaker"),
+    //         new CommandPause(3),
+    //         new StartIntake(m_Intake),
+    //         new CommandPause(2),
+    //         new StopShooter(m_Shooter),
+    //         new StopIntake(m_Intake),
+    //         new ArmToAngles(m_FullArmSubsystem, "rest")
+    //         // new DriveToPointA(s_Swerve, -0.5, 0, 180)
+    //     );
+
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -129,11 +133,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    // autoTwoNoteCenter.run();
-    autoMission.run();
+    // autoMission.run();
+    twoNoteCenter.run();
     callPeriodic();
 
-    s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
     //testMotor.set(.15);
     //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
     //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
@@ -152,13 +156,14 @@ public class Robot extends TimedRobot {
     // m_Shooter.periodic();
     //   m_FullArmSubsystem.periodic();
     
-    if(m_Intake.getRetractReady()){
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.setRetractReady(false);
-      LED.runOrange();
-    }else{
-      LED.runDefault();
-    }
+    // if(m_Intake.getRetractReady()){
+    //   m_FullArmSubsystem.setRestPosition();
+    //   m_Intake.setRetractReady(false);
+    //   LED.runOrange();
+    // }else{
+    //   LED.runDefault();
+    // }
+    
     // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
     // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
     //m_ArmSubsystem.periodic();
@@ -203,10 +208,10 @@ public class Robot extends TimedRobot {
     }
 
     /* Operator Related */
-    // if (operator.getBButtonReleased()) {
-    //   m_FullArmSubsystem.setPickupPosition();
-    //   // if Button B is released, the arm and wrist will go to the pickup position
-    // }
+    if (operator.getBButtonReleased()) {
+      m_FullArmSubsystem.setPickupPosition();
+      // if Button B is released, the arm and wrist will go to the pickup position
+    }
 
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
@@ -228,16 +233,21 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (intakeTrigger.getAsBoolean()) {
+    if (operator.getRightBumperPressed()) {
       m_Intake.startIntake();
-      // if the right trigger is pressed, the intake will intake
-    } else if (intakeBackwards.getAsBoolean()) {
-      m_Intake.startIntakeReverse();
-      // if the back button is pressed, the intake will outtake
-    } else {
-      m_Intake.stopintake();
-      // if neither the right trigger or the back button is pressed, the intake will stop
+      // if the left bumper is released, the arm and wrist will go to the speaker position
     }
+
+    // if (intakeTrigger.getAsBoolean()) {
+    //   m_Intake.startIntake();
+    //   // if the right trigger is pressed, the intake will intake
+    // } else if (intakeBackwards.getAsBoolean()) {
+    //   m_Intake.startIntakeReverse();
+    //   // if the back button is pressed, the intake will outtake
+    // } else {
+    //   m_Intake.stopintake();
+    //   // if neither the right trigger or the back button is pressed, the intake will stop
+    // }
 
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();

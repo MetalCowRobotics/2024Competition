@@ -81,7 +81,7 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 2.5; //TODO: This must be tuned to specific robot
-        public static final double maxAutoSpeed = 0.5;
+        public static final double maxAutoSpeed = 1;
         /** Radians per Second */
         public static final double maxAngularVelocity = ( Math.PI) / 3; //TODO: This must be tuned to specific robot
 
@@ -150,8 +150,8 @@ public final class Constants {
     public static final class FullArmConstants {
         public static final double armRest = 0.0;
         public static final double wristRest = 0.0;
-        public static final double armPickup = 289.0;
-        public static final double wristPickup = 47.0;
+        public static final double armPickup = 278.0;
+        public static final double wristPickup = 50.0;
         public static final double armClimbVert = 180.0;
         public static final double wristClimbVert = -35.0;
         public static final double armClimbFin = 87.0;
