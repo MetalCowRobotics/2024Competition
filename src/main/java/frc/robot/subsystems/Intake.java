@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class Intake {
     private CANSparkMax intakeMotor;   
     private double speed = 0;
-    private RelativeEncoder intakeEncoder;
+    // private RelativeEncoder intakeEncoder;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
     private double expectedTime = .18;
