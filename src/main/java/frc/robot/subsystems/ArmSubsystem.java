@@ -162,15 +162,6 @@ public class ArmSubsystem {
         double speed1 = 0;
         double speed2 = 0;
 
-        // if (wristAngle > -18) {
-        //     pidController1.setSetpoint(0);
-        //     pidController2.setSetpoint(0);
-        // }
-        // else {
-        //     pidController1.setSetpoint(targetAngle);
-        //     pidController2.setSetpoint(targetAngle);
-        // }
-
         pidController1.setSetpoint(targetAngle);
         pidController2.setSetpoint(targetAngle);
 
@@ -204,11 +195,6 @@ public class ArmSubsystem {
                 speed2 = 0;
             }
         }
-
-        // if (wristAngle > 0) {
-        //     speed1 = 0;
-        //     speed2 = 0;
-        // }
 
         SmartDashboard.putNumber("Arm 1 Motor Output", speed1);
         SmartDashboard.putNumber("Arm 2 Motor Output", speed2);
