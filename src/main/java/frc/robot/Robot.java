@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -28,7 +25,6 @@ import frc.robot.autos.Turn;
 import frc.robot.autos.StartShooter;
 import frc.robot.autos.StopShooter;
 import frc.robot.subsystems.*;
-import com.revrobotics.CANSparkLowLevel;
 
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -39,7 +35,6 @@ import com.revrobotics.CANSparkLowLevel;
 
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
-  //private CANSparkMax testMotor = new CANSparkMax(42, CANSparkLowLevel.MotorType.kBrushless);
   private PowerDistribution pdp = new PowerDistribution(10,ModuleType.kCTRE);
 
     /* Controllers */
@@ -57,7 +52,6 @@ public class Robot extends TimedRobot {
     private final double shootervalue = XboxController.Axis.kRightTrigger.value;
 
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton playMusic = new JoystickButton(driver, XboxController.Button.kA.value);
 
     /* Operator Controls */
     private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
@@ -104,15 +98,6 @@ public class Robot extends TimedRobot {
     s_Swerve.zeroGyro();
     s_Swerve.resetModulesToAbsolute();
     autoMission = new SequentialCommands(
-            // new ResetModulesToAbsolute(s_Swerve),
-            // new ArmToAngles(m_FullArmSubsystem, "speaker"),
-            // new StartShooter(m_Shooter),
-            // new CommandPause(3),
-            // new StartIntake(m_Intake),
-            // new CommandPause(2),
-            // new StopShooter(m_Shooter),
-            // new StopIntake(m_Intake),
-            // new ArmToAngles(m_FullArmSubsystem, "rest")
             new DriveToPointA(s_Swerve, -0.5, 0, 180)
         );
     SmartDashboard.putString("auto", "stopped");
@@ -124,10 +109,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     autoMission.run();
-    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    //testMotor.set(.15);
-    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
-    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
   }
 
   @Override
@@ -139,9 +120,6 @@ public class Robot extends TimedRobot {
     LED.runDefault();
     configureButtonBindings();
     callPeriodic();
-    // m_Intake.periodic();
-    // m_Shooter.periodic();
-    //   m_FullArmSubsystem.periodic();
     
     if(m_Intake.getRetractReady()){
       m_FullArmSubsystem.setRestPosition();
@@ -150,17 +128,7 @@ public class Robot extends TimedRobot {
     }else{
       LED.runDefault();
     }
-    m_Intake.periodic();
-    m_Shooter.periodic();
-    m_FullArmSubsystem.periodic();
-    // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
-    // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
-    //m_ArmSubsystem.periodic();
 
-    // m_WristSubsystem.setTarget(SmartDashboard.getNumber("Wanted Wrist Angle", 0))
-    // m_WristSubsystem.getArmAngle(m_ArmSubsystem.getEncoder1CurrentAngle());
-    //m_WristSubsystem.periodic();
- 
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
@@ -242,43 +210,11 @@ public class Robot extends TimedRobot {
       // if the left trigger is not pressed, the shooter will stop
     }
   }
-    // else {
-    //   m_FullArmSubsystem.setRestPosition();
-    // }
-
-    // if (armWrist.getAsBoolean()) {
-    //   m_FullArmSubsystem.setIntakePosition();
-    // }
-    // else {
-    //   m_FullArmSubsystem.setRestPosition();
-    // }
-
-    // if (armWrist2.getAsBoolean()) {
-    //   m_FullArmSubsystem.move();
-    // }
-    // else {
-    //   m_FullArmSubsystem.no();
-    // }
-
-    // if (shooterTrigger.getAsBoolean()) {
-    //   m_Shooter.setShootingSpeed();
-    // }
-    // else {
-    //   m_Shooter.setStopSpeed();
-    // }
-
-    // if (intakeButton.getAsBoolean()) {
-    //   m_Intake.setIntakeTrue();
-    // }
-    // else {
-    //   m_Intake.setIntakeFalse();
-    // }
 
     public void callPeriodic(){
       m_FullArmSubsystem.periodic();
       m_Intake.periodic();
       m_Shooter.periodic();
-
     }
   }
 
