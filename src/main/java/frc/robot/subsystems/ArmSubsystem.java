@@ -28,12 +28,12 @@ public class ArmSubsystem {
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
     private double maxRPM = 5500; 
-    private double minRPM = 3000;
+    private double minRPM = 1000;
     private double reduction = 100 * (24.0 / 12.0);
     private double kP = 0.05; // 0.07
     private double kI = 0.0;
     private double kD = 0.0;
-    private double positionTolerance = 5.0;
+    private double positionTolerance = 1.0;
     private double initialPosition = 0.0;
     
     public ArmSubsystem() {

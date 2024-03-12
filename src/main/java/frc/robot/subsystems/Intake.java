@@ -6,8 +6,8 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake {
     private CANSparkMax intakeMotor;   
@@ -16,7 +16,7 @@ public class Intake {
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
     private double expectedTime = .18;
-    private boolean notedetected = false;
+    private boolean noteDetected = false;
     private boolean retractReady = false;
     //private DigitalInput noteDetector;
     //private boolean notePresent = false; 
@@ -31,20 +31,38 @@ public class Intake {
     public void periodic() {
         if(speed >= 0){
             System.out.println("speed > 0");
-            if (notePresent() && !notedetected) {
-                notedetected = true;
+            //if (noteAquired()) {
+            //    setRetractReady(true);
+            //    stopintake();
+            //}
+            if (notePresent() && !noteDetected) {
+                noteDetected = true;
                 setRetractReady(true);
                 timer.reset();
                 timer.start();
 
             } 
-            if (notedetected && timer.get() > expectedTime){
+            if (noteDetected && timer.get() > expectedTime){
                 stopintake();
                 timer.stop();
             }
         } else System.out.println("speed < 0");
         intakeMotor.set(speed);
         SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+    }
+
+    private boolean noteAquired(){
+        if (!noteDetected && notePresent()) {
+                noteDetected = true;
+                timer.reset();
+                timer.start();
+        }
+        if (noteDetected  && timer.get() > expectedTime) {
+            timer.stop();
+            return true;
+        }
+        return false;
+
     }
 
     // public void setspeed(double i){
@@ -72,7 +90,7 @@ public class Intake {
     public void startIntake(){
         speed = .9;
         setRetractReady(false);
-        notedetected = false;
+        noteDetected = false;
     }
 
     public void startIntakeReverse(){

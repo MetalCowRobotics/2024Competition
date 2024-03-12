@@ -24,12 +24,12 @@ public class WristSubsystem {
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
     private double maxRPM = 5800; // 4000
-    private double minRPM = 3000; // 2000
+    private double minRPM = 1000; // 2000
     private double reduction = 100.0 * (60.0 / 18.0);
-    private double kP = 0.010; // 0.015
+    private double kP = 0.030; // 0.015
     private double kI = 0.0;
     private double kD = 0.0;
-    private double positionTolerance = 4.0;
+    private double positionTolerance = 1.0;
     private double initialPosition = 0.0;
 
     public WristSubsystem() {

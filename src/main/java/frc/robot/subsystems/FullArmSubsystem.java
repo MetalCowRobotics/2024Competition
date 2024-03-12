@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class FullArmSubsystem {
@@ -8,12 +9,23 @@ public class FullArmSubsystem {
     private double wristTarget;
     double[][] phase;
     int phaseNumber;
+    int armPose = 1;
+    final int STOWED_POSE = 1;
+    final int SPEAKER_POSE = 2;
+    final int INTAKE_POSE = 3;
+    final int AMP_POSE = 4;
+    final int CLIMB_REACH_POSE = 5;
+    final int CLIMB_UP_POSE = 6;
+
 
     public FullArmSubsystem(){
         m_ArmSubsystem = new ArmSubsystem();
         m_WristSubsystem =  new WristSubsystem();
         armTarget = Constants.FullArmConstants.armRest;
         wristTarget = Constants.FullArmConstants.wristRest;
+        SmartDashboard.putNumber("ArmAngle", 0.0);
+        SmartDashboard.putNumber("WristAngle", 0.0);
+
     }
 
     public int getPhase(){
@@ -31,6 +43,12 @@ public class FullArmSubsystem {
             // if the arm and wrist are not at rest, then set the arm to the target position and the wrist to the target position
         }
     }
+
+    public double determineArmAngleForVariableShooting(){
+        
+        return 0.0;
+    }
+    
 
     public void keepWristIn(){
         if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 90)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
@@ -67,6 +85,7 @@ public class FullArmSubsystem {
     }
 
     public void setPickupPosition(){
+        armPose = INTAKE_POSE;
         armTarget = Constants.FullArmConstants.armPickup;
         // telling arm to go to pickup position
         wristTarget = Constants.FullArmConstants.wristPickup;
@@ -75,14 +94,18 @@ public class FullArmSubsystem {
     }
     
     public void setSpeakerPosition(){
-        armTarget = Constants.FullArmConstants.armSpeaker;
+        armPose = SPEAKER_POSE;
+       // armTarget = Constants.FullArmConstants.armSpeaker;
+        armTarget = SmartDashboard.getNumber("ArmAngle", 145);
         // telling arm to go to speaker position
-        wristTarget = Constants.FullArmConstants.wristSpeaker;
+        //wristTarget = Constants.FullArmConstants.wristSpeaker;
+        wristTarget = SmartDashboard.getNumber("WristAngle", -35);
         // telling wrist to go to speaker position
         shortCircut(armTarget, wristTarget);
 
     }
     public void setClimbVertPosition(){
+        armPose = CLIMB_REACH_POSE;
         armTarget = Constants.FullArmConstants.armClimbVert;
         // telling arm to go to pre climb position where it is vertical
         wristTarget = Constants.FullArmConstants.wristClimbVert;
@@ -91,6 +114,7 @@ public class FullArmSubsystem {
     }
 
     public void setClimbFinPosition(){
+        armPose = CLIMB_UP_POSE;
         armTarget = Constants.FullArmConstants.armClimbFin;
         // telling arm to go to the final climb position
         wristTarget = Constants.FullArmConstants.wristClimbFin;
