@@ -16,7 +16,7 @@ public class Intake {
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
     private Timer startUp = new Timer();
-    private double expectedTime = .18; //.18
+    private double expectedTime = .16; //.18
     private boolean notedetected = false;
     private boolean retractReady = false;
     private boolean autoMode = false;
@@ -94,7 +94,7 @@ public class Intake {
                 timer.start();
 
             } 
-            if (notedetected && timer.get() > expectedTime){
+            if (notedetected && timer.get() >= expectedTime){
                 SmartDashboard.putString("auto", "stopped");
                 timer.stop();
                 return true;
@@ -128,7 +128,7 @@ public class Intake {
     }
 
     private boolean notePresent(){
-        return pdp.getCurrent(6)>15;
+        return pdp.getCurrent(6) > 15;
     }
 
     public void setRetractReady(boolean b){
@@ -148,7 +148,7 @@ public class Intake {
     }
 
     public void startIntakeReverse(){
-        speed = -.9;
+        speed = -.8;
     }
 
     public void stopintake(){

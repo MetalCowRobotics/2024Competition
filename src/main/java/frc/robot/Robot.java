@@ -235,8 +235,8 @@ public class Robot extends TimedRobot {
 
     if (operator.getRightBumperPressed()) {
       m_Intake.startIntake();
-      // if the left bumper is released, the arm and wrist will go to the speaker position
     }
+    
 
     // if (intakeTrigger.getAsBoolean()) {
     //   m_Intake.startIntake();

@@ -36,14 +36,12 @@ public class AutoTwoNoteCenter implements MCRCommand{
             
             new ArmToAngles(m_FullArmSubsystem, "pickup"),
             new StartIntake(m_Intake),
-            new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, -1.2, 0, 0), 7),
+            new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, -1.5, 0, 0), 7),
             new StopIntake(m_Intake),
             // new ArmToAngles(m_FullArmSubsystem, "rest")
-            
-        //    new StopIntake(m_Intake),
-        //    new CommandPause(1),
 
-           new ArmToAngles(m_FullArmSubsystem, "speaker"),
+
+           new ArmToAngles(m_FullArmSubsystem, "speakerFromNote"),
 
             // Setting the arm angles to speaker to shoot the picked up piece
             // new ArmToAngles(m_FullArmSubsystem, "speaker"),

@@ -158,8 +158,10 @@ public final class Constants {
         public static final double wristClimbFin = -35.0;
         public static final double armAmp = 279.0;
         public static final double wristAmp = 57.6;
-        public static final double armSpeaker = 145.0;
-        public static final double wristSpeaker = -35.0;
+        public static final double armSpeaker = 138.0;
+        public static final double wristSpeaker = -44.0;
+        public static final double armSpeakerFromNote = 128.0;
+        public static final double wristSpeakerFromNote = -44.0;
     }
     public static double targetPositionTolerance = 0.1;
     public static double targetAngleTolerance = 3;

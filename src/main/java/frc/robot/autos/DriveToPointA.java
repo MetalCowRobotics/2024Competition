@@ -35,6 +35,7 @@ public class DriveToPointA implements MCRCommand{
             SmartDashboard.putBoolean("stopDriving", i_Intake.getStopDriving());
             if (!finished_flag && i_Intake.getStopDriving())
                 finished_flag = true;
+                
                 s_swerve.teleopSwerve(
                     () -> 0, () -> 0, () -> 0, () -> false
                     );
