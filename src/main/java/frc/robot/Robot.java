@@ -185,6 +185,11 @@ public class Robot extends TimedRobot {
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
+    if (operator.getBButtonReleased()) {
+      m_FullArmSubsystem.setPickupPosition();
+      // if Button X is released, the arm and wrist will go to the climb final position
+    }
+
     if (operator.getLeftBumperReleased()) {
       m_FullArmSubsystem.setSpeakerPosition();
       // if the left bumper is released, the arm and wrist will go to the speaker position

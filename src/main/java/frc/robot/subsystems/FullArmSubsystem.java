@@ -33,7 +33,7 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 90)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
+        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 70)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
             m_WristSubsystem.setTarget(-48);
             // bring wrist in when moving up
         } else {
@@ -46,16 +46,37 @@ public class FullArmSubsystem {
         if((m_WristSubsystem.getCurrentAngle() > -33) && (armTarget > 10) && (m_ArmSubsystem.getAvgCurrentAngle() < 20)){
             m_ArmSubsystem.setTarget(m_ArmSubsystem.getAvgCurrentAngle());
             // stop arm until wrist is clear of hard stop
-        } else if ((m_WristSubsystem.getCurrentAngle() < 2) && (armTarget > 220) ){
+        } else if ((m_WristSubsystem.getCurrentAngle() < -5) && (armTarget > 220) ){
             m_ArmSubsystem.setTarget(225);
+            // stop arm until wrist is clear of the bumpers
+        } else if ((m_WristSubsystem.getCurrentAngle() < 4) && (armTarget > 225) ){
+            m_ArmSubsystem.setTarget(230);
             // stop arm until wrist is clear of the bumpers
         } else if ((m_WristSubsystem.getCurrentAngle() < 13) && (armTarget > 230) ){
             m_ArmSubsystem.setTarget(240);
+            // stop arm until wrist is clear of the bumpers
+        } else if ((m_WristSubsystem.getCurrentAngle() < 22) && (armTarget > 235) ){
+            m_ArmSubsystem.setTarget(245);
             // stop arm until wrist is clear of the bumpers
         } else {
             m_ArmSubsystem.setTarget(armTarget);
             // arm go to position
         }
+    }
+    public void setPickupPosition(){
+        armTarget = Constants.FullArmConstants.armPickup;
+        // telling arm to go to the final climb position
+        wristTarget = Constants.FullArmConstants.wristPickup;
+        // telling wrist to go to the final climb position
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setTrapShooting(){
+        armTarget = Constants.FullArmConstants.armTrapShooting;
+        // telling arm to go to the final climb position
+        wristTarget = Constants.FullArmConstants.wristTrapShooting;
+        // telling wrist to go to the final climb position
+        shortCircut(armTarget, wristTarget);
     }
 
     public void setRestPosition(){
