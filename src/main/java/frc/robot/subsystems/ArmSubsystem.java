@@ -33,7 +33,7 @@ public class ArmSubsystem {
     private double kP = 0.05; // 0.07
     private double kI = 0.0;
     private double kD = 0.0;
-    private double positionTolerance = 5.0;
+    private double positionTolerance = 3.5;
     private double initialPosition = 0.0;
     
     public ArmSubsystem() {

@@ -33,7 +33,7 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 90)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
+        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 70)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
             m_WristSubsystem.setTarget(-48);
             // bring wrist in when moving up
         } else {
@@ -58,10 +58,10 @@ public class FullArmSubsystem {
         }
     }
 
-    public void setRestPosition(){
-        armTarget = Constants.FullArmConstants.armRest;
+    public void setPickupPosition(){
+        armTarget = Constants.FullArmConstants.armPickup;
         // telling arm to go to rest position
-        wristTarget = Constants.FullArmConstants.wristRest;
+        wristTarget = Constants.FullArmConstants.wristPickup;
         // telling wrist to go to rest position
         shortCircut(armTarget, wristTarget);
     }
@@ -84,10 +84,26 @@ public class FullArmSubsystem {
         shortCircut(armTarget, wristTarget);
     }
 
+    public void setStageShootingPosition(){
+        armTarget = Constants.FullArmConstants.armStageShooting;
+        // telling arm to go to pre climb position where it is vertical
+        wristTarget = Constants.FullArmConstants.wristStageShooting;
+        // telling wrist to go to pre climb position where the arm is vertical
+        shortCircut(armTarget, wristTarget);
+    }
+
     public void setClimbFinPosition(){
         armTarget = Constants.FullArmConstants.armClimbFin;
         // telling arm to go to the final climb position
         wristTarget = Constants.FullArmConstants.wristClimbFin;
+        // telling wrist to go to the final climb position
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setRestPosition(){
+        armTarget = Constants.FullArmConstants.armRest;
+        // telling arm to go to the final climb position
+        wristTarget = Constants.FullArmConstants.wristRest;
         // telling wrist to go to the final climb position
         shortCircut(armTarget, wristTarget);
     }
