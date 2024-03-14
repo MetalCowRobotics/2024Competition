@@ -63,8 +63,8 @@ public class Swerve {
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        double xSpeed = m_xSlewRateLimiter.calculate(translation.getX());
-        double ySpeed = m_ySlewRateLimiter.calculate(translation.getY());
+        double xSpeed = m_xSlewRateLimiter.calculate(translation.getX() * speedMultiplier);
+        double ySpeed = m_ySlewRateLimiter.calculate(translation.getY() * speedMultiplier);
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
