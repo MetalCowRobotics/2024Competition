@@ -13,7 +13,7 @@ public class StartIntake extends InstantCommandBase{
     public void run(){
         // s_swerve.setHeading(new Rotation2d(180));
 
-        i_intake.setspeed(.5);
+        i_intake.startIntake();
         // i_intake.setIntakeTrue();
         SmartDashboard.putString("auto", "running");
     }

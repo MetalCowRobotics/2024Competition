@@ -20,6 +20,8 @@ public class Intake {
     private double expectedTime = 0.0;
     private boolean notedetected = false;
     private boolean retractReady = false;
+    private boolean autoMode = false;
+    private boolean driving = false;
     //private DigitalInput noteDetector;
     //private boolean notePresent = false; 
 
@@ -51,36 +53,86 @@ public class Intake {
     // }
 
     public void periodic() {
-        if(speed >= 0){
-            System.out.println("speed > 0");
-            if(startUp.get() < 0.3){
-                intakeMotor.set(speed);
-                return;
-            }
-            if (notePresent() && !notedetected) {
+        // if(speed >= 0){
+        //     System.out.println("speed > 0");
+        //     if(startUp.get() < 0.3){
+        //         intakeMotor.set(speed);
+        //         return;
+        //     }
+        //     if (notePresent() && !notedetected) {
+        // // if(!autoMode){
+        SmartDashboard.putNumber("startUp", startUp.get());
+        SmartDashboard.putBoolean("Note detected", notedetected);
+        SmartDashboard.putNumber("speed", speed);
+        SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+        if(startUp.get() < .5){
+            intakeMotor.set(speed);
+            return;
+        }
+        if (noteAcquired()) {
+            setRetractReady(true);
+            stopintake();
+            setStopDriving();
+        }
+        // if(speed >= 0){
+        //     System.out.println("speed > 0");
+        //     if (notePresent() && !notedetected) {
+        //         notedetected = true;
+        //         setRetractReady(true);
+        //         timer.reset();
+        //         timer.start();
+
+        //     } 
+        //     if (notedetected && timer.get() > expectedTime){
+        //         stopintake();
+        //         SmartDashboard.putString("auto", "stopped");
+        //         // setStopDriving();
+        //         timer.stop();
+        //     }
+        // } else System.out.println("speed < 0");
+
+        intakeMotor.set(speed);
+        
+    }
+
+    private boolean noteAcquired() {
+        if (notePresent() && !notedetected) {
                 notedetected = true;
-                setRetractReady(true);
                 timer.reset();
                 timer.start();
 
             } 
-            if (notedetected && timer.get() > expectedTime){
-                stopintake();
+            if (notedetected && timer.get() >= expectedTime){
+                SmartDashboard.putString("auto", "stopped");
                 timer.stop();
+                return true;
             }
-        } else System.out.println("speed < 0");
-        intakeMotor.set(speed);
-        SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+        return false;
     }
 
-    public void setspeed(double i){
-           // if (speed == 0) {
-                speed = i;
-            // } else {
-            //     speed = 0;
-            // }
-            //speed = i; 
-            intakeMotor.set(speed);
+    // public void setspeed(double i){
+    //        // if (speed == 0) {
+    //             speed = i;
+    //         // } else {
+    //         //     speed = 0;
+    //         // }
+    //         //speed = i; 
+    //         intakeMotor.set(speed);
+    // }
+    private void setStopDriving(){
+        driving = true;
+    }
+
+    public void setStartDriving(){
+        driving = false;
+    }
+
+    public boolean getStopDriving(){
+        return driving;
+    }
+    
+    public void setAutoMode(){
+        autoMode = true;
     }
 
     private boolean notePresent(){
@@ -96,16 +148,19 @@ public class Intake {
     }
 
     public void startIntake(){
+        startUp.reset();
+        startUp.start();
         speed = .9;
         setRetractReady(false);
         notedetected = false;
     }
 
     public void startIntakeReverse(){
-        speed = -.9;
+        speed = -.8;
     }
 
     public void stopintake(){
+        autoMode = false;
         speed = 0;
     }
 }

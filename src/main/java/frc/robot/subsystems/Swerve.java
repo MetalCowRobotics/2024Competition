@@ -41,13 +41,16 @@ public class Swerve {
     private PIDController angleHoldingPIDController = new PIDController(0.00004, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
-    private PIDController thetaController = new PIDController(0.004, 0, 0.001);
+    private PIDController thetaController = new PIDController(0.004, 0, 0.000);
+
+    private boolean positionReached = false;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
         thetaController.setTolerance(4);
+        thetaController.enableContinuousInput(0, 360);
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -175,6 +178,27 @@ public class Swerve {
         speedMultiplier = 1;
     }
 
+    public void setLocationReached(){
+        positionReached = true;
+    }
+
+    public boolean isLocationReached(){
+        return positionReached;
+    }
+
+    //nothing
+
+    // public void musicInit() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicInit();
+    //     }
+    // }
+
+    // public void musicPlay() {
+    //     for(SwerveModule mod : mSwerveMods) {
+    //         mod.musicPlay();
+    //     }
+    // }
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
@@ -212,6 +236,7 @@ public class Swerve {
         double x = getPose().getX();
         double y = getPose().getY();
         double yaw = getGyroYaw().getDegrees();
+        positionReached = false;
 
         xController.setSetpoint(targetX);
         yController.setSetpoint(targetY);
@@ -235,9 +260,11 @@ public class Swerve {
         Math.abs(y - targetY) < Constants.targetPositionTolerance &&
         Math.abs(yaw - targetTheta) < Constants.targetAngleTolerance) {
         // Stop the robot by setting the desired states to zero
+        setLocationReached();
         SwerveModuleState[] stopStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
             stopStates[i] = new SwerveModuleState(0, new Rotation2d());
+
         }
         setModuleStates(stopStates);
     } else {driveAuto(
