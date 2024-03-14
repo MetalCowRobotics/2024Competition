@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -96,10 +97,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
-    s_Swerve.resetModulesToAbsolute();
-    autoMission = new SequentialCommands(
-            new DriveToPointA(s_Swerve, -0.5, 0, 180)
-        );
+    s_Swerve.setHeading(new Rotation2d(Math.PI));
+    autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -185,8 +184,18 @@ public class Robot extends TimedRobot {
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
+     if (operator.getBButtonReleased()) {
+      m_FullArmSubsystem.setStageShootingPosition();
+      // if Button X is released, the arm and wrist will go to the climb final position
+    }
+
     if (operator.getLeftBumperReleased()) {
       m_FullArmSubsystem.setSpeakerPosition();
+      // if the left bumper is released, the arm and wrist will go to the speaker position
+    }
+
+    if (operator.getRightBumperReleased()) {
+      m_FullArmSubsystem.setPickupPosition();
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
