@@ -186,19 +186,6 @@ public class Swerve {
         return positionReached;
     }
 
-    //nothing
-
-    // public void musicInit() {
-    //     for(SwerveModule mod : mSwerveMods) {
-    //         mod.musicInit();
-    //     }
-    // }
-
-    // public void musicPlay() {
-    //     for(SwerveModule mod : mSwerveMods) {
-    //         mod.musicPlay();
-    //     }
-    // }
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
@@ -264,15 +251,15 @@ public class Swerve {
         SwerveModuleState[] stopStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
             stopStates[i] = new SwerveModuleState(0, new Rotation2d());
-
         }
         setModuleStates(stopStates);
-    } else {driveAuto(
-            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation * Constants.Swerve.maxAngularVelocity, 
-            true, 
-            false
-        );
+        } else {
+            driveAuto(
+                new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
+                -rotation * Constants.Swerve.maxAngularVelocity, 
+                true, 
+                false
+            );
+        }
     }
-}
 }

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-// import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj.Timer;
 public class Intake {
     private CANSparkMax intakeMotor;
     private double speed = 0;
-    // private RelativeEncoder intakeEncoder;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
     private Timer startUp = new Timer();
@@ -20,15 +18,12 @@ public class Intake {
     private double expectedTime = 0.0;
     private boolean notedetected = false;
     private boolean retractReady = false;
-    private boolean autoMode = false;
     private boolean driving = false;
-    //private DigitalInput noteDetector;
     //private boolean notePresent = false; 
 
     public Intake() {
         intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.setInverted(true);
-        // set intake motor
     }
 
     public void periodic() {
@@ -36,7 +31,7 @@ public class Intake {
         SmartDashboard.putBoolean("Note detected", notedetected);
         SmartDashboard.putNumber("speed", speed);
         SmartDashboard.putNumber("Current",pdp.getCurrent(6));
-        if(startUp.get() < .5){
+        if(startUp.get() < 0.5){
             intakeMotor.set(speed);
             return;
         }
@@ -52,7 +47,6 @@ public class Intake {
         //         setRetractReady(true);
         //         timer.reset();
         //         timer.start();
-
         //     } 
         //     if (notedetected && timer.get() > expectedTime){
         //         stopintake();
@@ -68,7 +62,6 @@ public class Intake {
                 notedetected = true;
                 timer.reset();
                 timer.start();
-
             } 
             if (notedetected && timer.get() >= expectedTime){
                 SmartDashboard.putString("auto", "stopped");
@@ -88,10 +81,6 @@ public class Intake {
 
     public boolean getStopDriving(){
         return driving;
-    }
-    
-    public void setAutoMode(){
-        autoMode = true;
     }
 
     private boolean notePresent(){
@@ -113,17 +102,16 @@ public class Intake {
     public void startIntake(){
         startUp.reset();
         startUp.start();
-        speed = .9;
+        speed = 0.9;
         setRetractReady(false);
         notedetected = false;
     }
 
     public void startIntakeReverse(){
-        speed = -.8;
+        speed = -0.8;
     }
 
     public void stopintake(){
-        autoMode = false;
         speed = 0;
     }
 }
