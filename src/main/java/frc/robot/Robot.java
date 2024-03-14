@@ -56,9 +56,9 @@ public class Robot extends TimedRobot {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Controls */
-    private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButton(XboxController.Button.kBack.value));
-    private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
+    private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
+    private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    public boolean intakeStatus = false;
     
     // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
     // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
@@ -115,8 +115,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    // autoMission.run();
-    twoNoteCenter.run();
+    autoMission.run();
+    // twoNoteCenter.run();
     callPeriodic();
 
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
@@ -155,6 +155,7 @@ public class Robot extends TimedRobot {
  
     if(m_Intake.getRetractReady()){
       m_FullArmSubsystem.setRestPosition();
+      m_Intake.resetNoteDetected();
       m_Intake.setRetractReady(false);
       LED.runOrange();
     }else{
@@ -197,13 +198,9 @@ public class Robot extends TimedRobot {
     }
 
     /* Operator Related */
-    if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setPickupPosition();
-      // if Button B is released, the arm and wrist will go to the pickup position
-    }
-
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
+      m_Intake.stopintake();
       // if Button A is released, the arm and wrist will go to the rest position
     }
 
@@ -223,19 +220,43 @@ public class Robot extends TimedRobot {
     }
 
     if (operator.getLeftBumperReleased()) {
+      if (!intakeStatus) {
+        m_Intake.startIntake();
+        intakeStatus = true;
+      } else {
+        m_Intake.stopintake();
+        intakeStatus = false;
+      }
+
+      // m_Intake.startIntake();
+      // if the left bumper is released, the arm and wrist will go to the speaker position
+    }
+
+    if (operator.getRightBumper()) {
+      m_Shooter.setShootingSpeed();
+      // m_FullArmSubsystem.setPickupPosition();
+      // if the left bumper is released, the arm and wrist will go to the speaker position
+    } else {
+      m_Shooter.setStopSpeed();
+    }
+
+    if (operator.getBackButtonReleased()) {
+      m_Intake.startIntakeReverse();
+    }
+
+    if (operator.getStartButtonReleased()) {
+      m_FullArmSubsystem.setAMPPosition();
+    }
+
+    if (shooterPosition.getAsBoolean()) {
       m_FullArmSubsystem.setSpeakerPosition();
-      // if the left bumper is released, the arm and wrist will go to the speaker position
     }
-
-
-    if (operator.getRightBumperReleased()) {
+    if (intakePosition.getAsBoolean()) {
       m_FullArmSubsystem.setPickupPosition();
-      // if the left bumper is released, the arm and wrist will go to the speaker position
     }
-
-    if (intakeTrigger.getAsBoolean()) {
-      m_Intake.startIntake();
-    }
+    // else {
+    //   m_FullArmSubsystem.setRestPosition();
+    // }
     
 
     // if (intakeTrigger.getAsBoolean()) {
@@ -249,14 +270,14 @@ public class Robot extends TimedRobot {
     //   // if neither the right trigger or the back button is pressed, the intake will stop
     // }
 
-    if (shooterTrigger.getAsBoolean()) {
-      m_Shooter.setShootingSpeed();
-      // if the left trigger is pressed, the shooter will shoot
-    }
-    else {
-      m_Shooter.setStopSpeed();
-      // if the left trigger is not pressed, the shooter will stop
-    }
+    // if (shooterTrigger.getAsBoolean()) {
+    //   m_Shooter.setShootingSpeed();
+    //   // if the left trigger is pressed, the shooter will shoot
+    // }
+    // else {
+    //   m_Shooter.setStopSpeed();
+    //   // if the left trigger is not pressed, the shooter will stop
+    // }
   }
 
     public void callPeriodic(){

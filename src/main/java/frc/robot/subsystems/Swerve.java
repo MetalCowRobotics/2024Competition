@@ -28,7 +28,7 @@ public class Swerve {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    private final double accelerationTime = 0.6;
+    private final double accelerationTime = 0.3;
     private double speedMultiplier = 1;
     private double desiredSpeed = Constants.Swerve.maxSpeed * speedMultiplier;
 
@@ -171,7 +171,7 @@ public class Swerve {
     }
 
     public void setCrawl() {
-        speedMultiplier = 0.5;
+        speedMultiplier = 0.35;
     }
 
     public void setBase() {

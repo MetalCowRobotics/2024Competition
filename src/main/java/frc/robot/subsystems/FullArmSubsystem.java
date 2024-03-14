@@ -33,7 +33,7 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 90)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
+        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 47)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
             m_WristSubsystem.setTarget(-48);
             // bring wrist in when moving up
         } else {
@@ -56,22 +56,6 @@ public class FullArmSubsystem {
             m_ArmSubsystem.setTarget(armTarget);
             // arm go to position
         }
-    }
-
-    public void setRestPosition(){
-        armTarget = Constants.FullArmConstants.armRest;
-        // telling arm to go to rest position
-        wristTarget = Constants.FullArmConstants.wristRest;
-        // telling wrist to go to rest position
-        shortCircut(armTarget, wristTarget);
-    }
-
-        public void setPickupPosition(){
-        armTarget = Constants.FullArmConstants.armPickup;
-        // telling arm to go to rest position
-        wristTarget = Constants.FullArmConstants.wristPickup;
-        // telling wrist to go to rest position
-        shortCircut(armTarget, wristTarget);
     }
 
     public boolean atTarget(){
@@ -126,6 +110,21 @@ public class FullArmSubsystem {
         // telling wrist to go to the final climb position
         shortCircut(armTarget, wristTarget);
     }
+
+    public void setRestPosition(){
+        armTarget = Constants.FullArmConstants.armRest;
+        // telling arm to go to the final climb position
+        wristTarget = Constants.FullArmConstants.wristRest;
+        // telling wrist to go to the final climb position
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setAMPPosition(){
+        armTarget = Constants.FullArmConstants.armAmp;
+        wristTarget = Constants.FullArmConstants.wristAmp;
+        shortCircut(armTarget, wristTarget);
+    }
+
     
     public void periodic() {    
         keepWristIn();
