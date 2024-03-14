@@ -160,6 +160,8 @@ public final class Constants {
         public static final double wristAmp = 57.6;
         public static final double armSpeaker = 145.0;
         public static final double wristSpeaker = -35.0;
+        public static final double armStageShooting = 125;
+        public static final double wristStageShooting = -46;
     }
     public static double targetPositionTolerance = 0.1;
     public static double targetAngleTolerance = 3;
