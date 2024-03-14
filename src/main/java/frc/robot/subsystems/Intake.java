@@ -10,13 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Intake {
-    private CANSparkMax intakeMotor;   
+    private CANSparkMax intakeMotor;
     private double speed = 0;
     // private RelativeEncoder intakeEncoder;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
     private Timer startUp = new Timer();
-    private double expectedTime = .18;
+    // private double expectedTime = 0.18;
+    private double expectedTime = 0.0;
     private boolean notedetected = false;
     private boolean retractReady = false;
     //private DigitalInput noteDetector;
@@ -52,7 +53,7 @@ public class Intake {
     public void periodic() {
         if(speed >= 0){
             System.out.println("speed > 0");
-            if(startUp.get() < .5){
+            if(startUp.get() < 0.3){
                 intakeMotor.set(speed);
                 return;
             }
@@ -108,5 +109,3 @@ public class Intake {
         speed = 0;
     }
 }
-
-//Travvypaddyepicgamer was here!!!!!

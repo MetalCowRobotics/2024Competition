@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Controls */
-    private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    // private final Trigger intakeTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger intakeBackwards = new Trigger(() -> operator.getRawButton(XboxController.Button.kBack.value));
     private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
 
@@ -190,12 +190,8 @@ public class Robot extends TimedRobot {
     }
 
     if (operator.getLeftBumperReleased()) {
-      m_FullArmSubsystem.setSpeakerPosition();
-      // if the left bumper is released, the arm and wrist will go to the speaker position
-    }
-
-    if (operator.getLeftBumperReleased()) {
-      m_FullArmSubsystem.setSpeakerPosition();
+      // m_FullArmSubsystem.setSpeakerPosition();
+      m_Intake.startIntake();
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
@@ -204,16 +200,18 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (intakeTrigger.getAsBoolean()) {
-      m_Intake.startIntake();
-      // if the right trigger is pressed, the intake will intake
-    } else if (intakeBackwards.getAsBoolean()) {
-      m_Intake.startIntakeReverse();
-      // if the back button is pressed, the intake will outtake
-    } else {
-      m_Intake.stopintake();
-      // if neither the right trigger or the back button is pressed, the intake will stop
-    }
+    // if (intakeTrigger.getAsBoolean()) {
+    //   m_Intake.startIntake();
+    //   // if the right trigger is pressed, the intake will intake
+    // } else if (intakeBackwards.getAsBoolean()) {
+    //   m_Intake.startIntakeReverse();
+    //   // if the back button is pressed, the intake will outtake
+    // } else {
+    //   m_Intake.stopintake();
+    //   // if neither the right trigger or the back button is pressed, the intake will stop
+    // }
+
+    
 
     if (shooterTrigger.getAsBoolean()) {
       m_Shooter.setShootingSpeed();
