@@ -150,8 +150,8 @@ public final class Constants {
     public static final class FullArmConstants {
         public static final double armRest = 0.0;
         public static final double wristRest = 0.0;
-        public static final double armPickup = 278.0;
-        public static final double wristPickup = 50.0;
+        public static final double armPickup = 289.0;
+        public static final double wristPickup = 47.0;
         public static final double armClimbVert = 180.0;
         public static final double wristClimbVert = -35.0;
         public static final double armClimbFin = 87.0;
@@ -159,9 +159,9 @@ public final class Constants {
         public static final double armAmp = 279.0;
         public static final double wristAmp = 57.6;
         public static final double armSpeaker = 138.0;
-        public static final double wristSpeaker = -44.0;
+        public static final double wristSpeaker = -46.0;
         public static final double armSpeakerFromNote = 128.0;
-        public static final double wristSpeakerFromNote = -44.0;
+        public static final double wristSpeakerFromNote = -46.0;
     }
     public static double targetPositionTolerance = 0.1;
     public static double targetAngleTolerance = 3;
