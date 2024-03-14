@@ -33,7 +33,7 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 70)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
+        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 47)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
             m_WristSubsystem.setTarget(-48);
             // bring wrist in when moving up
         } else {

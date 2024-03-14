@@ -155,8 +155,8 @@ public final class Constants {
         public static final double wristPickup = 47.0;
         public static final double armClimbVert = 178.0;
         public static final double wristClimbVert = -46.0;
-        public static final double armClimbFin = 40;
-        public static final double wristClimbFin = -35.0;
+        public static final double armClimbFin = 50;
+        public static final double wristClimbFin = -46.0;
         public static final double armAmp = 279.0;
         public static final double wristAmp = 57.6;
         public static final double armSpeaker = 145.0;

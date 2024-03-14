@@ -15,6 +15,7 @@ public class Intake {
     // private RelativeEncoder intakeEncoder;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
+    private Timer startUp = new Timer();
     private double expectedTime = .18;
     private boolean notedetected = false;
     private boolean retractReady = false;
@@ -51,6 +52,10 @@ public class Intake {
     public void periodic() {
         if(speed >= 0){
             System.out.println("speed > 0");
+            if(startUp.get() < .5){
+                intakeMotor.set(speed);
+                return;
+            }
             if (notePresent() && !notedetected) {
                 notedetected = true;
                 setRetractReady(true);
@@ -78,7 +83,7 @@ public class Intake {
     }
 
     private boolean notePresent(){
-        return pdp.getCurrent(6)>15;
+        return pdp.getCurrent(6) > 15;
     }
 
     public void setRetractReady(boolean b){
