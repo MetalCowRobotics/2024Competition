@@ -118,6 +118,13 @@ public class FullArmSubsystem {
         // telling wrist to go to the final climb position
         shortCircut(armTarget, wristTarget);
     }
+
+    public void setAMPPosition(){
+        armTarget = Constants.FullArmConstants.armAmp;
+        wristTarget = Constants.FullArmConstants.wristAmp;
+        shortCircut(armTarget, wristTarget);
+    }
+
     
     public void periodic() {    
         keepWristIn();

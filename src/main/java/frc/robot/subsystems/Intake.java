@@ -27,40 +27,11 @@ public class Intake {
 
     public Intake() {
         intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
-        // intakeEncoder = intakeMotor.getEncoder();
         intakeMotor.setInverted(true);
-        // noteDetector = new DigitalInput(0);
-        // set up the intake motor and the note detector
+        // set intake motor
     }
 
-    // public void periodic() {
-    //     if (intakeStatus) {
-    //         intakeMotor.set(speed);
-    //         // set speed of intake to 0.5
-    //     }
-    //     else {
-    //          intakeMotor.set(0);
-    //         }
-    //         // set speed of intake to 0
-    //     if (noteDetector.get()){
-    //         intakeStatus = false;
-    //         // if the note detector is pressed, then set the intake to false
-    //     }    
-    //     //noteDetector = new DigitalInput(0);
-    //     SmartDashboard.putNumber("Velocity",intakeEncoder.getVelocity());
-    // }
-    //     SmartDashboard.putNumber("Velocity",intakeEncoder.getVelocity());
-    // }
-
     public void periodic() {
-        // if(speed >= 0){
-        //     System.out.println("speed > 0");
-        //     if(startUp.get() < 0.3){
-        //         intakeMotor.set(speed);
-        //         return;
-        //     }
-        //     if (notePresent() && !notedetected) {
-        // // if(!autoMode){
         SmartDashboard.putNumber("startUp", startUp.get());
         SmartDashboard.putBoolean("Note detected", notedetected);
         SmartDashboard.putNumber("speed", speed);
@@ -89,10 +60,7 @@ public class Intake {
         //         // setStopDriving();
         //         timer.stop();
         //     }
-        // } else System.out.println("speed < 0");
-
-        intakeMotor.set(speed);
-        
+        intakeMotor.set(speed);   
     }
 
     private boolean noteAcquired() {
@@ -110,15 +78,6 @@ public class Intake {
         return false;
     }
 
-    // public void setspeed(double i){
-    //        // if (speed == 0) {
-    //             speed = i;
-    //         // } else {
-    //         //     speed = 0;
-    //         // }
-    //         //speed = i; 
-    //         intakeMotor.set(speed);
-    // }
     private void setStopDriving(){
         driving = true;
     }
@@ -137,6 +96,10 @@ public class Intake {
 
     private boolean notePresent(){
         return pdp.getCurrent(6) > 15;
+    }
+
+    public void resetNoteDetected(){
+        notedetected = false;
     }
 
     public void setRetractReady(boolean b){
