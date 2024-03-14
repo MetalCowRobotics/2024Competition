@@ -98,10 +98,7 @@ public class Robot extends TimedRobot {
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
     s_Swerve.setHeading(new Rotation2d(Math.PI));
-    s_Swerve.resetModulesToAbsolute();
-    autoMission = new SequentialCommands(
-            new DriveToPointA(s_Swerve, -0.5, 0, 180)
-        );
+    autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
