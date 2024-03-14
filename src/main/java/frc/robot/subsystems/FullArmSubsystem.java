@@ -58,14 +58,6 @@ public class FullArmSubsystem {
         }
     }
 
-    public void setPickupPosition(){
-        armTarget = Constants.FullArmConstants.armPickup;
-        // telling arm to go to rest position
-        wristTarget = Constants.FullArmConstants.wristPickup;
-        // telling wrist to go to rest position
-        shortCircut(armTarget, wristTarget);
-    }
-
     public boolean atTarget(){
         return m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget();
     }
@@ -95,13 +87,13 @@ public class FullArmSubsystem {
         shortCircut(armTarget, wristTarget);
     }
 
-    public void setSpeakerFromSpikeMark(){
-        armTarget = Constants.FullArmConstants.armSpeakerFromNote;
-        // telling arm to go to speaker position
-        wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
-        // telling wrist to go to speaker position
-        shortCircut(armTarget, wristTarget);
-    }
+    // public void setSpeakerFromSpikeMark(){
+    //     armTarget = Constants.FullArmConstants.armSpeakerFromNote;
+    //     // telling arm to go to speaker position
+    //     wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
+    //     // telling wrist to go to speaker position
+    //     shortCircut(armTarget, wristTarget);
+    // }
 
     public void setClimbVertPosition(){
         armTarget = Constants.FullArmConstants.armClimbVert;
