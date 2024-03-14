@@ -78,6 +78,15 @@ public class FullArmSubsystem {
         return m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget();
     }
 
+    public void setPickupPosition(){
+        armTarget = Constants.FullArmConstants.armPickup;
+        // telling arm to go to pickup position
+        wristTarget = Constants.FullArmConstants.wristPickup;
+        // telling wrist to go to pickup position
+        shortCircut(armTarget, wristTarget);
+    }
+    
+
     public void setSpeakerPosition(){
         armTarget = Constants.FullArmConstants.armSpeaker;
         // telling arm to go to speaker position
@@ -91,6 +100,14 @@ public class FullArmSubsystem {
         // telling arm to go to pre climb position where it is vertical
         wristTarget = Constants.FullArmConstants.wristStageShooting;
         // telling wrist to go to pre climb position where the arm is vertical
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setSpeakerFromSpikeMark(){
+        armTarget = Constants.FullArmConstants.armSpeakerFromNote;
+        // telling arm to go to speaker position
+        wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
+        // telling wrist to go to speaker position
         shortCircut(armTarget, wristTarget);
     }
 

@@ -81,7 +81,7 @@ public final class Constants {
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 2.5; //TODO: This must be tuned to specific robot
-        public static final double maxAutoSpeed = 0.5;
+        public static final double maxAutoSpeed = 1;
         /** Radians per Second */
         public static final double maxAngularVelocity = ( Math.PI) / 3; //TODO: This must be tuned to specific robot
 
@@ -158,10 +158,10 @@ public final class Constants {
         public static final double wristClimbFin = -35.0;
         public static final double armAmp = 279.0;
         public static final double wristAmp = 57.6;
-        public static final double armSpeaker = 145.0;
-        public static final double wristSpeaker = -35.0;
-        public static final double armStageShooting = 125;
-        public static final double wristStageShooting = -46;
+        public static final double armSpeaker = 138.0;
+        public static final double wristSpeaker = -46.0;
+        public static final double armSpeakerFromNote = 128.0;
+        public static final double wristSpeakerFromNote = -46.0;
     }
     public static double targetPositionTolerance = 0.1;
     public static double targetAngleTolerance = 3;
