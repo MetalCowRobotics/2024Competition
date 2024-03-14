@@ -87,13 +87,13 @@ public class FullArmSubsystem {
         shortCircut(armTarget, wristTarget);
     }
 
-    // public void setSpeakerFromSpikeMark(){
-    //     armTarget = Constants.FullArmConstants.armSpeakerFromNote;
-    //     // telling arm to go to speaker position
-    //     wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
-    //     // telling wrist to go to speaker position
-    //     shortCircut(armTarget, wristTarget);
-    // }
+    public void setSpeakerFromSpikeMark(){
+        armTarget = Constants.FullArmConstants.armSpeakerFromNote;
+        // telling arm to go to speaker position
+        wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
+        // telling wrist to go to speaker position
+        shortCircut(armTarget, wristTarget);
+    }
 
     public void setClimbVertPosition(){
         armTarget = Constants.FullArmConstants.armClimbVert;

@@ -34,9 +34,9 @@ public class ArmToAngles implements MCRCommand{
         if(pos.equals("climb_fin")){
             m_fullarm.setClimbFinPosition();
         }
-        // if(pos.equals("speakerFromNote")){
-        //     m_fullarm.setSpeakerFromSpikeMark();
-        // }
+        if(pos.equals("speakerFromNote")){
+            m_fullarm.setSpeakerFromSpikeMark();
+        }
         first_time = false;
     }
 

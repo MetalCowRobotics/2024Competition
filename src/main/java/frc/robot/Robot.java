@@ -115,8 +115,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    // autoMission.run();
-    twoNoteCenter.run();
+    autoMission.run();
+    // twoNoteCenter.run();
     callPeriodic();
 
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
