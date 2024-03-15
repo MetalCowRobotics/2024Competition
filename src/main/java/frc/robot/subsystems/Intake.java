@@ -27,6 +27,9 @@ public class Intake {
     }
 
     public void periodic() {
+        if ((notedetected)) {
+            LED.runOrange();
+        }
         SmartDashboard.putNumber("startUp", startUp.get());
         SmartDashboard.putBoolean("Note detected", notedetected);
         SmartDashboard.putNumber("speed", speed);
@@ -89,6 +92,7 @@ public class Intake {
 
     public void resetNoteDetected(){
         notedetected = false;
+        LED.runDefault();
     }
 
     public void setRetractReady(boolean b){
@@ -102,14 +106,22 @@ public class Intake {
     public void startIntake(){
         startUp.reset();
         startUp.start();
-        speed = 0.9;
+        speed = 0.85;
         setRetractReady(false);
         notedetected = false;
+        
     }
 
     public void startIntakeReverse(){
-        speed = -0.8;
+        speed = -0.85;
     }
+
+    public void feed(){
+        startUp.reset();
+        startUp.start();
+        speed = 1;
+        setRetractReady(false);
+        notedetected = false;    }
 
     public void stopintake(){
         speed = 0;

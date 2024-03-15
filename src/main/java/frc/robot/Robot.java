@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
@@ -19,6 +21,7 @@ import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.autos.DriveToPointA;
 import frc.robot.autos.ResetModulesToAbsolute;
+import frc.robot.autos.ShootNoteAuto;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
 // import frc.robot.autos.TestAuto;
@@ -56,8 +59,8 @@ public class Robot extends TimedRobot {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Controls */
-    private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
-    private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
     
     // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
@@ -75,6 +78,7 @@ public class Robot extends TimedRobot {
     /* autos */
     MCRCommand twoNoteCenter;
     
+    // private SendableChooser m_autoSelector = new SendableChooser<MCRCommand>();
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -82,7 +86,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    //LED.runOrange();
     // s_Swerve.musicInit();
+    SmartDashboard.putNumber("Arm Kp", 0.06);
+    SmartDashboard.putNumber("Arm Ki", 0.0);
+    SmartDashboard.putNumber("Arm Kd", 0.012);
+
+    SmartDashboard.putNumber("Intake Offset", 0);
+
+    SmartDashboard.putNumber("AutoSelect",0);
+
+    SmartDashboard.putNumber("Wrist Kp", 0.04);
+    SmartDashboard.putNumber("Wrist Ki", 0.0);
+    SmartDashboard.putNumber("Wrist Kd", 0.002);
+
+    SmartDashboard.putNumber("StageArmAngleOffSet", 0);
+    SmartDashboard.putNumber("AMPWristAngleOffSet", 0);
+
+    // SmartDashboard.
   }
 
   @Override
@@ -106,6 +127,9 @@ public class Robot extends TimedRobot {
 
     s_Swerve.setHeading(new Rotation2d(Math.PI));
     autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
+
+
+    //autoMission = new ShootNoteAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -115,9 +139,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    autoMission.run();
-    // twoNoteCenter.run();
-    callPeriodic();
+    autoMission.run(); 
+    //  twoNoteCenter.run();
+     callPeriodic(); 
 
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
     //testMotor.set(.15);
@@ -128,12 +152,15 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    m_FullArmSubsystem.setRestPosition();
+  }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    LED.runDefault();
+    //LED.runOrange();
+    //LED.runDefault();
     configureButtonBindings();
     callPeriodic();
     
@@ -157,9 +184,6 @@ public class Robot extends TimedRobot {
       m_FullArmSubsystem.setRestPosition();
       m_Intake.resetNoteDetected();
       m_Intake.setRetractReady(false);
-      LED.runOrange();
-    }else{
-      LED.runDefault();
     }
 
     s_Swerve.teleopSwerve(
@@ -215,13 +239,14 @@ public class Robot extends TimedRobot {
     }
 
      if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setStageShootingPosition();
+      m_FullArmSubsystem.setStageShootingPosition(SmartDashboard.getNumber("StageArmAngleOffSet", 0));
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
-    if (operator.getLeftBumperReleased()) {
+    if (operator.getRightBumperReleased()) {
       if (!intakeStatus) {
         m_Intake.startIntake();
+        LED.runDefault();
         intakeStatus = true;
       } else {
         m_Intake.stopintake();
@@ -232,7 +257,7 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (operator.getRightBumper()) {
+    if (operator.getLeftBumper()) {
       m_Shooter.setShootingSpeed();
       // m_FullArmSubsystem.setPickupPosition();
       // if the left bumper is released, the arm and wrist will go to the speaker position
@@ -240,12 +265,12 @@ public class Robot extends TimedRobot {
       m_Shooter.setStopSpeed();
     }
 
-    if (operator.getBackButtonReleased()) {
+    if (operator.getBackButton()) {
       m_Intake.startIntakeReverse();
     }
 
     if (operator.getStartButtonReleased()) {
-      m_FullArmSubsystem.setAMPPosition();
+      m_FullArmSubsystem.setAMPPosition(SmartDashboard.getNumber("AMPWristAngleOffSet", 0));
     }
 
     if (shooterPosition.getAsBoolean()) {

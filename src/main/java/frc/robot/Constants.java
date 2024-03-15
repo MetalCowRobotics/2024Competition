@@ -80,8 +80,8 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 3.5; //TODO: This must be tuned to specific robot
-        public static final double maxAutoSpeed = 1.0;
+        public static final double maxSpeed = 5; //TODO: This must be tuned to specific robot
+        public static final double maxAutoSpeed = 0.5;
         /** Radians per Second */
         // public static final double maxAngularVelocity = (3 * Math.PI) / 2; //TODO: This must be tuned to specific robot
         public static final double maxAngularVelocity = 10; //TODO: This must be tuned to specific robot
@@ -96,7 +96,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(76.49); // 74.49
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-104.41 + 180); // 76.49
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -106,7 +106,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 6;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-177.08); // -177.08
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(9.58 + 180); // -177.08
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -116,7 +116,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-5.69); //-3.69
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(176.39 + 180); //-5.69
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -126,7 +126,7 @@ public final class Constants {
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-122.58); //-120.58
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(59.32 + 180); //-122.58
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -149,21 +149,21 @@ public final class Constants {
     }
     // Arm and Wrist angles for each position in degrees
     public static final class FullArmConstants {
-        public static final double armRest = 0.0;
-        public static final double wristRest = 0.0;
+        public static final double armRest = 2.0;
+        public static final double wristRest = 2.0;
         public static final double armPickup = 289.0;
-        public static final double wristPickup = 47.0;
+        public static final double wristPickup = 52.0;//47
         public static final double armClimbVert = 178.0;
         public static final double wristClimbVert = -46.0;
-        public static final double armClimbFin = 63;
+        public static final double armClimbFin = 58;
         public static final double wristClimbFin = -46.0;
-        public static final double armAmp = 175.0;
-        public static final double wristAmp = 25;
-        public static final double armSpeaker = 143.0;
+        public static final double armAmp = 63;
+        public static final double wristAmp = 10;
+        public static final double armSpeaker = 142.0;
         public static final double wristSpeaker = -46.0;
-        public static final double armStageShooting = 135;
+        public static final double armStageShooting = 127;
         public static final double wristStageShooting = -46;
-        public static final double armSpeakerFromNote = 132.5;
+        public static final double armSpeakerFromNote = 131;
         public static final double wristSpeakerFromNote = -46;
 
     }
