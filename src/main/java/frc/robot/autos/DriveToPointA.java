@@ -45,7 +45,7 @@ public class DriveToPointA implements MCRCommand{
         i_Intake.setStartDriving();
         finished_flag = false;
         }
-        first_time =false;
+        first_time = false;
         SmartDashboard.putBoolean("finished flag", finished_flag);
         SmartDashboard.putBoolean("first Time", first_time);
         

@@ -167,7 +167,7 @@ public class Swerve {
     }
 
     public void setSprint() {
-        speedMultiplier = 1.5;
+        speedMultiplier = 0.833;
     }
 
     public void setCrawl() {

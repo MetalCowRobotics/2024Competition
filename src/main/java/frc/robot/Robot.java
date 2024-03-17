@@ -19,6 +19,7 @@ import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.AutoTwoNoteCenter;
+import frc.robot.autos.DriveOutAuto;
 import frc.robot.autos.DriveToPointA;
 import frc.robot.autos.ResetModulesToAbsolute;
 import frc.robot.autos.ShootNoteAuto;
@@ -126,10 +127,9 @@ public class Robot extends TimedRobot {
     s_Swerve.zeroGyro();
 
     s_Swerve.setHeading(new Rotation2d(Math.PI));
-    autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-
-
+    // autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     //autoMission = new ShootNoteAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
+    autoMission = new DriveOutAuto(s_Swerve, m_Intake);
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -243,20 +243,6 @@ public class Robot extends TimedRobot {
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
-    if (operator.getRightBumperReleased()) {
-      if (!intakeStatus) {
-        m_Intake.startIntake();
-        LED.runDefault();
-        intakeStatus = true;
-      } else {
-        m_Intake.stopintake();
-        intakeStatus = false;
-      }
-
-      // m_Intake.startIntake();
-      // if the left bumper is released, the arm and wrist will go to the speaker position
-    }
-
     if (operator.getLeftBumper()) {
       m_Shooter.setShootingSpeed();
       // m_FullArmSubsystem.setPickupPosition();
@@ -267,6 +253,20 @@ public class Robot extends TimedRobot {
 
     if (operator.getBackButton()) {
       m_Intake.startIntakeReverse();
+    }
+    else {
+      m_Intake.stopintake();
+    }
+
+    if (operator.getRightBumperReleased()) {
+      if (!intakeStatus) {
+        m_Intake.startIntake();
+        LED.runDefault();
+        intakeStatus = true;
+      } else {
+        m_Intake.stopintake();
+        intakeStatus = false;
+      }
     }
 
     if (operator.getStartButtonReleased()) {
