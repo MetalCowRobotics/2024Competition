@@ -10,6 +10,6 @@ public class ResetModulesToAbsolute extends InstantCommandBase{
     }
     @Override
     public void run(){
-        s_swerve.resetModulesToAbsolute();
+        s_swerve.zeroGyro();
     }
 }

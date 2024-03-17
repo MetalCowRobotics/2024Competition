@@ -167,11 +167,11 @@ public class Swerve {
     }
 
     public void setSprint() {
-        speedMultiplier = 1.4;
+        speedMultiplier = 0.833;
     }
 
     public void setCrawl() {
-        speedMultiplier = 0.35;
+        speedMultiplier = 0.4375;
     }
 
     public void setBase() {
@@ -240,7 +240,7 @@ public class Swerve {
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
-        double rotation = thetaController.calculate(yaw);
+        //double rotation = thetaController.calculate(yaw);
 
         // Check if the robot is close enough to the target position
     if (Math.abs(x - targetX) < Constants.targetPositionTolerance &&
@@ -256,7 +256,7 @@ public class Swerve {
         } else {
             driveAuto(
                 new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-                -rotation * Constants.Swerve.maxAngularVelocity, 
+                -yaw * 0, 
                 true, 
                 false
             );
