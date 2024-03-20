@@ -19,7 +19,10 @@ public class DriveOutAuto implements MCRCommand{
     
     public DriveOutAuto(Swerve s_Swerve, Intake m_Intake){
         twoNoteAuto = new SequentialCommands(
-                new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, -2.5, 0, s_Swerve.getGyroYaw().getDegrees()), 1.5)
+                new ZeroGyro(s_Swerve),
+                // new DriveToPointA(s_Swerve, m_Intake,-2,0,0)
+                new DriveToPointB(s_Swerve,-1.5,0,0)
+                
             );
     }
     

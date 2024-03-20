@@ -33,12 +33,8 @@ public class DriveToPointA implements MCRCommand{
     public boolean isFinished(){
         if(!first_time){
             SmartDashboard.putBoolean("stopDriving", i_Intake.getStopDriving());
-            if (!finished_flag && i_Intake.getStopDriving())
+            if (!finished_flag || i_Intake.getStopDriving()) //should be changed to "&&"
                 finished_flag = true;
-                
-                s_swerve.teleopSwerve(
-                    () -> 0, () -> 0, () -> 0, () -> false
-                    );
             return finished_flag;
         }
         else{
@@ -49,6 +45,6 @@ public class DriveToPointA implements MCRCommand{
         SmartDashboard.putBoolean("finished flag", finished_flag);
         SmartDashboard.putBoolean("first Time", first_time);
         
-        return false;
+        return finished_flag;
     }
 }

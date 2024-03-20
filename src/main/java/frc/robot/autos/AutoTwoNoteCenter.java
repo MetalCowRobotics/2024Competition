@@ -21,22 +21,22 @@ public class AutoTwoNoteCenter implements MCRCommand{
             // start with resetting
 
             // Setting the arm angles to poin the shooter and shoot the preloaded note
-            new StartShooter(m_Shooter),
-            new ArmToAngles(m_FullArmSubsystem, "speaker"),
+            // new StartShooter(m_Shooter),
+            // new ArmToAngles(m_FullArmSubsystem, "speaker"),
             new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
-            new FeedNote(m_Intake),
+            // new FeedNote(m_Intake),
             new CommandPause(.75),
-            new StopShooter(m_Shooter),
-            new StopIntake(m_Intake),
+            // new StopShooter(m_Shooter),
+            // new StopIntake(m_Intake),
 
             // Set the arm angles to pick the note up that is in front of the robot
            
-            new StartIntake(m_Intake),
+            // new StartIntake(m_Intake),
             
-            new ArmToAngles(m_FullArmSubsystem, "pickup"),
-            new StartIntake(m_Intake),
-            new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, -2.5, 0, s_Swerve.getGyroYaw().getDegrees()), 7),
-            new StopIntake(m_Intake),
+            // new ArmToAngles(m_FullArmSubsystem, "pickup"),
+            // new StartIntake(m_Intake),
+            new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, -1.5, 0, s_Swerve.getGyroYaw().getDegrees()), 7),
+            // new StopIntake(m_Intake),
             // new ArmToAngles(m_FullArmSubsystem, "rest")
 
         // new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, 0, 0, s_Swerve.getGyroYaw().getDegrees()), 5),
@@ -44,18 +44,18 @@ public class AutoTwoNoteCenter implements MCRCommand{
 
             // Setting the arm angles to speaker to shoot the picked up piece
           //  new ParallelCommands(
-                new ArmToAngles(m_FullArmSubsystem, "speakerFromNote"),
-                new StartShooter(m_Shooter),
-           // new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, 0, 0, s_Swerve.getGyroYaw().getDegrees()), 7),
+                // new ArmToAngles(m_FullArmSubsystem, "speakerFromNote"),
+                new StartShooter(m_Shooter)
+        //    new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, 0, 0, s_Swerve.getGyroYaw().getDegrees()), 7),
 
-            new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
-            new FeedNote(m_Intake),
-            new CommandPause(.75),
-            new StopShooter(m_Shooter),
-            new StopIntake(m_Intake), 
+            // new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
+            // new FeedNote(m_Intake),
+            // new CommandPause(.75),
+            // new StopShooter(m_Shooter),
+            // new StopIntake(m_Intake), 
 
-            // Set the arm angles to stow
-            new ArmToAngles(m_FullArmSubsystem, "rest")
+            // // Set the arm angles to stow
+            // new ArmToAngles(m_FullArmSubsystem, "rest")
         );
     }
     
