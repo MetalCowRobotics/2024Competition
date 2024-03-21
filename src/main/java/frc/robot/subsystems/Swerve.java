@@ -31,7 +31,7 @@ public class Swerve {
     private int lastTargetID;
     private boolean visionControl;
 
-    private final double accelerationTime = 0.6;
+    private final double accelerationTime = 0.3;
     private double speedMultiplier = 1;
     private double desiredSpeed = Constants.Swerve.maxSpeed * speedMultiplier;
 
@@ -46,13 +46,16 @@ public class Swerve {
     private PIDController angleVisionPIDController = new PIDController(0.04, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
-    private PIDController thetaController = new PIDController(0.004, 0, 0.001);
+    private PIDController thetaController = new PIDController(0.004, 0, 0.000);
+
+    private boolean positionReached = false;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
         thetaController.setTolerance(4);
+        thetaController.enableContinuousInput(0, 360);
 
         m_vision = new Vision();
         lastTargetID = -1;
@@ -70,21 +73,20 @@ public class Swerve {
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        double xSpeed = m_xSlewRateLimiter.calculate(translation.getX());
-        double ySpeed = m_ySlewRateLimiter.calculate(translation.getY());
-        double angularSpeed = m_angleSlewRateLimiter.calculate(rotation);
+        double xSpeed = m_xSlewRateLimiter.calculate(translation.getX() * speedMultiplier);
+        double ySpeed = m_ySlewRateLimiter.calculate(translation.getY() * speedMultiplier);
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    angularSpeed, 
+                                    rotation, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    angularSpeed)
+                                    rotation)
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, desiredSpeed);
 
@@ -180,11 +182,11 @@ public class Swerve {
     }
 
     public void setSprint() {
-        speedMultiplier = 1.4;
+        speedMultiplier = 0.833;
     }
 
     public void setCrawl() {
-        speedMultiplier = 0.5;
+        speedMultiplier = 0.4375;
     }
 
     public void setBase() {
@@ -194,12 +196,20 @@ public class Swerve {
     public void enableVisionControl() {
         visionControl = true;
     }
+    public void setLocationReached(){
+        positionReached = true;
+    }
+
+    public boolean isLocationReached(){
+        return positionReached;
+    }
 
     public void disableVisionControl() {
         visionControl = false;
     }
 
     public void periodicValues(){
+        swervePoseEstimator.update(getGyroYaw(), getModulePositions());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
@@ -225,6 +235,7 @@ public class Swerve {
         double x = getPose().getX();
         double y = getPose().getY();
         double yaw = getGyroYaw().getDegrees();
+        positionReached = false;
 
         xController.setSetpoint(targetX);
         yController.setSetpoint(targetY);
@@ -242,26 +253,28 @@ public class Swerve {
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
-        double rotation = thetaController.calculate(yaw);
+        //double rotation = thetaController.calculate(yaw);
 
         // Check if the robot is close enough to the target position
     if (Math.abs(x - targetX) < Constants.targetPositionTolerance &&
         Math.abs(y - targetY) < Constants.targetPositionTolerance &&
         Math.abs(yaw - targetTheta) < Constants.targetAngleTolerance) {
         // Stop the robot by setting the desired states to zero
+        setLocationReached();
         SwerveModuleState[] stopStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
             stopStates[i] = new SwerveModuleState(0, new Rotation2d());
         }
         setModuleStates(stopStates);
-    } else {driveAuto(
-            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation * Constants.Swerve.maxAngularVelocity, 
-            true, 
-            false
-        );
+        } else {
+            driveAuto(
+                new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
+                -yaw * 0, 
+                true, 
+                false
+            );
+        }
     }
-}
 
     public void visionAndPosePeriodic() {
         swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());

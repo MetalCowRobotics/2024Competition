@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class FullArmSubsystem {
@@ -23,7 +24,7 @@ public class FullArmSubsystem {
     public void shortCircut(double targetPosArm, double targetPosWrist){
         if((targetPosArm == Constants.FullArmConstants.armRest) && (targetPosWrist == Constants.FullArmConstants.wristRest)){
             m_ArmSubsystem.setTarget(0);
-            m_WristSubsystem.setTarget(-35);
+            m_WristSubsystem.setTarget(-10);
             // if the arm and wrist are at rest, then set the arm to 0 and the wrist to -35    
         }else{
             m_ArmSubsystem.setTarget(targetPosArm);
@@ -33,8 +34,8 @@ public class FullArmSubsystem {
     }
 
     public void keepWristIn(){
-        if(((armTarget > 20) && (m_ArmSubsystem.getAvgCurrentAngle() < 90)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
-            m_WristSubsystem.setTarget(-48);
+        if(((armTarget > 10) && (m_ArmSubsystem.getAvgCurrentAngle() < 47)) || (armTarget < 30) && (m_ArmSubsystem.getAvgCurrentAngle() > 5)) {
+            m_WristSubsystem.setTarget(-20);
             // bring wrist in when moving up
         } else {
             m_WristSubsystem.setTarget(wristTarget);
@@ -43,7 +44,7 @@ public class FullArmSubsystem {
     }
 
     public void keepArmIn(){
-        if((m_WristSubsystem.getCurrentAngle() > -33) && (armTarget > 10) && (m_ArmSubsystem.getAvgCurrentAngle() < 20)){
+        if((m_WristSubsystem.getCurrentAngle() > -10) && (armTarget > 10) && (m_ArmSubsystem.getAvgCurrentAngle() < 20)){
             m_ArmSubsystem.setTarget(m_ArmSubsystem.getAvgCurrentAngle());
             // stop arm until wrist is clear of hard stop
         } else if ((m_WristSubsystem.getCurrentAngle() < 2) && (armTarget > 220) ){
@@ -58,48 +59,74 @@ public class FullArmSubsystem {
         }
     }
 
-    public void setRestPosition(){
-        armTarget = Constants.FullArmConstants.armRest;
-        // telling arm to go to rest position
-        wristTarget = Constants.FullArmConstants.wristRest;
-        // telling wrist to go to rest position
-        shortCircut(armTarget, wristTarget);
-    }
     public boolean atTarget(){
         return m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget();
     }
+
+    public void setPickupPosition(){
+        armTarget = Constants.FullArmConstants.armPickup;
+        wristTarget = Constants.FullArmConstants.wristPickup;
+        shortCircut(armTarget, wristTarget);
+    }
+
     public void setSpeakerPosition(){
         armTarget = Constants.FullArmConstants.armSpeaker;
-        // telling arm to go to speaker position
         wristTarget = Constants.FullArmConstants.wristSpeaker;
-        // telling wrist to go to speaker position
         shortCircut(armTarget, wristTarget);
-
     }
+
+    public void setStageShootingPosition(double offset){
+        armTarget = Constants.FullArmConstants.armStageShooting + offset;
+        wristTarget = Constants.FullArmConstants.wristStageShooting;
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setStageShootingPosition(){
+        armTarget = Constants.FullArmConstants.armStageShooting;
+        wristTarget = Constants.FullArmConstants.wristStageShooting;
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setSpeakerFromSpikeMark(){
+        armTarget = Constants.FullArmConstants.armSpeakerFromNote;
+        wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
+        shortCircut(armTarget, wristTarget);
+    }
+
     public void setClimbVertPosition(){
         armTarget = Constants.FullArmConstants.armClimbVert;
-        // telling arm to go to pre climb position where it is vertical
         wristTarget = Constants.FullArmConstants.wristClimbVert;
-        // telling wrist to go to pre climb position where the arm is vertical
         shortCircut(armTarget, wristTarget);
     }
 
     public void setClimbFinPosition(){
         armTarget = Constants.FullArmConstants.armClimbFin;
-        // telling arm to go to the final climb position
         wristTarget = Constants.FullArmConstants.wristClimbFin;
-        // telling wrist to go to the final climb position
         shortCircut(armTarget, wristTarget);
     }
-    
+
+    public void setRestPosition(){
+        armTarget = Constants.FullArmConstants.armRest;
+        wristTarget = Constants.FullArmConstants.wristRest;
+        shortCircut(armTarget, wristTarget);
+    }
+
+    public void setAMPPosition(double offset){
+        armTarget = Constants.FullArmConstants.armAmp;
+        wristTarget = Constants.FullArmConstants.wristAmp + offset;
+        shortCircut(armTarget, wristTarget);
+    }
+
     public void periodic() {    
         keepWristIn();
         keepArmIn();
+        SmartDashboard.putNumber("Arm Target", armTarget);
+        SmartDashboard.putNumber("Wrist Target", wristTarget);
+
         System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
         System.out.println(m_WristSubsystem.getTargetAngle());
         
         m_WristSubsystem.periodic();
         m_ArmSubsystem.periodic();
-        // Calls the periodic method of the arm and wrist subsystems
     }
 }

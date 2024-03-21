@@ -27,13 +27,13 @@ public class ArmSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 5500; 
-    private double minRPM = 3000;
+    private double maxRPM = 5400; 
+    private double minRPM = 0;
     private double reduction = 100 * (24.0 / 12.0);
-    private double kP = 0.05; // 0.07
+    private double kP = 0.06; // 0.07
     private double kI = 0.0;
     private double kD = 0.0;
-    private double positionTolerance = 5.0;
+    private double positionTolerance = 2;
     private double initialPosition = 0.0;
     
     public ArmSubsystem() {
@@ -120,8 +120,9 @@ public class ArmSubsystem {
 
     public boolean atTarget() {
         if (Math.abs(targetAngle - getEncoder1CurrentAngle()) < positionTolerance
-            &&
-            Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance) {    
+            //&&
+           // Math.abs(targetAngle - getEncoder2CurrentAngle()) < positionTolerance
+           ) {    
                 return true;
             }
         else {
@@ -130,9 +131,13 @@ public class ArmSubsystem {
     }
 
    public boolean atAngle(double desiredAngle) {
-        if (Math.abs(desiredAngle - getEncoder1CurrentAngle()) < positionTolerance
+        if (((desiredAngle - getEncoder1CurrentAngle()) < positionTolerance)
             &&
-            Math.abs(desiredAngle - getEncoder2CurrentAngle()) < positionTolerance) {
+            ((desiredAngle - getEncoder1CurrentAngle()) >= 0)
+            &&
+            ((desiredAngle - getEncoder2CurrentAngle()) < positionTolerance)
+            &&            
+            ((desiredAngle - getEncoder2CurrentAngle()) >= 0)){
                 return true;
             }
         else {
@@ -158,7 +163,9 @@ public class ArmSubsystem {
 
     public void periodic() {
         writeStatus();
-
+        //pidController1.setPID(SmartDashboard.getNumber("Arm Kp", 0.06), SmartDashboard.getNumber("Arm Kd", 0.0), SmartDashboard.getNumber("Arm Kd", 0.012));
+        //pidController2.setPID(SmartDashboard.getNumber("Arm Kp", 0.06), SmartDashboard.getNumber("Arm Kd", 0.0), SmartDashboard.getNumber("Arm Kd", 0.012));
+        
         double speed1 = 0;
         double speed2 = 0;
 
@@ -167,7 +174,8 @@ public class ArmSubsystem {
 
         if (!atTarget()) {
             speed1 = pidController1.calculate(getEncoder1CurrentAngle());
-            speed2 = pidController2.calculate(getEncoder2CurrentAngle());
+            // speed2 = pidController2.calculate(getEncoder2CurrentAngle());
+            speed2 = speed1;
         }
 
         speed1 = limitSpeed(speed1);

@@ -17,33 +17,30 @@ public class Shooter {
         shooterMotor1 = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotor2 = new CANSparkMax(52, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotor1.setInverted(false);
+        shooterMotor2.setInverted(true);
         shooterEncoder1 = shooterMotor1.getEncoder();
         shooterEncoder2 = shooterMotor2.getEncoder();
-        shooterMotor2.setInverted(true);
     }
 
     public void periodic() {
         shooterMotor1.set(motorSpeed);
         shooterMotor2.set(motorSpeed);
         SmartDashboard.putBoolean("Shooter Spun Up", getShooterSpunUp());
-        // set the speed of the shooter motors to motorSpeed
     }
 
     public boolean getShooterSpunUp(){
-        if(((shooterEncoder1.getVelocity() / 5676) > .85) && ((shooterEncoder2.getVelocity() / 5676) > .85)){
+        if(((shooterEncoder1.getVelocity() / 5676) > 0.85) && ((shooterEncoder2.getVelocity() / 5676) > 0.85)){
             return true;        
         }
         return false;
     }
 
     public void setShootingSpeed() {
-        motorSpeed = 1;
-        // set the speed of the shooter motors to 0.9
+        motorSpeed = 0.9;
     }
     
     public void setStopSpeed() {
         motorSpeed = 0;
-        // set the speed of the shooter motors to 0
     }
 
     /* Methods for Commands */
