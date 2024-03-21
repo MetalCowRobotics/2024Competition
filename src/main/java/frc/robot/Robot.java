@@ -30,6 +30,7 @@ import frc.robot.autos.Turn;
 import frc.robot.autos.StartShooter;
 import frc.robot.autos.StopShooter;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.OldCode.FullArmSubsystem;
 import frc.lib14.*;
 import com.revrobotics.CANSparkLowLevel;
 /*
@@ -72,7 +73,7 @@ public class Robot extends TimedRobot {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Intake m_Intake = new Intake();
+    private final IntakeSubsystem m_Intake = new IntakeSubsystem();
     private final Shooter m_Shooter = new Shooter();
     private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
     

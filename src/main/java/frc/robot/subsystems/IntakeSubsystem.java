@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 
-public class Intake {
+public class IntakeSubsystem {
     private CANSparkMax intakeMotor;
     private double speed = 0;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
@@ -21,7 +21,7 @@ public class Intake {
     private boolean driving = false;
     //private boolean notePresent = false; 
 
-    public Intake() {
+    public IntakeSubsystem() {
         intakeMotor = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
         intakeMotor.setInverted(true);
     }

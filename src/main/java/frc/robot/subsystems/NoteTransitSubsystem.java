@@ -1,21 +1,26 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.math.Conversions;
 import frc.robot.Constants;
 
 public class NoteTransitSubsystem {
-    private ArmSubsystem m_ArmSubsystem;
-    private WristSubsystem m_WristSubsystem;
-    private double armTarget;
-    private double wristTarget;
-    double[][] phase;
-    int phaseNumber;
+
+    private ConveyorBeltSubsystem m_ConveyorBeltSubsystem;
+    private IntakeJointSubsystem m_IntakeJointSubsystem;
+    private ShooterJointSubsystem m_ShooterJointSubsystem;
+    private IntakeSubsystem m_IntakeSubsystem;
+
+    private double shooterTarget;
+    private double intakeTarget;
+
 
     public NoteTransitSubsystem(){
-        m_ArmSubsystem = new ArmSubsystem();
-        m_WristSubsystem =  new WristSubsystem();
-        
-        armTarget = Constants.FullArmConstants.armRest;
-        wristTarget = Constants.FullArmConstants.wristRest;
+        m_ConveyorBeltSubsystem = new ConveyorBeltSubsystem();
+        m_IntakeJointSubsystem = new IntakeJointSubsystem();
+        m_ShooterJointSubsystem = new ShooterJointSubsystem();
+        m_IntakeSubsystem = new IntakeSubsystem();
+
+
     }
 
 
@@ -34,53 +39,52 @@ public class NoteTransitSubsystem {
 
 
     public boolean atTarget(){
-        return m_ArmSubsystem.atTarget() && m_WristSubsystem.atTarget();
+        return m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget();
     }
 
     public void setPickupPosition(){
-        armTarget = Constants.FullArmConstants.armPickup;
-        wristTarget = Constants.FullArmConstants.wristPickup;
-        shortCircut(armTarget, wristTarget);
+        shooterTarget = Constants.JointConstants.shooterClose;
+        intakeTarget = Constants.JointConstants.intakeDeployed;
+        //shortCircut(armTarget, wristTarget);
     }
 
     public void setSpeakerPosition(){
-        armTarget = Constants.FullArmConstants.armSpeaker;
-        wristTarget = Constants.FullArmConstants.wristSpeaker;
-        shortCircut(armTarget, wristTarget);
+        shooterTarget = Constants.JointConstants.shooterClose;
+        intakeTarget = Constants.JointConstants.intakeDeployed;
+        //shortCircut(armTarget, wristTarget);
     }
 
     public void setStageShootingPosition(){
-        armTarget = Constants.FullArmConstants.armStageShooting;
-        wristTarget = Constants.FullArmConstants.wristStageShooting;
-        shortCircut(armTarget, wristTarget);
+        shooterTarget = Constants.JointConstants.shooterFar;
+        intakeTarget = Constants.JointConstants.intakeDeployed;
+        //shortCircut(armTarget, wristTarget);
     }
 
     public void setSpeakerFromSpikeMark(){
-        armTarget = Constants.FullArmConstants.armSpeakerFromNote;
-        wristTarget = Constants.FullArmConstants.wristSpeakerFromNote;
-        shortCircut(armTarget, wristTarget);
+        shooterTarget = Constants.JointConstants.shooterFar;
+        intakeTarget = Constants.JointConstants.intakeDeployed;
+       // shortCircut(armTarget, wristTarget);
     }
 
     public void setRestPosition(){
-        armTarget = Constants.FullArmConstants.armRest;
-        wristTarget = Constants.FullArmConstants.wristRest;
-        shortCircut(armTarget, wristTarget);
+        shooterTarget = Constants.JointConstants.shooterStart;
+        intakeTarget = Constants.JointConstants.intakeStart;
+        //shortCircut(armTarget, wristTarget);
     }
 
     public void setAMPPosition(){
-        armTarget = Constants.FullArmConstants.armAmp;
-        wristTarget = Constants.FullArmConstants.wristAmp;
-        shortCircut(armTarget, wristTarget);
+        shooterTarget = Constants.JointConstants.shooterClose;
+        intakeTarget = Constants.JointConstants.intakeAmp;
+        //shortCircut(armTarget, wristTarget);
     }
 
     public void periodic() {    
-        SmartDashboard.putNumber("Arm Target", armTarget);
-        SmartDashboard.putNumber("Wrist Target", wristTarget);
-
-        System.out.println("CurrentPos: " + m_WristSubsystem.getCurrentAngle());
-        System.out.println(m_WristSubsystem.getTargetAngle());
+        SmartDashboard.putNumber("Intake Target", intakeTarget);
+        SmartDashboard.putNumber("Shooter Target", shooterTarget);
         
-        m_WristSubsystem.periodic();
-        m_ArmSubsystem.periodic();
+        m_ConveyorBeltSubsystem.periodic();
+        m_IntakeSubsystem.periodic();
+        m_IntakeJointSubsystem.periodic();
+        m_ShooterJointSubsystem.periodic();
     }
 }

@@ -1,7 +1,7 @@
 package frc.robot.autos;
 
 import frc.lib14.MCRCommand;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Shooter;
 
