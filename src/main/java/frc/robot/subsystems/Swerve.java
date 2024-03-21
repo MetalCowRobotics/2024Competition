@@ -36,11 +36,9 @@ public class Swerve {
     private double desiredSpeed = Constants.Swerve.maxSpeed * speedMultiplier;
 
     private double linearAcceleration = desiredSpeed / accelerationTime;
-    private double angularAcceleration = Constants.Swerve.maxAngularVelocity / accelerationTime;
 
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
-    private SlewRateLimiter m_angleSlewRateLimiter = new SlewRateLimiter(angularAcceleration, -angularAcceleration, 0);
 
     private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
     private PIDController angleVisionPIDController = new PIDController(0.04, 0, 0.001);

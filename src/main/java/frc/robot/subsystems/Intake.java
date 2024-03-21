@@ -43,20 +43,6 @@ public class Intake {
             stopintake();
             setStopDriving();
         }
-        // if(speed >= 0){
-        //     System.out.println("speed > 0");
-        //     if (notePresent() && !notedetected) {
-        //         notedetected = true;
-        //         setRetractReady(true);
-        //         timer.reset();
-        //         timer.start();
-        //     } 
-        //     if (notedetected && timer.get() > expectedTime){
-        //         stopintake();
-        //         SmartDashboard.putString("auto", "stopped");
-        //         // setStopDriving();
-        //         timer.stop();
-        //     }
         intakeMotor.set(speed);   
     }
 
@@ -95,19 +81,6 @@ public class Intake {
         LED.runDefault();
     }
 
-    // private void stopintake(){
-    //     intakeMotor.set(0);
-    // }
-
-    // public void setIntakeTrue() {
-    //     intakeStatus = true;
-    //     // set intake to true
-    // }
-
-    // public void setIntakeFalse() {
-    //     intakeStatus = false;
-    //     // set intake to false
-    // }
     public void setRetractReady(boolean b){
         retractReady = b;
     }
