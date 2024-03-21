@@ -44,7 +44,7 @@ public class Swerve {
     private PIDController angleVisionPIDController = new PIDController(0.04, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
-    private PIDController thetaController = new PIDController(0.004, 0, 0.000);
+    private PIDController thetaController = new PIDController(0.004, 0, 0);
 
     private boolean positionReached = false;
 
@@ -52,7 +52,8 @@ public class Swerve {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
-        thetaController.setTolerance(4);
+        xController.setTolerance(0.05);
+        thetaController.setTolerance(2);
         thetaController.enableContinuousInput(0, 360);
 
         m_vision = new Vision();
@@ -274,6 +275,38 @@ public class Swerve {
         }
     }
 
+    public void visionDriveToPoint(double targetX, double targetY, double targetTheta) {
+        double x = getPose().getX();
+        double y = getPose().getY();
+        double yaw = getGyroYaw().getDegrees();
+
+        xController.setSetpoint(targetX);
+        yController.setSetpoint(targetY);
+
+        yaw = yaw % 360;
+        if (yaw < 0) {
+            yaw += 360;
+        }
+        
+            if (yaw > 180) {
+                thetaController.setSetpoint(360);
+            } else {
+                thetaController.setSetpoint(0);
+            }
+
+        double xCorrection = xController.calculate(x);
+        double yCorrection = yController.calculate(y);
+        double rotation = thetaController.calculate(yaw);
+        
+        drive(
+            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
+            -rotation * Constants.Swerve.maxAngularVelocity, 
+            true, 
+            false
+        );
+
+    }
+
     public void visionAndPosePeriodic() {
         swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
 
@@ -289,15 +322,17 @@ public class Swerve {
             lastTargetID = -1;
         }
         SmartDashboard.putNumber("AprilTagID", lastTargetID);
-        SmartDashboard.putNumber("X Pose", swervePoseEstimator.getEstimatedPosition().getX());
-        SmartDashboard.putNumber("Y Pose", swervePoseEstimator.getEstimatedPosition().getY());
-        SmartDashboard.putNumber("Pose Angle", swervePoseEstimator.getEstimatedPosition().getRotation().getDegrees());
+        SmartDashboard.putNumber("X Pose", getPose().getX());
+        SmartDashboard.putNumber("Y Pose", getPose().getY());
+        SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        visionAndPosePeriodic();
+        // visionAndPosePeriodic();
+
         if (visionControl) {
-            driveToPoint(getPose().getX(), getPose().getY(), m_vision.getVisionAngleEstimate());
+            // visionDriveToPoint(getPose().getX(), getPose().getY(), m_vision.getVisionAngleEstimate());
+            visionDriveToPoint(0,0,180);
         } else {
             teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
         }

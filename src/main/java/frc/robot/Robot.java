@@ -166,6 +166,13 @@ public class Robot extends TimedRobot {
       s_Swerve.setBase();
     }
 
+    if (visionAlignment.getAsBoolean()) {
+      s_Swerve.enableVisionControl();
+    }
+    else {
+      s_Swerve.disableVisionControl();
+    }
+
     /* Operator Related */
     if (operator.getAButtonReleased()) {
       m_FullArmSubsystem.setRestPosition();
