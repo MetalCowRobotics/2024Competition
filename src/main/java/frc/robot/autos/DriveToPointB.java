@@ -18,7 +18,8 @@ public class DriveToPointB implements MCRCommand {
     private double targetY;
     private double targetAngle;
 
-    private PIDController anglePIDController = new PIDController(0.00004, 0, 0.001);
+    private PIDController anglePIDController = new PIDController(0.000004, 0, 0.001);
+    //private PIDController anglePIDController = new PIDController(0.00003, 0, 0);
     private PIDController xController = new PIDController(0.7, 0, 0.001);
     private PIDController yController = new PIDController(0.6, 0, 0);
 
@@ -27,7 +28,8 @@ public class DriveToPointB implements MCRCommand {
         // addRequirements(m_swerve);
 
         anglePIDController.setSetpoint(0);
-        anglePIDController.setTolerance(2);
+        anglePIDController.setTolerance(3);
+        anglePIDController.enableContinuousInput(0, 360);
 
         this.targetX = x;
         this.targetY = y;
@@ -74,7 +76,7 @@ public class DriveToPointB implements MCRCommand {
         
         m_swerve.driveAuto(
             new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation * 0, 
+            -rotation * Constants.Swerve.maxAngularVelocity, 
             true, 
             false
         );
@@ -97,7 +99,7 @@ public class DriveToPointB implements MCRCommand {
         SmartDashboard.putNumber("angle error", Math.abs(yaw - targetAngle));
 
         if ( (Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE) && Math.abs(yaw - targetAngle) < ANGLE_TOLERANCE) {
-            // m_swerve.setStop();
+            m_swerve.setStop();
             return true;
 
         }

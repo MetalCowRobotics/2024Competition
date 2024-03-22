@@ -21,7 +21,7 @@ public class DriveOutAuto implements MCRCommand{
         twoNoteAuto = new SequentialCommands(
                 new ZeroGyro(s_Swerve),
                 // new DriveToPointA(s_Swerve, m_Intake,-2,0,0)
-                new DriveToPointB(s_Swerve,-1.5,0,0)
+                new DriveToPointB(s_Swerve,-1.5,0,90)
                 
             );
     }

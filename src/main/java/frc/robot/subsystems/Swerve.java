@@ -235,12 +235,13 @@ public class Swerve {
         if (yaw < 0) {
             yaw += 360;
         }
-        
+        if (targetTheta == 0) {
             if (yaw > 180) {
                 thetaController.setSetpoint(360);
             } else {
                 thetaController.setSetpoint(0);
             }
+        }
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);

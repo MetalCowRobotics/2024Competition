@@ -7,12 +7,14 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class ArmSubsystem {
     private CANSparkMax armMotor1;
     private CANSparkMax armMotor2;
     private RelativeEncoder encoder1;
     private RelativeEncoder encoder2;
+    private Command test;
 
     private PIDController pidController1;
     private PIDController pidController2;
