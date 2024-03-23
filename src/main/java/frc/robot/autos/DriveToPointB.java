@@ -99,7 +99,7 @@ public class DriveToPointB implements MCRCommand {
         SmartDashboard.putNumber("angle error", Math.abs(yaw - targetAngle));
 
         if ( (Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE) && Math.abs(yaw - targetAngle) < ANGLE_TOLERANCE) {
-            m_swerve.setStop();
+            m_swerve.stop();
             return true;
 
         }
