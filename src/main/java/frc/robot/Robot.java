@@ -163,6 +163,7 @@ public class Robot extends TimedRobot {
     //LED.runOrange();
     //LED.runDefault();
     configureButtonBindings();
+    SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
     
     // if(m_Intake.getRetractReady()){

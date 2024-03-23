@@ -84,7 +84,7 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }   
-    
+
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = translation.getX();
         double ySpeed = translation.getY();
@@ -113,6 +113,7 @@ public class Swerve {
 
     // Stops the robot from moving
     public void stop(){
+        SmartDashboard.putBoolean("stoppedRobot", true);
         driveAuto(new Translation2d(0,0), 0, true, false);
     }
            
