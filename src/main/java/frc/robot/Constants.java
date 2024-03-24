@@ -139,11 +139,17 @@ public final class Constants {
         public static final Transform3d robotToCamTranslation = new Transform3d(0.254, -0.0889, 0.2032, new Rotation3d());
 
         public static final class RobotCoordsForEachID {
-            public static final double[] redSpeakerCoords = {15.00, 5.50, 0};
-            public static final double[] blueSpeakerCoords = {1.50, 5.50, 180};
+            public static final double[] redSpeakerCenterCoords = {15.15, 5.55, 180};
+            public static final double[] blueSpeakerCeneterCoords = {1.35, 5.55, 0};
 
-            public static final double[] redAmpCoords = {14.70, 7.50, 90};
-            public static final double[] blueAmpCoords = {1.80, 7.50, 90};
+            public static final double[] redRightSpeakerCoords = {15.77, 6.66, 120};
+            public static final double[] blueRightSpeakerCoords = {0.77, 4.44, 300};
+
+            public static final double[] redLeftSpeakerCoords = {15.77, 4.44, 240};
+            public static final double[] blueLeftSpeakerCoords = {0.77, 6.66, 60};
+
+            public static final double[] redAmpCoords = {14.70, 7.60, 270};
+            public static final double[] blueAmpCoords = {1.84, 7.60, 270};
 
             public static final double[] redWolfTrapCoords = {12.25, 4.90, 225};
             public static final double[] blueWolfTrapCoords = {4.35, 4.90, 315};
