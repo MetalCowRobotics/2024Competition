@@ -19,7 +19,6 @@ public class DriveToPointB implements MCRCommand {
     private double targetAngle;
 
     private PIDController anglePIDController = new PIDController(0.02, 0, 0.00);
-    //private PIDController anglePIDController = new PIDController(0.00003, 0, 0);
     private PIDController xController = new PIDController(0.7, 0.05, 0.00);
     private PIDController yController = new PIDController(0.8, 0, 0);
 
@@ -29,18 +28,22 @@ public class DriveToPointB implements MCRCommand {
 
         anglePIDController.setSetpoint(0);
         anglePIDController.setTolerance(3);
-        anglePIDController.enableContinuousInput(0, 360);
-        
+        anglePIDController.enableContinuousInput(0, 360); // restarts from 0 instead of going over 360
+        xController.setTolerance(TOLERANCE);
+        yController.setTolerance(TOLERANCE);
 
+        // Setting target x, y, and target angle
         this.targetX = x;
         this.targetY = y;
         this.targetAngle = theta;
 
+        // Setting these targets to the pid controllers.
         xController.setSetpoint(targetX);
         yController.setSetpoint(targetY);
         anglePIDController.setSetpoint(targetAngle);
     }
 
+    // If 
     public double correctAngle(double yaw)
     {
         yaw = yaw % 360;
@@ -53,7 +56,7 @@ public class DriveToPointB implements MCRCommand {
     @Override
     public void run() {
         /* Get Values, Deadband*/
-
+        SmartDashboard.putBoolean("stoppedRobot", false);
         double x = m_swerve.getPose().getX();
         double y = m_swerve.getPose().getY();
 
@@ -79,7 +82,8 @@ public class DriveToPointB implements MCRCommand {
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
         // SmartDashboard.putNumber("absolute yaw", yaw);
-        if (Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE){
+        // Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE
+        if (xController.atSetpoint() && yController.atSetpoint()){
             xCorrection = 0;
             yCorrection = 0;
         }
@@ -103,9 +107,7 @@ public class DriveToPointB implements MCRCommand {
 
         yaw = yaw % 360;
         yaw = correctAngle(yaw);
-        // if (yaw < 0) {
-        //     yaw += 360;
-        // }
+
         System.out.println("Angle: " + yaw);
         SmartDashboard.putNumber("yaw", yaw);
         System.out.println(("x tolerance: " + (Math.abs(x - targetX) < TOLERANCE)));
@@ -113,15 +115,11 @@ public class DriveToPointB implements MCRCommand {
         SmartDashboard.putBoolean("angle tolerance", Math.abs(yaw - targetAngle) < 3);
         SmartDashboard.putNumber("angle error", Math.abs(yaw - targetAngle));
         System.out.println("ifStatement: " + (Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE));
-        // && Math.abs(yaw - targetAngle) < ANGLE_TOLERANCE)
 
-        if (Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE && Math.abs(yaw - targetAngle) < ANGLE_TOLERANCE){
+        if (xController.atSetpoint() && yController.atSetpoint() && anglePIDController.atSetpoint()){
             m_swerve.stop();
             return true;
         }
-        // if(Math.abs(yaw - targetAngle) < ANGLE_TOLERANCE){
-        //     return true;
-        // }
         return false;
     }
 }

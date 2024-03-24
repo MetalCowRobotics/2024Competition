@@ -23,7 +23,7 @@ public class DriveOutAuto implements MCRCommand{
                 // new DriveToPointA(s_Swerve, m_Intake,-2,0,0)
                 new DriveToPointB(s_Swerve,-1.5,0,90),
                 new CommandPause(1),
-                new DriveToPointB(s_Swerve,.5,0,0)
+                new DriveToPointB(s_Swerve, -1.5, 2, 90)
             );
     }
     
