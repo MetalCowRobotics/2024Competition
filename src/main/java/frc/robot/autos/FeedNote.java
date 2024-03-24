@@ -13,7 +13,7 @@ public class FeedNote extends InstantCommandBase{
     public void run(){
         // s_swerve.setHeading(new Rotation2d(180));
 
-        i_intake.feed();
+        //i_intake.feed();
         // i_intake.setIntakeTrue();
         SmartDashboard.putString("auto", "running");
     }

@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IntakeJointSubsystem {
+
+    private static IntakeJointSubsystem instance = new IntakeJointSubsystem();
     private CANSparkMax intakeJointMotor;
     private RelativeEncoder encoder;
 
@@ -31,13 +33,12 @@ public class IntakeJointSubsystem {
     private double positionTolerance = 2;
     private double initialPosition = 0.0;
 
-    public IntakeJointSubsystem() {
+    private IntakeJointSubsystem() {
         intakeJointMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
 
         intakeJointMotor.enableVoltageCompensation(nominalVoltage);
 
         intakeJointMotor.setOpenLoopRampRate(rampTime);
-
         intakeJointMotor.setClosedLoopRampRate(rampTime);
 
         intakeJointMotor.setInverted(false);
@@ -47,13 +48,16 @@ public class IntakeJointSubsystem {
         intakeJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
         encoder = intakeJointMotor.getEncoder();
-        
+
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
-
+        
         pidController = new PIDController(kP, kI, kD);
-
         pidController.setIntegratorRange(-0.65, 0.65);
+    }
+
+    public static IntakeJointSubsystem getInstance(){
+        return instance;
     }
 
     private boolean allowPositiveMotion(double angle) {

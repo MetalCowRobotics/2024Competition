@@ -73,9 +73,10 @@ public class Robot extends TimedRobot {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final IntakeSubsystem m_Intake = new IntakeSubsystem();
-    private final Shooter m_Shooter = new Shooter();
-    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    // private final IntakeSubsystem m_Intake = IntakeSubsystem.getInstance();
+    // private final Shooter m_Shooter = Shooter.getInstance();
+    // private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+    private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
     
     /* autos */
     MCRCommand twoNoteCenter;
@@ -130,7 +131,7 @@ public class Robot extends TimedRobot {
     s_Swerve.setHeading(new Rotation2d(Math.PI));
     // autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     //autoMission = new ShootNoteAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-    autoMission = new DriveOutAuto(s_Swerve, m_Intake);
+    //autoMission = new DriveOutAuto(s_Swerve, m_Intake);
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -154,7 +155,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_FullArmSubsystem.setRestPosition();
+    m_NoteTransitSubsystem.setRestPosition();
   }
 
   /** This function is called periodically during operator control. */
@@ -181,11 +182,11 @@ public class Robot extends TimedRobot {
     // m_WristSubsystem.getArmAngle(m_ArmSubsystem.getEncoder1CurrentAngle());
     //m_WristSubsystem.periodic();
  
-    if(m_Intake.getRetractReady()){
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.resetNoteDetected();
-      m_Intake.setRetractReady(false);
-    }
+    // if(m_Intake.getRetractReady()){
+    //   m_FullArmSubsystem.setRestPosition();
+    //   m_Intake.resetNoteDetected();
+    //   m_Intake.setRetractReady(false);
+    // }
 
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
@@ -224,61 +225,49 @@ public class Robot extends TimedRobot {
 
     /* Operator Related */
     if (operator.getAButtonReleased()) {
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.stopintake();
+      m_NoteTransitSubsystem.setRestPosition();
+      //m_Intake.stopintake();
       // if Button A is released, the arm and wrist will go to the rest position
     }
 
-    if (operator.getYButtonReleased()) {
-      m_FullArmSubsystem.setClimbVertPosition();
-      // if Button Y is released, the arm and wrist will go to the climb vertical position
-    }
-
-    if (operator.getXButtonReleased()) {
-      m_FullArmSubsystem.setClimbFinPosition();
-      // if Button X is released, the arm and wrist will go to the climb final position
-    }
-
      if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setStageShootingPosition(SmartDashboard.getNumber("StageArmAngleOffSet", 0));
+      m_NoteTransitSubsystem.setStageShootingPosition();
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
-    if (operator.getLeftBumper()) {
-      m_Shooter.setShootingSpeed();
+    if (operator.getLeftBumperReleased()) {
+      m_NoteTransitSubsystem.toggleShooter();
       // m_FullArmSubsystem.setPickupPosition();
       // if the left bumper is released, the arm and wrist will go to the speaker position
-    } else {
-      m_Shooter.setStopSpeed();
     }
 
     if (operator.getBackButton()) {
-      m_Intake.startIntakeReverse();
+      m_NoteTransitSubsystem.quickOuttake();
     }
     else {
-      m_Intake.stopintake();
+      m_NoteTransitSubsystem.disableIntake();
     }
 
     if (operator.getRightBumperReleased()) {
       if (!intakeStatus) {
-        m_Intake.startIntake();
+        m_NoteTransitSubsystem.enableIntake();
         LED.runDefault();
         intakeStatus = true;
       } else {
-        m_Intake.stopintake();
+        m_NoteTransitSubsystem.disableIntake();
         intakeStatus = false;
       }
     }
 
     if (operator.getStartButtonReleased()) {
-      m_FullArmSubsystem.setAMPPosition(SmartDashboard.getNumber("AMPWristAngleOffSet", 0));
+      m_NoteTransitSubsystem.setAMPPosition();
     }
 
     if (shooterPosition.getAsBoolean()) {
-      m_FullArmSubsystem.setSpeakerPosition();
+      m_NoteTransitSubsystem.setSpeakerPosition();
     }
     if (intakePosition.getAsBoolean()) {
-      m_FullArmSubsystem.setPickupPosition();
+      m_NoteTransitSubsystem.setPickupPosition();
     }
     // else {
     //   m_FullArmSubsystem.setRestPosition();
@@ -307,8 +296,6 @@ public class Robot extends TimedRobot {
   }
 
     public void callPeriodic(){
-      m_FullArmSubsystem.periodic();
-      m_Intake.periodic();
-      m_Shooter.periodic();
+      m_NoteTransitSubsystem.periodic();
     }
   }

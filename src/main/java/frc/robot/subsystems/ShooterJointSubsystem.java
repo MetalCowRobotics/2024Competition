@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShooterJointSubsystem {
+
+    private static ShooterJointSubsystem instance = new ShooterJointSubsystem();
     private CANSparkMax shooterJointMotor;
     private RelativeEncoder encoder;
 
@@ -31,7 +33,7 @@ public class ShooterJointSubsystem {
     private double positionTolerance = 2;
     private double initialPosition = 0.0;
 
-    public ShooterJointSubsystem() {
+    private ShooterJointSubsystem() {
         shooterJointMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
 
         shooterJointMotor.enableVoltageCompensation(nominalVoltage);
@@ -54,6 +56,10 @@ public class ShooterJointSubsystem {
         pidController = new PIDController(kP, kI, kD);
 
         pidController.setIntegratorRange(-0.65, 0.65);
+    }
+
+    public static ShooterJointSubsystem getInstance(){
+        return instance;
     }
 
     private boolean allowPositiveMotion(double angle) {

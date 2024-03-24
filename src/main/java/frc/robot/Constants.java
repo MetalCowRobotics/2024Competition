@@ -171,6 +171,7 @@ public final class Constants {
     public static final class JointConstants{
         public static final double intakeStart = 0;
         public static final double intakeDeployed = 0;
+        public static final double intakeLoading = 0;
         public static final double intakeAmp = 0;
         public static final double shooterStart = 0;
         public static final double shooterClose = 0;

@@ -7,24 +7,33 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
+    private static Shooter instance = new Shooter();
     private CANSparkMax shooterMotor1;   
     private CANSparkMax shooterMotor2;  
     private RelativeEncoder shooterEncoder1;
     private RelativeEncoder shooterEncoder2;
     private double motorSpeed = 0;
+    private boolean shooterEnabled;
 
-    public Shooter() {
+    private Shooter() {
         shooterMotor1 = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotor2 = new CANSparkMax(52, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotor1.setInverted(false);
         shooterMotor2.setInverted(true);
         shooterEncoder1 = shooterMotor1.getEncoder();
         shooterEncoder2 = shooterMotor2.getEncoder();
+        shooterEnabled = false;
+    }
+
+    public static Shooter getInstance(){
+        return instance;
     }
 
     public void periodic() {
-        shooterMotor1.set(motorSpeed);
-        shooterMotor2.set(motorSpeed);
+        if(shooterEnabled){
+            shooterMotor1.set(.9);
+            shooterMotor2.set(.9);
+        }
         SmartDashboard.putBoolean("Shooter Spun Up", getShooterSpunUp());
     }
 
@@ -33,6 +42,14 @@ public class Shooter {
             return true;        
         }
         return false;
+    }
+
+    public void toggleShooter(){
+        if(shooterEnabled){
+            shooterEnabled = false;
+        }else{
+            shooterEnabled = true;
+        }
     }
 
     public void setShootingSpeed() {
