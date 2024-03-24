@@ -135,8 +135,8 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        /* In Meters (Camera 2 Inches Behind Gyro, Camera 2 Inches To The Gyro's Right, Camera 16 Inches Above Gyro). */
-        public static final Transform3d robotToCamTranslation = new Transform3d(-0.0508, 0.0508, 0.4064, new Rotation3d());
+        /* In Meters (Camera 10 Inches In Front of Gyro, Camera 3.5 Inches To The Gyro's Right, Camera 8 Inches Above Gyro). */
+        public static final Transform3d robotToCamTranslation = new Transform3d(0.254, -0.0889, 0.2032, new Rotation3d());
 
         public static final class RobotCoordsForEachID {
             public static final double[] redSpeakerCoords = {15.00, 5.50, 0};
