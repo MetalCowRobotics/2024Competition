@@ -26,7 +26,6 @@ import frc.robot.autos.ShootNoteAuto;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
 // import frc.robot.autos.TestAuto;
-import frc.robot.autos.Turn;
 import frc.robot.autos.StartShooter;
 import frc.robot.autos.StopShooter;
 import frc.robot.subsystems.*;
