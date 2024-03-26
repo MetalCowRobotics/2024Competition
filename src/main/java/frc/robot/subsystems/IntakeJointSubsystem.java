@@ -6,6 +6,8 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IntakeJointSubsystem {
 
@@ -19,6 +21,10 @@ public class IntakeJointSubsystem {
     private double minSetpoint;
     private double targetAngle;
 
+    private DigitalInput boreInput = new DigitalInput(8);
+    private DutyCycleEncoder boreEncoder = new DutyCycleEncoder(boreInput);
+    private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
+
     private double nominalVoltage = 12.6;
     private double rampTime = 0.250;
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
@@ -26,7 +32,7 @@ public class IntakeJointSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 700; // 4000
     private double minRPM = 0; // 2000
-    private double reduction =  (72.0 / 11.0) * (30.0 / 16.0)*(4.0 / 1.0);
+    private double reduction =  (72.0 / 11.0) * (30.0 / 24.0)*(4.0 / 1.0);
     private double kP = 0.03; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;
@@ -79,7 +85,8 @@ public class IntakeJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
+        //return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
+        return boreConvertedOffsetValue;
     }
 
     public void resetEncoders(double angle) {
@@ -113,6 +120,9 @@ public class IntakeJointSubsystem {
 
     public void periodic() {
         writeStatus();
+        boreRawValue = boreEncoder.getAbsolutePosition();
+        boreConvertedValue = boreRawValue * (360);
+        boreConvertedOffsetValue = boreConvertedValue - 90;
 
         double speed = 0;
 
