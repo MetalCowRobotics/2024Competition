@@ -63,22 +63,18 @@ public class Robot extends TimedRobot {
     private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
     
-    // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
+
 
     MCRCommand autoMission;
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final Intake m_Intake = new Intake();
-    private final Shooter m_Shooter = new Shooter();
-    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
+
+    private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
     
     /* autos */
     MCRCommand twoNoteCenter;
     
-    // private SendableChooser m_autoSelector = new SendableChooser<MCRCommand>();
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -122,13 +118,14 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    if(SmartDashboard.getNumber("AutoSelect", 0) == 0){
+      //autoMission = ....
+    }
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
 
     s_Swerve.setHeading(new Rotation2d(Math.PI));
-    // autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-    //autoMission = new ShootNoteAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-    autoMission = new DriveOutAuto(s_Swerve, m_Intake);
+
     SmartDashboard.putString("auto", "stopped");
     // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
     
@@ -140,20 +137,13 @@ public class Robot extends TimedRobot {
     // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
     s_Swerve.periodicValues();
     autoMission.run(); 
-    //  twoNoteCenter.run();
-     callPeriodic(); 
+    callPeriodic(); 
 
-    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    //testMotor.set(.15);
-    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
-    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
-
-    //autoMission.run();
   }
 
   @Override
   public void teleopInit() {
-    m_FullArmSubsystem.setRestPosition();
+    m_NoteTransitSubsystem.setRestPosition();
   }
 
   /** This function is called periodically during operator control. */
@@ -164,28 +154,6 @@ public class Robot extends TimedRobot {
     configureButtonBindings();
     SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
-    
-    // if(m_Intake.getRetractReady()){
-    //   m_FullArmSubsystem.setRestPosition();
-    //   m_Intake.setRetractReady(false);
-    //   LED.runOrange();
-    // }else{
-    //   LED.runDefault();
-    // }
-    
-    // m_ArmSubsystem.setTarget(SmartDashboard.getNumber("Wanted Arm Angle", 0));
-    // m_ArmSubsystem.getWristAngle(m_WristSubsystem.getCurrentAngle());
-    //m_ArmSubsystem.periodic();
-
-    // m_WristSubsystem.setTarget(SmartDashboard.getNumber("Wanted Wrist Angle", 0))
-    // m_WristSubsystem.getArmAngle(m_ArmSubsystem.getEncoder1CurrentAngle());
-    //m_WristSubsystem.periodic();
- 
-    if(m_Intake.getRetractReady()){
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.resetNoteDetected();
-      m_Intake.setRetractReady(false);
-    }
 
     s_Swerve.teleopSwerve(
       () -> -driver.getRawAxis(translationAxis), 
@@ -224,91 +192,44 @@ public class Robot extends TimedRobot {
 
     /* Operator Related */
     if (operator.getAButtonReleased()) {
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.stopintake();
+      m_NoteTransitSubsystem.setRestPosition();
       // if Button A is released, the arm and wrist will go to the rest position
     }
 
-    if (operator.getYButtonReleased()) {
-      m_FullArmSubsystem.setClimbVertPosition();
-      // if Button Y is released, the arm and wrist will go to the climb vertical position
-    }
-
-    if (operator.getXButtonReleased()) {
-      m_FullArmSubsystem.setClimbFinPosition();
-      // if Button X is released, the arm and wrist will go to the climb final position
-    }
-
      if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setStageShootingPosition(SmartDashboard.getNumber("StageArmAngleOffSet", 0));
+      m_NoteTransitSubsystem.setStageShootingPosition();
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
-    if (operator.getLeftBumper()) {
-      m_Shooter.setShootingSpeed();
-      // m_FullArmSubsystem.setPickupPosition();
+    if (operator.getLeftBumperReleased()) {
+      m_NoteTransitSubsystem.toggleShooter();
       // if the left bumper is released, the arm and wrist will go to the speaker position
-    } else {
-      m_Shooter.setStopSpeed();
     }
 
-    if (operator.getBackButton()) {
-      m_Intake.startIntakeReverse();
+    if (operator.getRightBumper()) {
+      m_NoteTransitSubsystem.enableIntake();
+      LED.runDefault();
+    }
+    else if (operator.getBackButton()) {
+      m_NoteTransitSubsystem.quickOuttake();
     }
     else {
-      m_Intake.stopintake();
-    }
-
-    if (operator.getRightBumperReleased()) {
-      if (!intakeStatus) {
-        m_Intake.startIntake();
-        LED.runDefault();
-        intakeStatus = true;
-      } else {
-        m_Intake.stopintake();
-        intakeStatus = false;
-      }
+      m_NoteTransitSubsystem.disableIntake();
     }
 
     if (operator.getStartButtonReleased()) {
-      m_FullArmSubsystem.setAMPPosition(SmartDashboard.getNumber("AMPWristAngleOffSet", 0));
+      m_NoteTransitSubsystem.setAMPPosition();
     }
 
     if (shooterPosition.getAsBoolean()) {
-      m_FullArmSubsystem.setSpeakerPosition();
+      m_NoteTransitSubsystem.setSpeakerPosition();
     }
     if (intakePosition.getAsBoolean()) {
-      m_FullArmSubsystem.setPickupPosition();
+      m_NoteTransitSubsystem.setPickupPosition();
     }
-    // else {
-    //   m_FullArmSubsystem.setRestPosition();
-    // }
-    
-
-    // if (intakeTrigger.getAsBoolean()) {
-    //   m_Intake.startIntake();
-    //   // if the right trigger is pressed, the intake will intake
-    // } else if (intakeBackwards.getAsBoolean()) {
-    //   m_Intake.startIntakeReverse();
-    //   // if the back button is pressed, the intake will outtake
-    // } else {
-    //   m_Intake.stopintake();
-    //   // if neither the right trigger or the back button is pressed, the intake will stop
-    // }
-
-    // if (shooterTrigger.getAsBoolean()) {
-    //   m_Shooter.setShootingSpeed();
-    //   // if the left trigger is pressed, the shooter will shoot
-    // }
-    // else {
-    //   m_Shooter.setStopSpeed();
-    //   // if the left trigger is not pressed, the shooter will stop
-    // }
   }
 
     public void callPeriodic(){
-      m_FullArmSubsystem.periodic();
-      m_Intake.periodic();
-      m_Shooter.periodic();
+      m_NoteTransitSubsystem.periodic();
     }
   }

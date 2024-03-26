@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.InstantCommandBase;
 import frc.lib14.MCRCommand;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class DriveToPointA implements MCRCommand{
     Swerve s_swerve;
@@ -13,9 +13,9 @@ public class DriveToPointA implements MCRCommand{
     double targetAngle;
     boolean finished_flag = false;
     boolean first_time = true;
-    Intake i_Intake;
+    IntakeSubsystem i_Intake;
 
-    public DriveToPointA(Swerve m_swerve, Intake m_Intake, double x, double y, double theta){
+    public DriveToPointA(Swerve m_swerve, IntakeSubsystem m_Intake, double x, double y, double theta){
         s_swerve = m_swerve;
         xCor = x;
         yCor = y;

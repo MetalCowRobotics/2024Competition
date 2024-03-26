@@ -1,9 +1,9 @@
 package frc.robot.autos;
 
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.FullArmSubsystem;
+import frc.robot.subsystems.OldCode.FullArmSubsystem;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,7 +17,7 @@ public class DriveOutAuto implements MCRCommand{
     double armMovementTimeout = .5;
     MCRCommand twoNoteAuto;
     
-    public DriveOutAuto(Swerve s_Swerve, Intake m_Intake){
+    public DriveOutAuto(Swerve s_Swerve, IntakeSubsystem m_Intake){
         twoNoteAuto = new SequentialCommands(
                 new ZeroGyro(s_Swerve),
                 // new DriveToPointA(s_Swerve, m_Intake,-2,0,0)

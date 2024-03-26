@@ -1,9 +1,9 @@
 package frc.robot.autos;
 
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.FullArmSubsystem;
+import frc.robot.subsystems.OldCode.FullArmSubsystem;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import frc.lib14.CommandPause;
@@ -15,7 +15,7 @@ public class AutoTwoNoteCenter implements MCRCommand{
     double armMovementTimeout = .5;
     MCRCommand twoNoteAuto;
     
-    public AutoTwoNoteCenter(Swerve s_Swerve, Intake m_Intake, Shooter m_Shooter, FullArmSubsystem m_FullArmSubsystem){
+    public AutoTwoNoteCenter(Swerve s_Swerve, IntakeSubsystem m_Intake, Shooter m_Shooter, FullArmSubsystem m_FullArmSubsystem){
         // Shoot the notes into the speaker
         twoNoteAuto = new SequentialCommands(
             // start with resetting
