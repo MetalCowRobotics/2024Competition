@@ -41,7 +41,6 @@ public class Swerve {
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
 
     private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0);
-    private PIDController angleVisionPIDController = new PIDController(0.04, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
     private PIDController thetaController = new PIDController(0.004, 0, 0);
@@ -59,7 +58,6 @@ public class Swerve {
         m_vision = new Vision();
         lastTargetID = -1;
         visionControl = false;
-        angleVisionPIDController.setTolerance(2);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -275,38 +273,6 @@ public class Swerve {
         }
     }
 
-    public void visionDriveToPoint(double targetX, double targetY, double targetTheta) {
-        double x = getPose().getX();
-        double y = getPose().getY();
-        double yaw = getGyroYaw().getDegrees();
-
-        xController.setSetpoint(targetX);
-        yController.setSetpoint(targetY);
-
-        yaw = yaw % 360;
-        if (yaw < 0) {
-            yaw += 360;
-        }
-        
-            if (yaw > 180) {
-                thetaController.setSetpoint(360);
-            } else {
-                thetaController.setSetpoint(0);
-            }
-
-        double xCorrection = xController.calculate(x);
-        double yCorrection = yController.calculate(y);
-        double rotation = thetaController.calculate(yaw);
-        
-        drive(
-            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation * Constants.Swerve.maxAngularVelocity, 
-            true, 
-            false
-        );
-
-    }
-
     public void visionAndPosePeriodic() {
         swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
 
@@ -335,8 +301,7 @@ public class Swerve {
         visionAndPosePeriodic();
 
         if (visionControl) {
-            // visionDriveToPoint(getPose().getX(), getPose().getY(), m_vision.getVisionAngleEstimate());
-            // visionDriveToPoint(0,0,180);
+            // [NEW DRIVETOPOINT METHOD]
         } else {
             teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
         }
