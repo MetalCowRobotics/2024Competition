@@ -1,41 +1,33 @@
 package frc.robot.autos;
 
-import frc.robot.subsystems.FullArmSubsystem;
 import frc.lib14.MCRCommand;
+import frc.robot.subsystems.NoteTransitSubsystem;
 
+/*This command sets the shooter and intake to different angles. */
 public class ArmToAngles implements MCRCommand{
-    
-    FullArmSubsystem m_fullarm;
     String pos;
     boolean finished_flag = false;
     boolean first_time = true;
 
-    public ArmToAngles(FullArmSubsystem m_fullarmSub, String position) {
-        this.m_fullarm = m_fullarmSub;
+    public ArmToAngles(String position) {
         this.pos = position;
     }
 
     @Override
     public void run() {
-        // if String pos is equal pickup
+        
         if(pos.equals("pickup")){
-            m_fullarm.setPickupPosition();
+            NoteTransitSubsystem.getInstance().setPickupPosition();
         }
         if(pos.equals("rest")){
-            m_fullarm.setRestPosition();
-        }
-        if(pos.equals("climb_start")){
-            m_fullarm.setClimbVertPosition();
+            NoteTransitSubsystem.getInstance().setRestPosition();
         }
         if(pos.equals("speaker")){
-            m_fullarm.setSpeakerPosition();
+            NoteTransitSubsystem.getInstance().setSpeakerPosition();
             
         }
-        if(pos.equals("climb_fin")){
-            m_fullarm.setClimbFinPosition();
-        }
         if(pos.equals("speakerFromNote")){
-            m_fullarm.setSpeakerFromSpikeMark();
+            NoteTransitSubsystem.getInstance().setSpeakerFromSpikeMark();
         }
         first_time = false;
     }
@@ -43,7 +35,7 @@ public class ArmToAngles implements MCRCommand{
     @Override
     public boolean isFinished(){
         if(!first_time){
-        if (!finished_flag && m_fullarm.atTarget()) 
+        if (!finished_flag && NoteTransitSubsystem.getInstance().atTarget()) 
             finished_flag = true;
         return finished_flag;
         }

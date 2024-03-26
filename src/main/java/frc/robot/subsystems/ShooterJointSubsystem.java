@@ -7,9 +7,10 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class ShooterJointSubsystem {
 
-public class WristSubsystem {
-    private CANSparkMax wristMotor;
+    private static ShooterJointSubsystem instance = new ShooterJointSubsystem();
+    private CANSparkMax shooterJointMotor;
     private RelativeEncoder encoder;
 
     private PIDController pidController;
@@ -25,29 +26,29 @@ public class WristSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 6200; // 4000
     private double minRPM = 0; // 2000
-    private double reduction = 100.0 * (60.0 / 18.0);
+    private double reduction = 100.0 * (24.0 / 12.0);
     private double kP = 0.04; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 2;
     private double initialPosition = 0.0;
 
-    public WristSubsystem() {
-        wristMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
+    private ShooterJointSubsystem() {
+        shooterJointMotor = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
 
-        wristMotor.enableVoltageCompensation(nominalVoltage);
+        shooterJointMotor.enableVoltageCompensation(nominalVoltage);
 
-        wristMotor.setOpenLoopRampRate(rampTime);
+        shooterJointMotor.setOpenLoopRampRate(rampTime);
 
-        wristMotor.setClosedLoopRampRate(rampTime);
+        shooterJointMotor.setClosedLoopRampRate(rampTime);
 
-        wristMotor.setInverted(false);
+        shooterJointMotor.setInverted(false);
 
-        wristMotor.setIdleMode(idleMode);
+        shooterJointMotor.setIdleMode(idleMode);
 
-        wristMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+        shooterJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
-        encoder = wristMotor.getEncoder();
+        encoder = shooterJointMotor.getEncoder();
         
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
@@ -55,6 +56,10 @@ public class WristSubsystem {
         pidController = new PIDController(kP, kI, kD);
 
         pidController.setIntegratorRange(-0.65, 0.65);
+    }
+
+    public static ShooterJointSubsystem getInstance(){
+        return instance;
     }
 
     private boolean allowPositiveMotion(double angle) {
@@ -95,12 +100,8 @@ public class WristSubsystem {
         return Math.abs(targetAngle - getCurrentAngle()) < positionTolerance;
     }
 
-    public boolean atAngle(double desiredAngle) {
-        return Math.abs(desiredAngle - getCurrentAngle()) < positionTolerance;
-    }
-
     private void writeStatus() {
-        SmartDashboard.putNumber("Wrist Angle", getCurrentAngle());
+        SmartDashboard.putNumber("Shooter Angle", getCurrentAngle());
         // SmartDashboard.putNumber("Wrist Angular Velocity", Units.rotationsToDegrees(encoder.getVelocity() / reduction));
         // SmartDashboard.putNumber("Wrist Encoder Position", encoder.getPosition());
         // SmartDashboard.putNumber("Wrist encoder Velocity", encoder.getVelocity());
@@ -131,13 +132,13 @@ public class WristSubsystem {
                 speed = 0;
             }
         }
-        SmartDashboard.putNumber("Wrist Encoder Output", encoder.getPosition());
-        SmartDashboard.putNumber("Wrist Motor Output", speed);
+        SmartDashboard.putNumber("Shooter Joint Encoder Output", encoder.getPosition());
+        SmartDashboard.putNumber("Shooter Joint Motor Output", speed);
 
         if (atTarget()) {
-            wristMotor.set(0);
+            shooterJointMotor.set(0);
         } else {
-            wristMotor.set(speed);
+            shooterJointMotor.set(speed);
         }
     }
 }

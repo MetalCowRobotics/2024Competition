@@ -13,6 +13,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
 import frc.robot.autos.DriveOutAuto;
+import frc.robot.autos.DriveToPointA;
+import frc.robot.autos.ResetModulesToAbsolute;
+import frc.robot.autos.ShootNoteAuto;
+import frc.robot.autos.StartIntake;
+import frc.robot.autos.StopIntake;
+// import frc.robot.autos.TestAuto;
+import frc.robot.autos.ToggleShooter;
 import frc.robot.subsystems.*;
 
 /*
@@ -50,15 +57,17 @@ public class Robot extends TimedRobot {
     // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
 
-    /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    private final Intake m_Intake = new Intake();
-    private final Shooter m_Shooter = new Shooter();
-    private final FullArmSubsystem m_FullArmSubsystem = new FullArmSubsystem();
-    
-    /* autos */
     MCRCommand autoMission;
 
+    /* Subsystems */
+    private final Swerve s_Swerve = new Swerve();
+
+    private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
+    
+    /* autos */
+    MCRCommand twoNoteCenter;
+    
+    // private SendableChooser m_autoSelector = new SendableChooser<MCRCommand>();
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -97,12 +106,10 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    s_Swerve.visionToGyro();
+    // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
     s_Swerve.setHeading(new Rotation2d(Math.PI));
-    // autoMission = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-    //autoMission = new ShootNoteAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-    autoMission = new DriveOutAuto(s_Swerve, m_Intake);
+
     SmartDashboard.putString("auto", "stopped");
     
   }
@@ -110,27 +117,31 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
     autoMission.run(); 
-    callPeriodic(); 
+    //  twoNoteCenter.run();
+     callPeriodic(); 
+
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    //testMotor.set(.15);
+    //SmartDashboard.putNumber("Current",pdp.getCurrent(6));
+    //SmartDashboard.putNumber("Voltage",pdp.getVoltage());
+
+    //autoMission.run();
   }
 
   @Override
   public void teleopInit() {
     s_Swerve.visionToGyro();
-    m_FullArmSubsystem.setRestPosition();
+    m_NoteTransitSubsystem.setRestPosition();
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
+    SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
-    
-    if(m_Intake.getRetractReady()){
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.resetNoteDetected();
-      m_Intake.setRetractReady(false);
-    }
 
     s_Swerve.periodic(
       () -> -driver.getRawAxis(translationAxis), 
@@ -138,9 +149,6 @@ public class Robot extends TimedRobot {
       () -> -driver.getRawAxis(rotationAxis), 
       () -> false /* Never Robot-Oriented */
     );
-    m_FullArmSubsystem.periodic();
-    m_Intake.periodic();
-    m_Shooter.periodic();
   }
 
   @Override
@@ -175,61 +183,44 @@ public class Robot extends TimedRobot {
 
     /* Operator Related */
     if (operator.getAButtonReleased()) {
-      m_FullArmSubsystem.setRestPosition();
-      m_Intake.stopintake();
-    }
-
-    if (operator.getYButtonReleased()) {
-      m_FullArmSubsystem.setClimbVertPosition();
-    }
-
-    if (operator.getXButtonReleased()) {
-      m_FullArmSubsystem.setClimbFinPosition();
+      m_NoteTransitSubsystem.setRestPosition();
+      // if Button A is released, the arm and wrist will go to the rest position
     }
 
      if (operator.getBButtonReleased()) {
-      m_FullArmSubsystem.setStageShootingPosition(SmartDashboard.getNumber("StageArmAngleOffSet", 0));
+      m_NoteTransitSubsystem.setStageShootingPosition();
+      // if Button X is released, the arm and wrist will go to the climb final position
     }
 
-    if (operator.getLeftBumper()) {
-      m_Shooter.setShootingSpeed();
-    } else {
-      m_Shooter.setStopSpeed();
+    if (operator.getLeftBumperReleased()) {
+      m_NoteTransitSubsystem.toggleShooter();
+      // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (operator.getBackButton()) {
-      m_Intake.startIntakeReverse();
+    if (operator.getRightBumper()) {
+      m_NoteTransitSubsystem.enableIntake();
+      LED.runDefault();
+    }
+    else if (operator.getBackButton()) {
+      m_NoteTransitSubsystem.quickOuttake();
     }
     else {
-      m_Intake.stopintake();
-    }
-
-    if (operator.getRightBumperReleased()) {
-      if (!intakeStatus) {
-        m_Intake.startIntake();
-        LED.runDefault();
-        intakeStatus = true;
-      } else {
-        m_Intake.stopintake();
-        intakeStatus = false;
-      }
+      m_NoteTransitSubsystem.disableIntake();
     }
 
     if (operator.getStartButtonReleased()) {
-      m_FullArmSubsystem.setAMPPosition(SmartDashboard.getNumber("AMPWristAngleOffSet", 0));
+      m_NoteTransitSubsystem.setAMPPosition();
     }
 
     if (shooterPosition.getAsBoolean()) {
-      m_FullArmSubsystem.setSpeakerPosition();
+      m_NoteTransitSubsystem.setSpeakerPosition();
     }
     if (intakePosition.getAsBoolean()) {
-      m_FullArmSubsystem.setPickupPosition();
+      m_NoteTransitSubsystem.setPickupPosition();
     }
   }
 
     public void callPeriodic(){
-      m_FullArmSubsystem.periodic();
-      m_Intake.periodic();
-      m_Shooter.periodic();
+      m_NoteTransitSubsystem.periodic();
     }
   }

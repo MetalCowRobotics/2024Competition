@@ -90,7 +90,7 @@ public class Swerve {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }    
+    }   
 
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = translation.getX();
@@ -116,6 +116,12 @@ public class Swerve {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
+    }
+
+    // Stops the robot from moving
+    public void stop(){
+        SmartDashboard.putBoolean("stoppedRobot", true);
+        driveAuto(new Translation2d(0,0), 0, true, false);
     }
            
     /* Used by SwerveControllerCommand in Auto */
@@ -193,6 +199,10 @@ public class Swerve {
     public void enableVisionControl() {
         visionControl = true;
     }
+    public void setStop() {
+        speedMultiplier = 0;
+    }
+
     public void setLocationReached(){
         positionReached = true;
     }
@@ -241,29 +251,36 @@ public class Swerve {
         if (yaw < 0) {
             yaw += 360;
         }
-        
+        if (targetTheta == 0) {
             if (yaw > 180) {
                 thetaController.setSetpoint(360);
             } else {
                 thetaController.setSetpoint(0);
             }
+        }
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
         //double rotation = thetaController.calculate(yaw);
 
         // Check if the robot is close enough to the target position
+        SmartDashboard.putNumber("X-pos", getPose().getX());
+        SmartDashboard.putNumber("y-pos", getPose().getX());
+        SmartDashboard.putNumber("ValueX", xCorrection);
+        SmartDashboard.putNumber("Valuey", Math.abs(y - targetY));
+        SmartDashboard.putNumber("ValueA", Math.abs(yaw - targetTheta));
     if (Math.abs(x - targetX) < Constants.targetPositionTolerance &&
         Math.abs(y - targetY) < Constants.targetPositionTolerance &&
         Math.abs(yaw - targetTheta) < Constants.targetAngleTolerance) {
         // Stop the robot by setting the desired states to zero
-        setLocationReached();
+        SmartDashboard.putBoolean("ReachedPoint:", true);
         SwerveModuleState[] stopStates = new SwerveModuleState[4];
         for (int i = 0; i < 4; i++) {
             stopStates[i] = new SwerveModuleState(0, new Rotation2d());
         }
         setModuleStates(stopStates);
         } else {
+            SmartDashboard.putBoolean("ReachedPoint:", false);
             driveAuto(
                 new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
                 -yaw * 0, 

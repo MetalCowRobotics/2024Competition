@@ -2,18 +2,15 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.InstantCommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.NoteTransitSubsystem;
 
+/*This command disables the intake */
 public class StopIntake extends InstantCommandBase{
-    Intake i_intake;
-    public StopIntake(Intake m_intake){
-        i_intake = m_intake;
+    public StopIntake(){
         }
     @Override
     public void run(){
-        // s_swerve.setHeading(new Rotation2d(180));
-        i_intake.stopintake();
-        // i_intake.setIntakeFalse();
+        NoteTransitSubsystem.getInstance().disableIntake();
         SmartDashboard.putString("auto", "stopped");
     }
 }
