@@ -2,17 +2,13 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.InstantCommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.NoteTransitSubsystem;
 
-public class StopShooter extends InstantCommandBase{
-    Shooter s_shooter;
-    public StopShooter(Shooter m_shooter){
-        s_shooter = m_shooter;
-        }
+public class ToggleShooter extends InstantCommandBase{
     @Override
     public void run(){
         // s_swerve.setHeading(new Rotation2d(180));
-        s_shooter.setStopSpeed();
+        NoteTransitSubsystem.getInstance().toggleShooter();
         SmartDashboard.putString("auto", "running");
     }
 }

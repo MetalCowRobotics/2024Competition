@@ -20,7 +20,7 @@ public class ShootNoteAuto implements MCRCommand{
         twoNoteAuto = new SequentialCommands(
             
             // Setting the arm angles to poin the shooter and shoot the preloaded note
-            new StartShooter(m_Shooter),
+            new ToggleShooter(m_Shooter),
             new ArmToAngles(m_FullArmSubsystem, "speaker"),
             new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
             new FeedNote(m_Intake),

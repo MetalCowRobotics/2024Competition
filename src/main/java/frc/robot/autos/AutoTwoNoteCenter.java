@@ -21,7 +21,7 @@ public class AutoTwoNoteCenter implements MCRCommand{
             // start with resetting
 
             // Setting the arm angles to poin the shooter and shoot the preloaded note
-            new StartShooter(m_Shooter),
+            new ToggleShooter(m_Shooter),
             new ArmToAngles(m_FullArmSubsystem, "speaker"),
             new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
             new FeedNote(m_Intake),
@@ -45,7 +45,7 @@ public class AutoTwoNoteCenter implements MCRCommand{
             // Setting the arm angles to speaker to shoot the picked up piece
           //  new ParallelCommands(
                 new ArmToAngles(m_FullArmSubsystem, "speakerFromNote"),
-                new StartShooter(m_Shooter),
+                new ToggleShooter(m_Shooter),
            // new TimedCommandSet(new DriveToPointA(s_Swerve, m_Intake, 0, 0, s_Swerve.getGyroYaw().getDegrees()), 7),
 
             new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
