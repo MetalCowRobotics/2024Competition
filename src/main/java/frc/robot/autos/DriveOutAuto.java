@@ -3,7 +3,6 @@ package frc.robot.autos;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.OldCode.FullArmSubsystem;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -12,6 +11,7 @@ import frc.lib14.CommandPause;
 import frc.lib14.ParallelCommands;
 import frc.lib14.TimedCommandSet;
 
+/*This auto just leaves the zone */
 public class DriveOutAuto implements MCRCommand{    
     boolean first = true;
     double armMovementTimeout = .5;
