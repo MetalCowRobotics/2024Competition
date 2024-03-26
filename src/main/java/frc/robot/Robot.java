@@ -4,7 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.MCRCommand;
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,7 +30,11 @@ public class Robot extends TimedRobot {
     // private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     // private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
 
-    MCRCommand autoMission;
+  MCRCommand autoMission;
+
+  private DigitalInput boreInput = new DigitalInput(0);
+  private DutyCycleEncoder boreEncoder = new DutyCycleEncoder(boreInput);
+  private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
 
   @Override
   public void robotInit() {}
@@ -55,11 +62,22 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    SmartDashboard.putNumber("Offset", 0);
+  }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    boreRawValue = boreEncoder.getAbsolutePosition();
+    boreConvertedValue = boreRawValue * (2 * Math.PI);
+    boreConvertedOffsetValue = boreConvertedValue - 90;
+    // boreConvertedOffsetValue = boreConvertedValue - SmartDashboard.getNumber("Offset", 0);
+
+    SmartDashboard.putNumber("Bore Raw", boreRawValue);
+    SmartDashboard.putNumber("Bore Converted", boreConvertedValue);
+    SmartDashboard.putNumber("Bore Converted + Offset", boreConvertedOffsetValue);
+  }
 
   @Override
   public void testInit() {}
