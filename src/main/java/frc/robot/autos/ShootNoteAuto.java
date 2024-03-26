@@ -9,7 +9,7 @@ import frc.lib14.CommandPause;
 import frc.lib14.ParallelCommands;
 import frc.lib14.TimedCommandSet;
 
-
+/*This auto just shoots the preloaded note into the speaker */
 public class ShootNoteAuto implements MCRCommand{    
     boolean first = true;
     double armMovementTimeout = .5;
@@ -19,14 +19,14 @@ public class ShootNoteAuto implements MCRCommand{
         // Shoot the notes into the speaker
         twoNoteAuto = new SequentialCommands(
             
-            // Setting the arm angles to poin the shooter and shoot the preloaded note
+            // Setting the arm angles to point the shooter and shoot the preloaded note
             new ToggleShooter(),
             new ArmToAngles("speaker"),
-            new TimedCommandSet(new ShooterReady(m_Shooter), 1.5),
-            new FeedNote(m_Intake),
+            new StartIntake(),
             new CommandPause(.75),
             new ToggleShooter(),
-            new StopIntake(m_Intake)
+            new StopIntake(),
+            new ArmToAngles("rest")
         );
     }
     
