@@ -2,11 +2,11 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.InstantCommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class StopIntake extends InstantCommandBase{
-    Intake i_intake;
-    public StopIntake(Intake m_intake){
+    IntakeSubsystem i_intake;
+    public StopIntake(IntakeSubsystem m_intake){
         i_intake = m_intake;
         }
     @Override
