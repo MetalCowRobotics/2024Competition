@@ -61,10 +61,6 @@ public class Robot extends TimedRobot {
     private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
-    
-
-
-    MCRCommand autoMission;
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -72,6 +68,7 @@ public class Robot extends TimedRobot {
     private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
     
     /* autos */
+    MCRCommand autoMission;
     MCRCommand twoNoteCenter;
     
   /*
@@ -118,7 +115,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(SmartDashboard.getNumber("AutoSelect", 0) == 0){
-      //autoMission = ....
+      autoMission = new AutoTwoNoteCenter(s_Swerve);
     }
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();

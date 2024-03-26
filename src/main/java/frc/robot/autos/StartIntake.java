@@ -7,8 +7,6 @@ import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command enables the intake */
 public class StartIntake extends InstantCommandBase{
-    public StartIntake(){
-        }
     @Override
     public void run(){
         NoteTransitSubsystem.getInstance().enableIntake();

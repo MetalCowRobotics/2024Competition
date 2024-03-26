@@ -26,7 +26,7 @@ public class IntakeJointSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 700; // 4000
     private double minRPM = 0; // 2000
-    private double reduction =  (72.0 / 11.0) * (30.0 / 16.0)*(4.0 / 1.0);
+    private double reduction =  (72.0 / 11.0) * (30.0 / 24.0)*(4.0 / 1.0);
     private double kP = 0.03; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;

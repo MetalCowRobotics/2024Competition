@@ -23,11 +23,13 @@ public class AutoTwoNoteCenter implements MCRCommand{
             // start with resetting
             new ZeroGyro(s_Swerve),
 
+            new ArmToAngles("rest"),            
             // Setting the arm angles to point the shooter and shoot the preloaded note
             new ToggleShooter(),
             new ArmToAngles("speaker"),
+            new CommandPause(1),
             new StartIntake(),
-            new CommandPause(.75),
+            new CommandPause(1.5),
             new ToggleShooter(),
             new StopIntake(),
 
@@ -39,8 +41,9 @@ public class AutoTwoNoteCenter implements MCRCommand{
             // Setting the arm angles to speaker to shoot the picked up piece
             new ToggleShooter(),
             new ArmToAngles("speakerFromNote"),
+            new CommandPause(1),
             new StartIntake(),
-            new CommandPause(.75),
+            new CommandPause(1.5),
             new ToggleShooter(),
             new StopIntake(),
 
