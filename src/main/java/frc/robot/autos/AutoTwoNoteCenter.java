@@ -3,7 +3,7 @@ package frc.robot.autos;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.OldCode.FullArmSubsystem;
+import frc.robot.subsystems.NoteTransitSubsystem;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import frc.lib14.CommandPause;
