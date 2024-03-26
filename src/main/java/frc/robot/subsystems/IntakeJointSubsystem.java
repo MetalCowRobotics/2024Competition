@@ -7,9 +7,10 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class IntakeJointSubsystem {
 
-public class WristSubsystem {
-    private CANSparkMax wristMotor;
+    private static IntakeJointSubsystem instance = new IntakeJointSubsystem();
+    private CANSparkMax intakeJointMotor;
     private RelativeEncoder encoder;
 
     private PIDController pidController;
@@ -23,38 +24,40 @@ public class WristSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 6200; // 4000
+    private double maxRPM = 700; // 4000
     private double minRPM = 0; // 2000
-    private double reduction = 100.0 * (60.0 / 18.0);
-    private double kP = 0.04; // 0.015
+    private double reduction =  (72.0 / 11.0) * (30.0 / 16.0)*(4.0 / 1.0);
+    private double kP = 0.03; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 2;
     private double initialPosition = 0.0;
 
-    public WristSubsystem() {
-        wristMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
+    private IntakeJointSubsystem() {
+        intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
 
-        wristMotor.enableVoltageCompensation(nominalVoltage);
+        intakeJointMotor.enableVoltageCompensation(nominalVoltage);
 
-        wristMotor.setOpenLoopRampRate(rampTime);
+        intakeJointMotor.setOpenLoopRampRate(rampTime);
+        intakeJointMotor.setClosedLoopRampRate(rampTime);
 
-        wristMotor.setClosedLoopRampRate(rampTime);
+        intakeJointMotor.setInverted(false);
 
-        wristMotor.setInverted(false);
+        intakeJointMotor.setIdleMode(idleMode);
 
-        wristMotor.setIdleMode(idleMode);
+        intakeJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
-        wristMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+        encoder = intakeJointMotor.getEncoder();
 
-        encoder = wristMotor.getEncoder();
-        
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
-
+        
         pidController = new PIDController(kP, kI, kD);
-
         pidController.setIntegratorRange(-0.65, 0.65);
+    }
+
+    public static IntakeJointSubsystem getInstance(){
+        return instance;
     }
 
     private boolean allowPositiveMotion(double angle) {
@@ -100,7 +103,7 @@ public class WristSubsystem {
     }
 
     private void writeStatus() {
-        SmartDashboard.putNumber("Wrist Angle", getCurrentAngle());
+        SmartDashboard.putNumber("Intake Angle", getCurrentAngle());
         // SmartDashboard.putNumber("Wrist Angular Velocity", Units.rotationsToDegrees(encoder.getVelocity() / reduction));
         // SmartDashboard.putNumber("Wrist Encoder Position", encoder.getPosition());
         // SmartDashboard.putNumber("Wrist encoder Velocity", encoder.getVelocity());
@@ -131,13 +134,13 @@ public class WristSubsystem {
                 speed = 0;
             }
         }
-        SmartDashboard.putNumber("Wrist Encoder Output", encoder.getPosition());
-        SmartDashboard.putNumber("Wrist Motor Output", speed);
+        SmartDashboard.putNumber("Intake Joint Encoder Output", encoder.getPosition());
+        SmartDashboard.putNumber("Intake Joint Motor Output", speed);
 
         if (atTarget()) {
-            wristMotor.set(0);
+            intakeJointMotor.set(0);
         } else {
-            wristMotor.set(speed);
+            intakeJointMotor.set(speed);
         }
     }
 }
