@@ -26,7 +26,7 @@ public class ShooterJointSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 6200; // 4000
     private double minRPM = 0; // 2000
-    private double reduction = 100.0 * (60.0 / 18.0);
+    private double reduction = 100.0 * (24.0 / 12.0);
     private double kP = 0.04; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;
@@ -34,7 +34,7 @@ public class ShooterJointSubsystem {
     private double initialPosition = 0.0;
 
     private ShooterJointSubsystem() {
-        shooterJointMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
+        shooterJointMotor = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
 
         shooterJointMotor.enableVoltageCompensation(nominalVoltage);
 
@@ -98,10 +98,6 @@ public class ShooterJointSubsystem {
 
     public boolean atTarget() {
         return Math.abs(targetAngle - getCurrentAngle()) < positionTolerance;
-    }
-
-    public boolean atAngle(double desiredAngle) {
-        return Math.abs(desiredAngle - getCurrentAngle()) < positionTolerance;
     }
 
     private void writeStatus() {

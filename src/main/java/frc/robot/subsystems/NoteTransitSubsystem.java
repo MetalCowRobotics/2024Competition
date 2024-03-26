@@ -32,21 +32,6 @@ public class NoteTransitSubsystem {
         return instance;
     } 
 
-
-
-    // public void shortCircut(double targetPosArm, double targetPosWrist){
-    //     if((targetPosArm == Constants.FullArmConstants.armRest) && (targetPosWrist == Constants.FullArmConstants.wristRest)){
-    //         m_ArmSubsystem.setTarget(0);
-    //         m_WristSubsystem.setTarget(-10);
-    //         // if the arm and wrist are at rest, then set the arm to 0 and the wrist to -35    
-    //     }else{
-    //         m_ArmSubsystem.setTarget(targetPosArm);
-    //         m_WristSubsystem.setTarget(targetPosWrist);
-    //         // if the arm and wrist are not at rest, then set the arm to the target position and the wrist to the target position
-    //     }
-    // }
-
-
     public boolean atTarget(){
         return m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget();
     }
@@ -57,7 +42,6 @@ public class NoteTransitSubsystem {
         intakeTarget = Constants.JointConstants.intakeDeployed;
         m_IntakeSubsystem.setPickupSpeed();
         isShootingState = false;
-        //shortCircut(armTarget, wristTarget);
     }
 
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
@@ -66,7 +50,6 @@ public class NoteTransitSubsystem {
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
         isShootingState = true;
-        //shortCircut(armTarget, wristTarget);
     }
 
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
@@ -75,7 +58,6 @@ public class NoteTransitSubsystem {
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
         isShootingState = true;
-        //shortCircut(armTarget, wristTarget);
     }
 
     //Sets joints to speaker from spike location, and sets the intake speed to the feed speed for when it is enabled,
@@ -84,7 +66,6 @@ public class NoteTransitSubsystem {
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
         isShootingState = true;
-       // shortCircut(armTarget, wristTarget);
     }
    
     //Sets joints to rest location, and sets the intake speed to the off 
@@ -93,7 +74,6 @@ public class NoteTransitSubsystem {
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.stopintake();
         isShootingState = false;
-        //shortCircut(armTarget, wristTarget);
     }
 
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
@@ -102,12 +82,15 @@ public class NoteTransitSubsystem {
         intakeTarget = Constants.JointConstants.intakeAmp;
         m_IntakeSubsystem.setAmpSpeed();
         isShootingState = false;
-        //shortCircut(armTarget, wristTarget);
     }
 
     //Turns the shooter on or off
     public void toggleShooter(){
         m_Shooter.toggleShooter();
+    }
+
+    public boolean getShooterSpunUp(){
+        return m_Shooter.getShooterSpunUp();
     }
 
 
@@ -132,16 +115,19 @@ public class NoteTransitSubsystem {
 
 
 
-    public void periodic() {    
+    public void periodic() {
+        m_IntakeJointSubsystem.setTarget(intakeTarget);
+        m_ShooterJointSubsystem.setTarget(shooterTarget);
         SmartDashboard.putNumber("Intake Target", intakeTarget);
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
         //Automatically lifts the intake once tehre is a note inside
-        if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
-            setRestPosition();
-            alreadyLiftedIntake = true;
-        }
+        // if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
+        //     setRestPosition();
+        //     alreadyLiftedIntake = true;
+        // }
         m_IntakeSubsystem.periodic();
         m_IntakeJointSubsystem.periodic();
         m_ShooterJointSubsystem.periodic();
+        m_Shooter.periodic();
     }
 }

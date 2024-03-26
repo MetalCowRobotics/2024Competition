@@ -24,17 +24,17 @@ public class IntakeJointSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 6200; // 4000
+    private double maxRPM = 700; // 4000
     private double minRPM = 0; // 2000
-    private double reduction = 100.0 * (60.0 / 18.0);
-    private double kP = 0.04; // 0.015
+    private double reduction =  (72.0 / 11.0) * (30.0 / 16.0)*(4.0 / 1.0);
+    private double kP = 0.03; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 2;
     private double initialPosition = 0.0;
 
     private IntakeJointSubsystem() {
-        intakeJointMotor = new CANSparkMax(13, CANSparkLowLevel.MotorType.kBrushless);
+        intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
 
         intakeJointMotor.enableVoltageCompensation(nominalVoltage);
 

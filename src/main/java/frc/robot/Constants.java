@@ -147,35 +147,15 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
-    // Arm and Wrist angles for each position in degrees
-    public static final class FullArmConstants {
-        public static final double armRest = 2.0;
-        public static final double wristRest = 2.0;
-        public static final double armPickup = 289.0;
-        public static final double wristPickup = 52.0;//47
-        public static final double armClimbVert = 178.0;
-        public static final double wristClimbVert = -46.0;
-        public static final double armClimbFin = 58;
-        public static final double wristClimbFin = -46.0;
-        public static final double armAmp = 63;
-        public static final double wristAmp = 10;
-        public static final double armSpeaker = 142.0;
-        public static final double wristSpeaker = -46.0;
-        public static final double armStageShooting = 127;
-        public static final double wristStageShooting = -46;
-        public static final double armSpeakerFromNote = 131;
-        public static final double wristSpeakerFromNote = -46;
-
-    }
-
+    // Wrist and Intake angles for each position in degrees
     public static final class JointConstants{
         public static final double intakeStart = 0;
-        public static final double intakeDeployed = 0;
+        public static final double intakeDeployed = 145;
         public static final double intakeLoading = 0;
-        public static final double intakeAmp = 0;
+        public static final double intakeAmp = 90;
         public static final double shooterStart = 0;
-        public static final double shooterClose = 0;
-        public static final double shooterFar = 0;
+        public static final double shooterClose = -90;
+        public static final double shooterFar = -45;
 
 
     }
