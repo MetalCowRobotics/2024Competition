@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.math.Conversions;
 import frc.robot.Constants;
 
 public class NoteTransitSubsystem {
@@ -11,9 +10,6 @@ public class NoteTransitSubsystem {
     private IntakeSubsystem m_IntakeSubsystem;
     private Shooter m_Shooter;
     private boolean isShootingState;
-    private boolean alreadyLiftedIntake;
-
-    
 
     private double shooterTarget;
     private double intakeTarget;
@@ -25,7 +21,6 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem = IntakeSubsystem.getInstance();
         m_Shooter = Shooter.getInstance();
         isShootingState = false;
-        alreadyLiftedIntake = false;
     }
 
     public static NoteTransitSubsystem getInstance(){

@@ -12,14 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
-import frc.robot.autos.DriveOutAuto;
-import frc.robot.autos.DriveToPointA;
-import frc.robot.autos.ResetModulesToAbsolute;
-import frc.robot.autos.ShootNoteAuto;
-import frc.robot.autos.StartIntake;
-import frc.robot.autos.StopIntake;
-// import frc.robot.autos.TestAuto;
-import frc.robot.autos.ToggleShooter;
 import frc.robot.subsystems.*;
 
 /*
