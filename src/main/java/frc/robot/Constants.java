@@ -152,10 +152,10 @@ public final class Constants {
         public static final double intakeStart = 0;
         public static final double intakeDeployed = 200;
         public static final double intakeLoading = 12;
-        public static final double intakeAmp = 85;
         public static final double shooterStart = 0;
         public static final double shooterClose = -28;
         public static final double shooterFar = -45;
+        public static final double shooterAMP = 3;
 
 
     }
