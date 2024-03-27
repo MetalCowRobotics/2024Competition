@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IntakeJointSubsystem {
 
@@ -30,7 +31,7 @@ public class IntakeJointSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 700; // 4000
+    private double maxRPM = 0; // 4000
     private double minRPM = 0; // 2000
     private double reduction =  (72.0 / 11.0) * (30.0 / 24.0)*(4.0 / 1.0);
     private double kP = 0.03; // 0.015
@@ -57,6 +58,13 @@ public class IntakeJointSubsystem {
 
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
+
+        SmartDashboard.putNumber("IntakeJointkP", kP);
+        SmartDashboard.putNumber("IntakeJointkI", kI);
+        SmartDashboard.putNumber("IntakeJointkD", kD);
+
+
+
         
         pidController = new PIDController(kP, kI, kD);
         pidController.setIntegratorRange(-0.65, 0.65);
@@ -122,9 +130,13 @@ public class IntakeJointSubsystem {
         writeStatus();
         boreRawValue = boreEncoder.getAbsolutePosition();
         boreConvertedValue = boreRawValue * (360);
+        SmartDashboard.putNumber("Absolute Encoder Value", boreConvertedValue);
         boreConvertedOffsetValue = boreConvertedValue - 90;
 
         double speed = 0;
+
+        pidController.setPID(SmartDashboard.getNumber("IntakeJointkP", kP), SmartDashboard.getNumber("IntakeJointkI", kI), SmartDashboard.getNumber("IntakeJointkD", kD));
+
 
         pidController.setSetpoint(targetAngle);
 

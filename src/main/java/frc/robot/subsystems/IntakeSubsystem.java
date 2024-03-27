@@ -23,6 +23,7 @@ public class IntakeSubsystem {
         intakeSensor = new DigitalInput(0);//TODO: Put actual channel into the code
         intakeEnabled = false;
         SmartDashboard.putBoolean("IntakeEnabled", intakeEnabled);
+
     }
 
     public static IntakeSubsystem getInstance(){
