@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
     private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
+    
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -147,6 +148,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //LED.runOrange();
     //LED.runDefault();
+
     configureButtonBindings();
     SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
@@ -202,7 +204,7 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (operator.getRightBumper()) {
+    if (intakeToggle()) {
       m_NoteTransitSubsystem.enableIntake();
       LED.runDefault();
     }
@@ -227,5 +229,13 @@ public class Robot extends TimedRobot {
 
     public void callPeriodic(){
       m_NoteTransitSubsystem.periodic();
+    }
+
+    public boolean intakeToggle(){
+      if(m_NoteTransitSubsystem.getShootingState()){
+        return operator.getRightBumperReleased();  
+      }else{
+        return operator.getRightBumper();
+      }
     }
   }

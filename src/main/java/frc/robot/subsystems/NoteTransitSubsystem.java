@@ -85,7 +85,7 @@ public class NoteTransitSubsystem {
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
     public void setAMPPosition(){
         shooterTarget = Constants.JointConstants.shooterAMP;
-        intakeTarget = Constants.JointConstants.intakeLoading;
+        intakeTarget = Constants.JointConstants.intakeAmp;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setAmpSpeed();
         isShootingState = true;
@@ -100,6 +100,10 @@ public class NoteTransitSubsystem {
         return m_Shooter.getShooterSpunUp();
     }
 
+    public boolean getShootingState(){
+        return isShootingState;
+    }
+
 
     //Turns on the intake to the speed that the state requires, except if you are in a state where you are shooting, then if you try, it does not enable the intake unless the shooter is at speed
     public void enableIntake(){
@@ -109,6 +113,8 @@ public class NoteTransitSubsystem {
                 m_IntakeSubsystem.setAlreadyStopped(false);
                 alreadyLiftedIntake = false;
             }
+        }else if(((isShootingState) && (m_Shooter.getShooterSpunUp()))){
+            m_IntakeSubsystem.toggleIntake();
         }else{
             disableIntake();
         }

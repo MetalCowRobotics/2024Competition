@@ -78,6 +78,14 @@ public class IntakeSubsystem {
         intakeEnabled = true;
     }
 
+    public void toggleIntake(){
+        if (intakeEnabled){
+            intakeEnabled = false;
+        }else{
+            intakeEnabled = true;
+        }
+    }
+
     public void startIntakeReverse(){
         speed = 0.85;
         intakeEnabled = true;
