@@ -71,7 +71,7 @@ public class NoteTransitSubsystem {
     //Sets joints to rest location, and sets the intake speed to the off 
     public void setRestPosition(){
         shooterTarget = Constants.JointConstants.shooterStart;
-        intakeTarget = Constants.JointConstants.intakeLoading;
+        intakeTarget = Constants.JointConstants.intakeStart;
         m_IntakeSubsystem.stopintake();
         isShootingState = false;
     }

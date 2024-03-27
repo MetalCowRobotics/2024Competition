@@ -56,6 +56,10 @@ public class ShooterJointSubsystem {
         pidController = new PIDController(kP, kI, kD);
 
         pidController.setIntegratorRange(-0.65, 0.65);
+
+        SmartDashboard.putNumber("ShooterJointkp", kP);
+        SmartDashboard.putNumber("ShooterJointkp", kI);
+        SmartDashboard.putNumber("ShooterJointkp", kD);
     }
 
     public static ShooterJointSubsystem getInstance(){
@@ -112,6 +116,7 @@ public class ShooterJointSubsystem {
     public void periodic() {
         writeStatus();
 
+        pidController.setPID(SmartDashboard.getNumber("ShooterJointkP", kP), SmartDashboard.getNumber("ShooterJointkI", kI), SmartDashboard.getNumber("ShooterJointkD", kD));
         double speed = 0;
 
         pidController.setSetpoint(targetAngle);
