@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    s_Swerve.visionToGyro();
+    // s_Swerve.visionToGyro();
     m_NoteTransitSubsystem.setRestPosition();
   }
 

@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.photonvision.EstimatedRobotPose;
+
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -170,8 +172,8 @@ public class Swerve {
     }
 
     public void visionToGyro() {
-        m_vision.periodic();
-        swervePoseEstimator.resetPosition(new Rotation2d(m_vision.getVisionAngleEstimate()), getModulePositions(), m_vision.getVisionPoseEstimate());
+        // m_vision.periodic();
+        // swervePoseEstimator.resetPosition(new Rotation2d(m_vision.getVisionAngleEstimate()), getModulePositions(), m_vision.getVisionPoseEstimate());
     }
 
     public Rotation2d getGyroYaw() {
@@ -290,35 +292,87 @@ public class Swerve {
         }
     }
 
-    public void visionAndPosePeriodic() {
-        swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+    // public void visionAndPosePeriodic() {
+    //     swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
 
+    //     m_vision.periodic();
+    //     if (m_vision.hasTargets()) {
+    //         // SmartDashboard.putBoolean("HasTarget", true);
+    //         // if (m_vision.returnEstimatedRobotPose().isPresent()) {
+    //         //     SmartDashboard.putBoolean("We Failing", false);
+    //         // } else {
+    //         //     SmartDashboard.putBoolean("We Failing", true);
+    //         // }
+    //         // if (lastTargetID == -1) {
+    //         //     setPose(m_vision.getVisionPoseEstimate());
+    //         // }
+    //         // if (m_vision.getPhotonEstimatorBase() == null) {
+    //         //     SmartDashboard.putBoolean("We Failing", true);
+    //         // } else {
+    //         //     SmartDashboard.putBoolean("We Failing", false);
+    //         // }
+    //         // SmartDashboard.putNumber("Vision X Pose", m_vision.getPhotonPose().getX());
+    //         // SmartDashboard.putNumber("Vision Y Pose", m_vision.getPhotonPose().getY());
+    //         // SmartDashboard.putNumber("Vision Pose Angle", m_vision.getPhotonPose().getRotation().getDegrees());
+    //         // swervePoseEstimator.addVisionMeasurement(m_vision.getPhotonPose(), m_vision.getPhotonTimestampSeconds());
+    //         lastTargetID = m_vision.getTagID();
+    //     }
+    //     else {
+    //         lastTargetID = -1;
+    //         SmartDashboard.putBoolean("HasTarget", false);
+    //     }
+
+    //     SmartDashboard.putNumber("AprilTagID", lastTargetID);
+    //     SmartDashboard.putNumber("X Pose", getPose().getX());
+    //     SmartDashboard.putNumber("Y Pose", getPose().getY());
+    //     SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
+    // }
+
+    public void visionCalculations() {
         m_vision.periodic();
-        if (m_vision.hasTargets()) {
-            if (lastTargetID == -1) {
-                setPose(m_vision.getVisionPoseEstimate());
-            }
-            swervePoseEstimator.addVisionMeasurement(m_vision.getVisionPoseEstimate(), m_vision.getTimestampSeconds());
-            lastTargetID = m_vision.getTagID();
-        }
-        else {
-            lastTargetID = -1;
-        }
-        SmartDashboard.putNumber("Vision X Pose", m_vision.getVisionPoseEstimate().getX());
-        SmartDashboard.putNumber("Vision Y Pose", m_vision.getVisionPoseEstimate().getY());
-        SmartDashboard.putNumber("Vision Pose Angle", m_vision.getVisionAngleEstimate());
+        double time = m_vision.returnTime();
+        double photonX = m_vision.returnPhotonX();
+        double photonY = m_vision.returnPhotonY();
 
-        SmartDashboard.putNumber("AprilTagID", lastTargetID);
-        SmartDashboard.putNumber("X Pose", getPose().getX());
-        SmartDashboard.putNumber("Y Pose", getPose().getY());
-        SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
+        double yaw = getGyroYaw().getDegrees() % 360;
+        if (yaw < 0) {
+            yaw += 360;
+        }
+
+        double photonXAngle = yaw - 180;
+        double photonYAngle = yaw + 90 - 180;
+
+        Translation2d photonXVector = new Translation2d(
+            photonX * Math.cos(Math.toRadians(photonXAngle)),
+            photonX * Math.sin(Math.toRadians(photonXAngle))
+        );
+
+        Translation2d photonYVector = new Translation2d(
+            photonY * Math.cos(Math.toRadians(photonYAngle)),
+            photonY * Math.sin(Math.toRadians(photonYAngle))
+        );
+
+        Translation2d apriltagPosition = photonXVector.plus(photonYVector);
+
+        Translation2d robotPosition = apriltagPosition.times(-1.0);
+
+        Pose2d robotPose = new Pose2d(
+            robotPosition,
+            getGyroYaw()
+        );
+
+        SmartDashboard.putNumber("vision x", robotPose.getX());
+        SmartDashboard.putNumber("vision y", robotPose.getY());
+
+        if (lastTargetID != m_vision.getTagID()) {
+            setPose(robotPose);
+        }
+        swervePoseEstimator.addVisionMeasurement(robotPose, time);
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        visionAndPosePeriodic();
-
         if (visionControl) {
-            // [NEW DRIVETOPOINT METHOD]
+            visionCalculations();
         } else {
             teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
         }
