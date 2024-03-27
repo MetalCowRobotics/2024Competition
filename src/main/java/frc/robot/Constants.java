@@ -150,11 +150,11 @@ public final class Constants {
     // Wrist and Intake angles for each position in degrees
     public static final class JointConstants{
         public static final double intakeStart = 0;
-        public static final double intakeDeployed = 145;
-        public static final double intakeLoading = 0;
-        public static final double intakeAmp = 90;
+        public static final double intakeDeployed = 200;
+        public static final double intakeLoading = 12;
+        public static final double intakeAmp = 85;
         public static final double shooterStart = 0;
-        public static final double shooterClose = -90;
+        public static final double shooterClose = -28;
         public static final double shooterFar = -45;
 
 

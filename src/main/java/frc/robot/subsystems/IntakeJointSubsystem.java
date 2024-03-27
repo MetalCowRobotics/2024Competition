@@ -22,7 +22,7 @@ public class IntakeJointSubsystem {
     private double minSetpoint;
     private double targetAngle;
 
-    private DigitalInput boreInput = new DigitalInput(8);
+    private DigitalInput boreInput = new DigitalInput(0);
     private DutyCycleEncoder boreEncoder = new DutyCycleEncoder(boreInput);
     private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
 
@@ -31,10 +31,10 @@ public class IntakeJointSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 0; // 4000
+    private double maxRPM = 1300; // 4000
     private double minRPM = 0; // 2000
     private double reduction =  (72.0 / 11.0) * (30.0 / 24.0)*(4.0 / 1.0);
-    private double kP = 0.03; // 0.015
+    private double kP = 0.007; // 0.015
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 2;
@@ -42,7 +42,6 @@ public class IntakeJointSubsystem {
 
     private IntakeJointSubsystem() {
         intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
-
         intakeJointMotor.enableVoltageCompensation(nominalVoltage);
 
         intakeJointMotor.setOpenLoopRampRate(rampTime);
@@ -131,7 +130,7 @@ public class IntakeJointSubsystem {
         boreRawValue = boreEncoder.getAbsolutePosition();
         boreConvertedValue = boreRawValue * (360);
         SmartDashboard.putNumber("Absolute Encoder Value", boreConvertedValue);
-        boreConvertedOffsetValue = boreConvertedValue - 90;
+        boreConvertedOffsetValue = boreConvertedValue - 114;
 
         double speed = 0;
 

@@ -17,8 +17,8 @@ public class Shooter {
     private Shooter() {
         shooterMotor1 = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
         shooterMotor2 = new CANSparkMax(52, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotor1.setInverted(false);
-        shooterMotor2.setInverted(true);
+        shooterMotor1.setInverted(true);
+        shooterMotor2.setInverted(false);
         shooterEncoder1 = shooterMotor1.getEncoder();
         shooterEncoder2 = shooterMotor2.getEncoder();
         shooterEnabled = false;
