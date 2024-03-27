@@ -3,8 +3,8 @@ package frc.robot.autos;
 import frc.lib14.MCRCommand;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
+/*This command sets the shooter and intake to different angles. */
 public class ArmToAngles implements MCRCommand{
-
     String pos;
     boolean finished_flag = false;
     boolean first_time = true;
@@ -15,7 +15,7 @@ public class ArmToAngles implements MCRCommand{
 
     @Override
     public void run() {
-        // if String pos is equal pickup
+        
         if(pos.equals("pickup")){
             NoteTransitSubsystem.getInstance().setPickupPosition();
         }

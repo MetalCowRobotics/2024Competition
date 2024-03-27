@@ -26,7 +26,6 @@ import frc.robot.autos.ShootNoteAuto;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
 // import frc.robot.autos.TestAuto;
-import frc.robot.autos.Turn;
 import frc.robot.autos.ToggleShooter;
 import frc.robot.subsystems.*;
 import frc.lib14.*;
@@ -62,10 +61,6 @@ public class Robot extends TimedRobot {
     private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
-    
-
-
-    MCRCommand autoMission;
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -73,6 +68,7 @@ public class Robot extends TimedRobot {
     private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
     
     /* autos */
+    MCRCommand autoMission;
     MCRCommand twoNoteCenter;
     
   /*
@@ -119,7 +115,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     if(SmartDashboard.getNumber("AutoSelect", 0) == 0){
-      //autoMission = ....
+      autoMission = new AutoTwoNoteCenter(s_Swerve);
     }
     // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
     s_Swerve.zeroGyro();
@@ -134,6 +130,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
+    s_Swerve.periodicValues();
     autoMission.run(); 
     callPeriodic(); 
 
@@ -150,6 +148,7 @@ public class Robot extends TimedRobot {
     //LED.runOrange();
     //LED.runDefault();
     configureButtonBindings();
+    SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
 
     s_Swerve.teleopSwerve(
