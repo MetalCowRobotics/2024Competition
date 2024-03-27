@@ -292,87 +292,37 @@ public class Swerve {
         }
     }
 
-    // public void visionAndPosePeriodic() {
-    //     swervePoseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+    public void visionAndPosePeriodic() {
 
-    //     m_vision.periodic();
-    //     if (m_vision.hasTargets()) {
-    //         // SmartDashboard.putBoolean("HasTarget", true);
-    //         // if (m_vision.returnEstimatedRobotPose().isPresent()) {
-    //         //     SmartDashboard.putBoolean("We Failing", false);
-    //         // } else {
-    //         //     SmartDashboard.putBoolean("We Failing", true);
-    //         // }
-    //         // if (lastTargetID == -1) {
-    //         //     setPose(m_vision.getVisionPoseEstimate());
-    //         // }
-    //         // if (m_vision.getPhotonEstimatorBase() == null) {
-    //         //     SmartDashboard.putBoolean("We Failing", true);
-    //         // } else {
-    //         //     SmartDashboard.putBoolean("We Failing", false);
-    //         // }
-    //         // SmartDashboard.putNumber("Vision X Pose", m_vision.getPhotonPose().getX());
-    //         // SmartDashboard.putNumber("Vision Y Pose", m_vision.getPhotonPose().getY());
-    //         // SmartDashboard.putNumber("Vision Pose Angle", m_vision.getPhotonPose().getRotation().getDegrees());
-    //         // swervePoseEstimator.addVisionMeasurement(m_vision.getPhotonPose(), m_vision.getPhotonTimestampSeconds());
-    //         lastTargetID = m_vision.getTagID();
-    //     }
-    //     else {
-    //         lastTargetID = -1;
-    //         SmartDashboard.putBoolean("HasTarget", false);
-    //     }
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
+            "Vision X Pose",
+            estimatedRobotPose.estimatedPose.getX()
+    ));
 
-    //     SmartDashboard.putNumber("AprilTagID", lastTargetID);
-    //     SmartDashboard.putNumber("X Pose", getPose().getX());
-    //     SmartDashboard.putNumber("Y Pose", getPose().getY());
-    //     SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
-    // }
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
+            "Vision Y Pose",
+            estimatedRobotPose.estimatedPose.getY()
+    ));
 
-    public void visionCalculations() {
-        m_vision.periodic();
-        double time = m_vision.returnTime();
-        double photonX = m_vision.returnPhotonX();
-        double photonY = m_vision.returnPhotonY();
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
+            "Vision Y Pose",
+            estimatedRobotPose.estimatedPose.toPose2d().getRotation().getDegrees()
+    ));
 
-        double yaw = getGyroYaw().getDegrees() % 360;
-        if (yaw < 0) {
-            yaw += 360;
-        }
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.addVisionMeasurement(
+            estimatedRobotPose.estimatedPose.toPose2d(),
+            estimatedRobotPose.timestampSeconds
+    ));
 
-        double photonXAngle = yaw - 180;
-        double photonYAngle = yaw + 90 - 180;
-
-        Translation2d photonXVector = new Translation2d(
-            photonX * Math.cos(Math.toRadians(photonXAngle)),
-            photonX * Math.sin(Math.toRadians(photonXAngle))
-        );
-
-        Translation2d photonYVector = new Translation2d(
-            photonY * Math.cos(Math.toRadians(photonYAngle)),
-            photonY * Math.sin(Math.toRadians(photonYAngle))
-        );
-
-        Translation2d apriltagPosition = photonXVector.plus(photonYVector);
-
-        Translation2d robotPosition = apriltagPosition.times(-1.0);
-
-        Pose2d robotPose = new Pose2d(
-            robotPosition,
-            getGyroYaw()
-        );
-
-        SmartDashboard.putNumber("vision x", robotPose.getX());
-        SmartDashboard.putNumber("vision y", robotPose.getY());
-
-        if (lastTargetID != m_vision.getTagID()) {
-            setPose(robotPose);
-        }
-        swervePoseEstimator.addVisionMeasurement(robotPose, time);
+        SmartDashboard.putNumber("AprilTagID", lastTargetID);
+        SmartDashboard.putNumber("X Pose", getPose().getX());
+        SmartDashboard.putNumber("Y Pose", getPose().getY());
+        SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
         if (visionControl) {
-            visionCalculations();
+
         } else {
             teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
         }
