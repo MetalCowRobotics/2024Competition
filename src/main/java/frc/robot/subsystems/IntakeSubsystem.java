@@ -11,6 +11,7 @@ public class IntakeSubsystem {
     private boolean intakeEnabled;
     private double speed = 0;
     private DigitalInput intakeSensor;
+    private boolean alreadyStopped;
     private boolean backOutPressed;
     // private double expectedTime = 0.18;
     private boolean retractReady = false;
@@ -22,6 +23,7 @@ public class IntakeSubsystem {
         intakeMotor.setInverted(true);
         intakeSensor = new DigitalInput(1);//TODO: Put actual channel into the code
         intakeEnabled = false;
+        alreadyStopped = false;
         SmartDashboard.putBoolean("IntakeEnabled", intakeEnabled);
 
     }
@@ -33,18 +35,16 @@ public class IntakeSubsystem {
 
 
     public void periodic(){
-       // if(noteAcquired()){
-            //LED.runOrange();
-            // if(!backOutPressed){
-            //     stopintake();
-            // }
-      //  }else{
-        //     LED.runDefault();
-        // }
+       if(noteAcquired() && !alreadyStopped){
+            stopintake();
+            LED.runOrange();
+            alreadyStopped = true;
+       }else{
+            LED.runDefault();
+        }
         if(intakeEnabled)
             intakeMotor.set(speed);
         else{
-           // stopintake();
             intakeMotor.set(0);
         }
         SmartDashboard.putNumber("IntakeSpeed", speed);
@@ -82,6 +82,10 @@ public class IntakeSubsystem {
         speed = 0.85;
         intakeEnabled = true;
         backOutPressed = true;
+    }
+
+    public void setAlreadyStopped(boolean val){
+        alreadyStopped = val;
     }
 
     public void stopintake(){

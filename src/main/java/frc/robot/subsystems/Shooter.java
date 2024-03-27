@@ -12,6 +12,7 @@ public class Shooter {
     private CANSparkMax shooterMotor2;  
     private RelativeEncoder shooterEncoder1;
     private RelativeEncoder shooterEncoder2;
+    private double speed;
     private boolean shooterEnabled;
 
     private Shooter() {
@@ -21,6 +22,7 @@ public class Shooter {
         shooterMotor2.setInverted(false);
         shooterEncoder1 = shooterMotor1.getEncoder();
         shooterEncoder2 = shooterMotor2.getEncoder();
+        speed = 0;
         shooterEnabled = false;
     }
 
@@ -30,8 +32,8 @@ public class Shooter {
 
     public void periodic() {
         if(shooterEnabled){
-            shooterMotor1.set(1);
-            shooterMotor2.set(1);
+            shooterMotor1.set(speed);
+            shooterMotor2.set(speed);
         } else {
             shooterMotor1.set(0);
             shooterMotor2.set(0);
@@ -43,10 +45,20 @@ public class Shooter {
     }
 
     public boolean getShooterSpunUp(){
-        if((shooterEncoder1.getVelocity() > 4400.0) && (shooterEncoder2.getVelocity() > 4400.0)){
+        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 5100.0) && (shooterEncoder2.getVelocity() > 5100.0))){
             return true;        
+        }else if((speed == .5) && ((shooterEncoder1.getVelocity() > 2500.0) && (shooterEncoder2.getVelocity() > 2500.0))){
+            return true;
         }
         return false;
+    }
+
+    public void setShootingSpeed(){
+        speed = 1.0;
+    }
+
+    public void setAmpSpeed(){
+        speed = .5;
     }
 
     public void toggleShooter(){

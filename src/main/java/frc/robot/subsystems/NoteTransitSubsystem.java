@@ -12,7 +12,7 @@ public class NoteTransitSubsystem {
     private Shooter m_Shooter;
     private boolean isShootingState;
     private boolean alreadyLiftedIntake;
-
+    private boolean isPickup;
     
 
     private double shooterTarget;
@@ -25,6 +25,7 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem = IntakeSubsystem.getInstance();
         m_Shooter = Shooter.getInstance();
         isShootingState = false;
+        isPickup = false;
         alreadyLiftedIntake = false;
     }
 
@@ -41,6 +42,7 @@ public class NoteTransitSubsystem {
         shooterTarget = Constants.JointConstants.shooterClose;
         intakeTarget = Constants.JointConstants.intakeDeployed;
         m_IntakeSubsystem.setPickupSpeed();
+        m_Shooter.setShootingSpeed();
         isShootingState = false;
     }
 
@@ -49,6 +51,7 @@ public class NoteTransitSubsystem {
         shooterTarget = Constants.JointConstants.shooterClose;
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
         isShootingState = true;
     }
 
@@ -57,6 +60,7 @@ public class NoteTransitSubsystem {
         shooterTarget = Constants.JointConstants.shooterFar;
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
         isShootingState = true;
     }
 
@@ -65,6 +69,7 @@ public class NoteTransitSubsystem {
         shooterTarget = Constants.JointConstants.shooterFar;
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
         isShootingState = true;
     }
    
@@ -73,15 +78,17 @@ public class NoteTransitSubsystem {
         shooterTarget = Constants.JointConstants.shooterStart;
         intakeTarget = Constants.JointConstants.intakeStart;
         m_IntakeSubsystem.stopintake();
+        m_Shooter.setShootingSpeed();
         isShootingState = false;
     }
 
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
     public void setAMPPosition(){
-        shooterTarget = Constants.JointConstants.shooterClose;
-        intakeTarget = Constants.JointConstants.intakeAmp;
-        m_IntakeSubsystem.setAmpSpeed();
-        isShootingState = false;
+        shooterTarget = Constants.JointConstants.shooterAMP;
+        intakeTarget = Constants.JointConstants.intakeLoading;
+        m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setAmpSpeed();
+        isShootingState = true;
     }
 
     //Turns the shooter on or off
@@ -98,6 +105,10 @@ public class NoteTransitSubsystem {
     public void enableIntake(){
         if((!isShootingState) || ((isShootingState) && (m_Shooter.getShooterSpunUp()))){
             m_IntakeSubsystem.startIntake();
+            if(isPickup){
+                m_IntakeSubsystem.setAlreadyStopped(false);
+                alreadyLiftedIntake = false;
+            }
         }else{
             disableIntake();
         }
@@ -121,10 +132,10 @@ public class NoteTransitSubsystem {
         SmartDashboard.putNumber("Intake Target", intakeTarget);
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
         //Automatically lifts the intake once tehre is a note inside
-        // if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
-        //     setRestPosition();
-        //     alreadyLiftedIntake = true;
-        // }
+        if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
+            setSpeakerPosition();
+            alreadyLiftedIntake = true;
+        }
         m_IntakeSubsystem.periodic();
         m_IntakeJointSubsystem.periodic();
         m_ShooterJointSubsystem.periodic();
