@@ -19,7 +19,7 @@ public class IntakeSubsystem {
 
     private IntakeSubsystem() {
         intakeMotor = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
-        intakeMotor.setInverted(false);
+        intakeMotor.setInverted(true);
         intakeSensor = new DigitalInput(1);//TODO: Put actual channel into the code
         intakeEnabled = false;
         SmartDashboard.putBoolean("IntakeEnabled", intakeEnabled);
