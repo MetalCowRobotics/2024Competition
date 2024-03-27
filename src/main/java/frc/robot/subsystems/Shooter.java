@@ -43,7 +43,7 @@ public class Shooter {
     }
 
     public boolean getShooterSpunUp(){
-        if((shooterEncoder1.getVelocity() > 4300.0) && (shooterEncoder2.getVelocity() > 4300.0)){
+        if((shooterEncoder1.getVelocity() > 4400.0) && (shooterEncoder2.getVelocity() > 4400.0)){
             return true;        
         }
         return false;
