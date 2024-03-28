@@ -12,7 +12,6 @@ public class NoteTransitSubsystem {
     private boolean isShootingState;
     private boolean alreadyLiftedIntake;
     private boolean isPickup;
-    
 
     private double shooterTarget;
     private double intakeTarget;
