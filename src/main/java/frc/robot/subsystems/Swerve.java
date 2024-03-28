@@ -14,13 +14,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -294,6 +291,8 @@ public class Swerve {
 
     public void visionAndPosePeriodic() {
 
+        SmartDashboard.putNumber("BestID", m_vision.getBestID());
+
         m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
             "Vision X Pose",
             estimatedRobotPose.estimatedPose.getX()
@@ -309,22 +308,23 @@ public class Swerve {
             estimatedRobotPose.estimatedPose.toPose2d().getRotation().getDegrees()
     ));
 
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.addVisionMeasurement(
-            estimatedRobotPose.estimatedPose.toPose2d(),
-            estimatedRobotPose.timestampSeconds
-    ));
+    //     m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.addVisionMeasurement(
+    //         estimatedRobotPose.estimatedPose.toPose2d(),
+    //         estimatedRobotPose.timestampSeconds
+    // ));
+        // SmartDashboard.putNumber("HUHUHUHUHHU", m_vision.getPoseEstimate().get().estimatedPose.getX());
 
-        SmartDashboard.putNumber("AprilTagID", lastTargetID);
-        SmartDashboard.putNumber("X Pose", getPose().getX());
-        SmartDashboard.putNumber("Y Pose", getPose().getY());
-        SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
+        // SmartDashboard.putNumber("X Pose", getPose().getX());
+        // SmartDashboard.putNumber("Y Pose", getPose().getY());
+        // SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        if (visionControl) {
+        // if (visionControl) {
 
-        } else {
+        // } else {
+            visionAndPosePeriodic();
             teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
-        }
+        // }
     }
 }
