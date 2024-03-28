@@ -33,7 +33,6 @@ public class Robot extends TimedRobot {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
   
-
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
 
@@ -124,7 +123,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // s_Swerve.visionToGyro();
+    s_Swerve.visionToGyro();
     m_NoteTransitSubsystem.setRestPosition();
   }
 
@@ -132,7 +131,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     configureButtonBindings();
-    SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
 
     s_Swerve.periodic(

@@ -29,8 +29,8 @@ public class Vision extends SubsystemBase {
         camera.setDriverMode(false);
         cameraPipelineResult = camera.getLatestResult();
         aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-        // robotToCam = Constants.VisionConstants.robotToCamTranslation;
-        photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, new Transform3d());
+        robotToCam = Constants.VisionConstants.robotToCamTranslation;
+        photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, robotToCam);
         photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 

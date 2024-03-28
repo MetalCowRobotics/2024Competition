@@ -169,8 +169,11 @@ public class Swerve {
     }
 
     public void visionToGyro() {
-        // m_vision.periodic();
-        // swervePoseEstimator.resetPosition(new Rotation2d(m_vision.getVisionAngleEstimate()), getModulePositions(), m_vision.getVisionPoseEstimate());
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.resetPosition(
+            estimatedRobotPose.estimatedPose.toPose2d().getRotation(),
+            getModulePositions(),
+            estimatedRobotPose.estimatedPose.toPose2d()
+        ));
     }
 
     public Rotation2d getGyroYaw() {
@@ -296,35 +299,25 @@ public class Swerve {
         m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
             "Vision X Pose",
             estimatedRobotPose.estimatedPose.getX()
-    ));
-
+        ));
         m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
             "Vision Y Pose",
             estimatedRobotPose.estimatedPose.getY()
-    ));
-
+        ));
         m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
-            "Vision Y Pose",
-            estimatedRobotPose.estimatedPose.toPose2d().getRotation().getDegrees()
-    ));
-
-    //     m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.addVisionMeasurement(
-    //         estimatedRobotPose.estimatedPose.toPose2d(),
-    //         estimatedRobotPose.timestampSeconds
-    // ));
-        // SmartDashboard.putNumber("HUHUHUHUHHU", m_vision.getPoseEstimate().get().estimatedPose.getX());
-
-        // SmartDashboard.putNumber("X Pose", getPose().getX());
-        // SmartDashboard.putNumber("Y Pose", getPose().getY());
-        // SmartDashboard.putNumber("Pose Angle", getHeading().getDegrees());
+            "Vision Angle",
+            Math.toDegrees(estimatedRobotPose.estimatedPose.getRotation().getAngle())
+        ));
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.addVisionMeasurement(
+            estimatedRobotPose.estimatedPose.toPose2d(),
+            estimatedRobotPose.timestampSeconds
+        ));
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        // if (visionControl) {
-
-        // } else {
+        if (visionControl) {
             visionAndPosePeriodic();
-            teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
-        // }
+        }
+        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
     }
 }
