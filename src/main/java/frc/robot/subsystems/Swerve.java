@@ -312,6 +312,13 @@ public class Swerve {
             estimatedRobotPose.estimatedPose.toPose2d(),
             estimatedRobotPose.timestampSeconds
         ));
+
+        if (lastTargetID != m_vision.getBestID()) {
+            m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> setPose(
+            estimatedRobotPose.estimatedPose.toPose2d()
+            ));
+        }
+        lastTargetID = m_vision.getBestID();
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
@@ -319,5 +326,8 @@ public class Swerve {
             visionAndPosePeriodic();
         }
         teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+        SmartDashboard.putNumber("X Pose", getPose().getX());
+        SmartDashboard.putNumber("Y Pose", getPose().getY());
+        SmartDashboard.putNumber("Drive Angle", getPose().getRotation().getDegrees());
     }
 }
