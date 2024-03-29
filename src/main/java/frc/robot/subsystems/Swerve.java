@@ -15,6 +15,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -32,7 +33,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Swerve {
+public class Swerve implements Subsystem{
     public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -331,7 +332,7 @@ public class Swerve {
         ));
 
         if (lastTargetID != m_vision.getBestID()) {
-            m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> setPose(
+            m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> resetPose(
             estimatedRobotPose.estimatedPose.toPose2d()
             ));
         }
