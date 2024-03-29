@@ -36,10 +36,8 @@ public class Vision extends SubsystemBase {
 
     public Optional<EstimatedRobotPose> getPoseEstimate() {
         if (cameraPipelineResult.hasTargets()) {
-            SmartDashboard.putBoolean("HasTarget", true);
             return photonPoseEstimator.update();
         } else {
-            SmartDashboard.putBoolean("HasTarget", false);
             return Optional.empty();
         }
     }
@@ -47,8 +45,10 @@ public class Vision extends SubsystemBase {
     public int getBestID() {
         if (cameraPipelineResult.hasTargets()) {
             int bestID = cameraPipelineResult.getBestTarget().getFiducialId();
+            SmartDashboard.putNumber("BestID", bestID);
             return bestID;
         } else {
+            SmartDashboard.putNumber("BestID", -1);
             return -1;
         }
     }

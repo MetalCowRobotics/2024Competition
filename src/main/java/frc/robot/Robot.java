@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    s_Swerve.periodicValues();
+    // s_Swerve.periodicValues();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

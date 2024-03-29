@@ -294,8 +294,6 @@ public class Swerve {
 
     public void visionAndPosePeriodic() {
 
-        SmartDashboard.putNumber("BestID", m_vision.getBestID());
-
         m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
             "Vision X Pose",
             estimatedRobotPose.estimatedPose.getX()
