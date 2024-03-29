@@ -1,13 +1,9 @@
 package frc.robot.autos;
 
-import frc.robot.subsystems.NoteTransitSubsystem;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.lib14.CommandPause;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
-import frc.lib14.TimedCommandSet;
-import frc.robot.autos.*;
 
 /*This auto shoots the preloaded note into the speaker and leave the zone after 10 seconds */
 public class AutoShootAndLeave {

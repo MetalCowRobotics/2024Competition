@@ -2,7 +2,6 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib14.InstantCommandBase;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command toggles the shooter on/off */
