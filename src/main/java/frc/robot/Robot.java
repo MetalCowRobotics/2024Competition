@@ -5,6 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -13,15 +17,21 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import frc.robot.autos.ArmToAngles;
+import frc.robot.autos.ArmToAngles2;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.autos.DriveOutAuto;
 import frc.robot.autos.DriveToPointA;
+import frc.robot.autos.EjectIntake;
 import frc.robot.autos.ResetModulesToAbsolute;
+import frc.robot.autos.RunShooter;
 import frc.robot.autos.ShootNoteAuto;
 import frc.robot.autos.StartIntake;
 import frc.robot.autos.StopIntake;
@@ -29,6 +39,15 @@ import frc.robot.autos.StopIntake;
 import frc.robot.autos.ToggleShooter;
 import frc.robot.subsystems.*;
 import frc.lib14.*;
+
+import java.time.Instant;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.revrobotics.CANSparkLowLevel;
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -67,19 +86,55 @@ public class Robot extends TimedRobot {
     private final Swerve s_Swerve = new Swerve();
 
     private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
+ 
+
+
+       
     
     /* autos */
     MCRCommand autoMission;
     MCRCommand twoNoteCenter;
-    
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+ 
 
   @Override
   public void robotInit() {
-    //LED.runOrange();
+    AutoBuilder.configureHolonomic(
+            s_Swerve::getPose,
+            s_Swerve::resetPose,
+            s_Swerve::getRobotRelativeSpeeds,
+            s_Swerve::driveRobotRelative,
+            new HolonomicPathFollowerConfig(
+                new PIDConstants(0.0, 0.0, 0.02),
+                new PIDConstants(0.031, 0.0, 0.0),
+                1.5,
+                0.4,
+                new ReplanningConfig(true,true)
+            ),
+            () -> {
+                var alliance = DriverStation.getAlliance();
+                return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+            },
+             s_Swerve
+        );
+          NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNote"));
+          NamedCommands.registerCommand("rest Pos", new ArmToAngles2("rest"));
+          NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speaker"));
+          NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickup"));
+          NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
+          NamedCommands.registerCommand("Intake Run", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
+          NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
+     // Build an auto chooser. This will use Commands.none() as the default option.
+    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Center And Left");
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
     // s_Swerve.musicInit();
     SmartDashboard.putNumber("Arm Kp", 0.06);
     SmartDashboard.putNumber("Arm Ki", 0.0);
@@ -87,7 +142,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Intake Offset", 0);
 
-    SmartDashboard.putNumber("AutoSelect",0);
+
 
     SmartDashboard.putNumber("Wrist Kp", 0.04);
     SmartDashboard.putNumber("Wrist Ki", 0.0);
@@ -99,8 +154,10 @@ public class Robot extends TimedRobot {
     // SmartDashboard.
   }
 
+
   @Override
   public void robotPeriodic() {
+   
     s_Swerve.periodicValues();
     SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
@@ -115,31 +172,26 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    if(SmartDashboard.getNumber("AutoSelect", 0) == 0){
-      autoMission = new AutoTwoNoteCenter(s_Swerve);
-    }
-    // testAuto = new TestAuto(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem); 
-    s_Swerve.zeroGyro();
-
-    s_Swerve.setHeading(new Rotation2d(Math.PI));
-
-    SmartDashboard.putString("auto", "stopped");
-    // autoTwoNoteCenter = new AutoTwoNoteCenter(s_Swerve, m_Intake, m_Shooter, m_FullArmSubsystem);
-    
+    PathPlannerAuto autoCommand = new PathPlannerAuto("Center And Left");
+    autoCommand.schedule();
+    System.out.println("Autonomous command scheduled");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    // s_Swerve.driveToPoint(1, 1, s_Swerve.getGyroYaw().getDegrees());
-    s_Swerve.periodicValues();
-    autoMission.run(); 
-    callPeriodic(); 
 
+
+  public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
+    SmartDashboard.putString("hy", "5");
+    s_Swerve.periodicValues();
+    callPeriodic(); 
   }
 
   @Override
   public void teleopInit() {
+    CommandScheduler.getInstance().cancelAll();
+    m_NoteTransitSubsystem.stopShooter();
     m_NoteTransitSubsystem.setRestPosition();
   }
 
@@ -163,7 +215,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {}
-
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}

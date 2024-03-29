@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
@@ -45,7 +46,7 @@ public class Shooter {
     }
 
     public boolean getShooterSpunUp(){
-        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 5100.0) && (shooterEncoder2.getVelocity() > 5100.0))){
+        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 4300.0) && (shooterEncoder2.getVelocity() > 4300.0))){
             return true;        
         }else if((speed == .5) && ((shooterEncoder1.getVelocity() > 2500.0) && (shooterEncoder2.getVelocity() > 2500.0))){
             return true;
@@ -58,7 +59,7 @@ public class Shooter {
     }
 
     public void setAmpSpeed(){
-        speed = .5;
+        speed = .75;
     }
 
     public void toggleShooter(){
@@ -67,6 +68,16 @@ public class Shooter {
         }else{
             shooterEnabled = true;
         }
+    }
+
+    public void stopShooter() {
+        // TODO Auto-generated method stub
+      shooterEnabled = false;
+    }
+
+    public void startShooter() {
+        // TODO Auto-generated method stub
+       shooterEnabled = true;
     }
 
 }

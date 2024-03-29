@@ -1,18 +1,15 @@
 package frc.robot.subsystems;
 
-import frc.robot.SwerveModule;
-import frc.robot.Constants;
-
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.RobotCentric;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,10 +17,23 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.SwerveModule;
 
-public class Swerve {
+public class Swerve implements Subsystem {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -46,6 +56,13 @@ public class Swerve {
     private boolean positionReached = false;
 
     public Swerve() {
+        
+    // All other subsystem initialization
+    // ...
+
+    // Configure AutoBuilder last
+    
+
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
@@ -84,6 +101,11 @@ public class Swerve {
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }   
+
+  
+    
+    
+
 
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = translation.getX();
@@ -126,6 +148,8 @@ public class Swerve {
         }
     }
 
+    
+
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
@@ -146,7 +170,18 @@ public class Swerve {
         return swerveOdometry.getPoseMeters();
     }
 
-    public void setPose(Pose2d pose) {
+    public ChassisSpeeds getRobotRelativeSpeeds(){
+        return new ChassisSpeeds();
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+        double rotation = speeds.omegaRadiansPerSecond;
+        drive(translation, rotation, false, false);
+        SmartDashboard.putString("bob", "3");
+    }
+
+    public void resetPose(Pose2d pose) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
@@ -161,6 +196,7 @@ public class Swerve {
     public void zeroGyro(){
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
+
 
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
@@ -195,6 +231,8 @@ public class Swerve {
     public boolean isLocationReached(){
         return positionReached;
     }
+
+    
 
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());

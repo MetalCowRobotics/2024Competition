@@ -15,6 +15,6 @@ public class EjectIntake extends InstantCommandBase{
 
         NoteTransitSubsystem.getInstance().quickOuttake();
         // i_intake.setIntakeTrue();
-        SmartDashboard.putString("auto", "running");
+        SmartDashboard.putString("auto", "ejected piece from intake");
     }
 }

@@ -1,36 +1,31 @@
 package frc.robot.autos;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib14.MCRCommand;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command sets the shooter and intake to different angles. */
-public class ArmToAngles implements MCRCommand{
+public class ArmToAngles2 extends Command{
     String pos;
     boolean finished_flag = false;
     boolean first_time = true;
-
-    public ArmToAngles(String position) {
-        this.pos = position;
+    public ArmToAngles2(String position){
+        pos = position;
     }
-
     @Override
-    public void run() {
-        // SmartDashboard.putString("ArmToAngles", "started running");
+    public void execute() {
+        
         if(pos.equals("pickup")){
-            SmartDashboard.putString("ArmToAngles", "pickup");
             NoteTransitSubsystem.getInstance().setPickupPosition();
         }
         if(pos.equals("rest")){
-            SmartDashboard.putString("ArmToAngles", "rest");
             NoteTransitSubsystem.getInstance().setRestPosition();
         }
         if(pos.equals("speaker")){
-            SmartDashboard.putString("ArmToAngles", "speaker");
             NoteTransitSubsystem.getInstance().setSpeakerPosition();
+            
         }
         if(pos.equals("speakerFromNote")){
-            SmartDashboard.putString("ArmToAngles", "speaker");
             NoteTransitSubsystem.getInstance().setSpeakerFromSpikeMark();
         }
         first_time = false;

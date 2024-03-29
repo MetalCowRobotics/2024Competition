@@ -34,6 +34,7 @@ public class NoteTransitSubsystem {
     } 
 
     public boolean atTarget(){
+        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
         return m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget();
     }
 
@@ -95,6 +96,12 @@ public class NoteTransitSubsystem {
     public void toggleShooter(){
         m_Shooter.toggleShooter();
     }
+    public void startShooter(){
+        m_Shooter.startShooter();
+    }
+    public void stopShooter(){
+        m_Shooter.stopShooter();
+    }
 
     public boolean getShooterSpunUp(){
         return m_Shooter.getShooterSpunUp();
@@ -137,6 +144,7 @@ public class NoteTransitSubsystem {
         m_ShooterJointSubsystem.setTarget(shooterTarget);
         SmartDashboard.putNumber("Intake Target", intakeTarget);
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
+        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
         //Automatically lifts the intake once tehre is a note inside
         if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
             setSpeakerPosition();

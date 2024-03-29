@@ -1,14 +1,15 @@
 package frc.robot.autos;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.InstantCommandBase;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command toggles the shooter on/off */
-public class ToggleShooter extends InstantCommandBase{
+public class RunShooter extends Command{
     @Override
-    public void run(){
+    public void execute(){
         NoteTransitSubsystem.getInstance().toggleShooter();
-        SmartDashboard.putString("auto", "shooter running");
+        SmartDashboard.putString("auto", "running");
     }
 }
