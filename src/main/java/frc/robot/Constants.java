@@ -155,7 +155,7 @@ public final class Constants {
         public static final double shooterStart = 0;
         public static final double shooterClose = -28;
         public static final double shooterFar = -45;
-        public static final double shooterAMP = 3;
+        public static final double shooterAMP = -28;
 
 
     }

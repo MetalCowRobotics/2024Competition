@@ -6,6 +6,8 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShooterJointSubsystem {
 
@@ -18,6 +20,10 @@ public class ShooterJointSubsystem {
     private double maxSetpoint;
     private double minSetpoint;
     private double targetAngle;
+
+    private DigitalInput boreInput;
+    private DutyCycleEncoder boreEncoder;
+    private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
 
     private double nominalVoltage = 12.6;
     private double rampTime = 0.250;
@@ -49,6 +55,9 @@ public class ShooterJointSubsystem {
         shooterJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
         encoder = shooterJointMotor.getEncoder();
+
+        boreInput = new DigitalInput(2);
+        boreEncoder = new DutyCycleEncoder(boreInput);
         
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
@@ -85,11 +94,7 @@ public class ShooterJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
-    }
-
-    public void resetEncoders(double angle) {
-        encoder.setPosition(angle);
+        return -((boreEncoder.get() * 360) - 329);
     }
 
     public void setTarget(double target) {
@@ -139,7 +144,7 @@ public class ShooterJointSubsystem {
                 speed = 0;
             }
         }
-        SmartDashboard.putNumber("Shooter Joint Encoder Output", encoder.getPosition());
+        // SmartDashboard.putNumber("Shooter Joint Encoder Output", encoder.getPosition());
         SmartDashboard.putNumber("Shooter Joint Motor Output", speed);
 
         if (atTarget()) {
