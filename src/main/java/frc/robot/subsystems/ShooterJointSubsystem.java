@@ -101,6 +101,8 @@ public class ShooterJointSubsystem {
     }
 
     public boolean atTarget() {
+        SmartDashboard.putBoolean("Shooter atTarget", Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance);
+        SmartDashboard.putBoolean("Shooter atTarget", Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance);
         return Math.abs(targetAngle - getCurrentAngle()) < positionTolerance;
     }
 

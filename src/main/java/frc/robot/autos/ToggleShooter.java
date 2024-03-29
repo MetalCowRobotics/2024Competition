@@ -9,6 +9,6 @@ public class ToggleShooter extends InstantCommandBase{
     @Override
     public void run(){
         NoteTransitSubsystem.getInstance().toggleShooter();
-        SmartDashboard.putString("auto", "running");
+        SmartDashboard.putString("auto", "shooter running");
     }
 }

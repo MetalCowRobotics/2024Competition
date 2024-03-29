@@ -94,7 +94,7 @@ public class IntakeSubsystem {
     }
 
     public void setPickupSpeed(){
-        speed = -.85;
+        speed = -.9;
     }
 
     public void setFeedSpeed(){
