@@ -4,43 +4,20 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
-import frc.lib14.SequentialCommands;
-import frc.robot.autos.ArmToAngles;
 import frc.robot.autos.ArmToAngles2;
-import frc.robot.autos.AutoTwoNoteCenter;
-import frc.robot.autos.DriveOutAuto;
-import frc.robot.autos.DriveToPointA;
-import frc.robot.autos.EjectIntake;
-import frc.robot.autos.ResetModulesToAbsolute;
-import frc.robot.autos.RunShooter;
-import frc.robot.autos.ShootNoteAuto;
-import frc.robot.autos.StartIntake;
-import frc.robot.autos.StopIntake;
-// import frc.robot.autos.TestAuto;
-import frc.robot.autos.ToggleShooter;
 import frc.robot.subsystems.*;
-import frc.lib14.*;
-
-import java.time.Instant;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -48,7 +25,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.revrobotics.CANSparkLowLevel;
+
 /*
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -58,7 +35,6 @@ import com.revrobotics.CANSparkLowLevel;
 
 public class Robot extends TimedRobot {
   public static final CTREConfigs ctreConfigs = new CTREConfigs();
-  private PowerDistribution pdp = new PowerDistribution(10,ModuleType.kCTRE);
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -69,37 +45,29 @@ public class Robot extends TimedRobot {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
   
-
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final double shootervalue = XboxController.Axis.kRightTrigger.value;
-
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Controls */
     private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
-    
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-
     private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
- 
-
-
-       
     
     /* autos */
     MCRCommand autoMission;
     MCRCommand twoNoteCenter;
+
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
  
-
   @Override
   public void robotInit() {
     AutoBuilder.configureHolonomic(
@@ -134,30 +102,10 @@ public class Robot extends TimedRobot {
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    
-    // s_Swerve.musicInit();
-    SmartDashboard.putNumber("Arm Kp", 0.06);
-    SmartDashboard.putNumber("Arm Ki", 0.0);
-    SmartDashboard.putNumber("Arm Kd", 0.012);
-
-    SmartDashboard.putNumber("Intake Offset", 0);
-
-
-
-    SmartDashboard.putNumber("Wrist Kp", 0.04);
-    SmartDashboard.putNumber("Wrist Ki", 0.0);
-    SmartDashboard.putNumber("Wrist Kd", 0.002);
-
-    SmartDashboard.putNumber("StageArmAngleOffSet", 0);
-    SmartDashboard.putNumber("AMPWristAngleOffSet", 0);
-
-    // SmartDashboard.
   }
-
 
   @Override
   public void robotPeriodic() {
-   
     s_Swerve.periodicValues();
     SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
@@ -179,8 +127,6 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-
-
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("hy", "5");
@@ -198,11 +144,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //LED.runOrange();
-    //LED.runDefault();
-
     configureButtonBindings();
-    SmartDashboard.putNumber("yawTeleOp", s_Swerve.getGyroYaw().getDegrees());
     callPeriodic();
 
     s_Swerve.teleopSwerve(
