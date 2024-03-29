@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib.math.Conversions;
 import frc.robot.Constants;
 
 public class NoteTransitSubsystem {
-
     private static NoteTransitSubsystem instance = new NoteTransitSubsystem();
     private IntakeJointSubsystem m_IntakeJointSubsystem;
     private ShooterJointSubsystem m_ShooterJointSubsystem;
@@ -13,11 +11,8 @@ public class NoteTransitSubsystem {
     private boolean isShootingState;
     private boolean alreadyLiftedIntake;
     private boolean isPickup;
-    
-
     private double shooterTarget;
     private double intakeTarget;
-
 
     private NoteTransitSubsystem(){
         m_IntakeJointSubsystem = IntakeJointSubsystem.getInstance();
@@ -96,9 +91,11 @@ public class NoteTransitSubsystem {
     public void toggleShooter(){
         m_Shooter.toggleShooter();
     }
+
     public void startShooter(){
         m_Shooter.startShooter();
     }
+
     public void stopShooter(){
         m_Shooter.stopShooter();
     }
@@ -110,7 +107,6 @@ public class NoteTransitSubsystem {
     public boolean getShootingState(){
         return isShootingState;
     }
-
 
     //Turns on the intake to the speed that the state requires, except if you are in a state where you are shooting, then if you try, it does not enable the intake unless the shooter is at speed
     public void enableIntake(){
@@ -136,8 +132,6 @@ public class NoteTransitSubsystem {
     public void disableIntake(){
         m_IntakeSubsystem.stopintake();
     }
-
-
 
     public void periodic() {
         m_IntakeJointSubsystem.setTarget(intakeTarget);

@@ -5,11 +5,6 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.RobotCentric;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -22,15 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.SwerveModule;
 
 public class Swerve implements Subsystem {
@@ -43,7 +32,6 @@ public class Swerve implements Subsystem {
     private double desiredSpeed = Constants.Swerve.maxSpeed * speedMultiplier;
 
     private double linearAcceleration = desiredSpeed / accelerationTime;
-    // private double angularAcceleration = Constants.Swerve.maxAngularVelocity / accelerationTime;
 
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
@@ -56,13 +44,6 @@ public class Swerve implements Subsystem {
     private boolean positionReached = false;
 
     public Swerve() {
-        
-    // All other subsystem initialization
-    // ...
-
-    // Configure AutoBuilder last
-    
-
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
@@ -75,7 +56,6 @@ public class Swerve implements Subsystem {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
-
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
     }
 
@@ -100,12 +80,7 @@ public class Swerve implements Subsystem {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }   
-
-  
-    
-    
-
+    }
 
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = translation.getX();
@@ -146,9 +121,7 @@ public class Swerve implements Subsystem {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
-    }
-
-    
+    }    
 
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
@@ -197,7 +170,6 @@ public class Swerve implements Subsystem {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
-
     public Rotation2d getGyroYaw() {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
@@ -232,8 +204,6 @@ public class Swerve implements Subsystem {
         return positionReached;
     }
 
-    
-
     public void periodicValues(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
@@ -245,7 +215,6 @@ public class Swerve implements Subsystem {
     }
 
     public void teleopSwerve(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
@@ -266,7 +235,7 @@ public class Swerve implements Subsystem {
             false /* KEEP FALSE */
         );
     }
-        
+
     public void driveToPoint(double targetX, double targetY, double targetTheta) {
         double x = getPose().getX();
         double y = getPose().getY();
@@ -289,7 +258,6 @@ public class Swerve implements Subsystem {
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
-        //double rotation = thetaController.calculate(yaw);
 
         // Check if the robot is close enough to the target position
         SmartDashboard.putNumber("X-pos", getPose().getX());

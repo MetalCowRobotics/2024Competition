@@ -2,22 +2,17 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-public class IntakeJointSubsystem {
 
+public class IntakeJointSubsystem {
     private static IntakeJointSubsystem instance = new IntakeJointSubsystem();
     private CANSparkMax intakeJointMotor;
-    private RelativeEncoder encoder;
 
     private PIDController pidController;
-
     private double maxSetpoint;
     private double minSetpoint;
     private double targetAngle;
@@ -31,14 +26,12 @@ public class IntakeJointSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 1500; // 4000
-    private double minRPM = 0; // 2000
-    private double reduction =  (72.0 / 11.0) * (30.0 / 24.0)*(4.0 / 1.0);
-    private double kP = 0.007; // 0.015
+    private double maxRPM = 1500;
+    private double minRPM = 0;
+    private double kP = 0.007;
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 5;
-    private double initialPosition = 0.0;
 
     private IntakeJointSubsystem() {
         intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
@@ -53,18 +46,9 @@ public class IntakeJointSubsystem {
 
         intakeJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
-        encoder = intakeJointMotor.getEncoder();
-
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
 
-        SmartDashboard.putNumber("IntakeJointkP", kP);
-        SmartDashboard.putNumber("IntakeJointkI", kI);
-        SmartDashboard.putNumber("IntakeJointkD", kD);
-
-
-
-        
         pidController = new PIDController(kP, kI, kD);
         pidController.setTolerance(positionTolerance);
         pidController.setIntegratorRange(-0.65, 0.65);
@@ -93,12 +77,7 @@ public class IntakeJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        //return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
         return boreConvertedOffsetValue;
-    }
-
-    public void resetEncoders(double angle) {
-        encoder.setPosition(angle);
     }
 
     public void setTarget(double target) {
@@ -110,7 +89,6 @@ public class IntakeJointSubsystem {
     }
 
     public boolean atTarget() {
-        // Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance
         SmartDashboard.putBoolean("Intake atTarget", pidController.atSetpoint());
         return pidController.atSetpoint();
     }
@@ -121,11 +99,6 @@ public class IntakeJointSubsystem {
 
     private void writeStatus() {
         SmartDashboard.putNumber("Intake Angle", getCurrentAngle());
-        // SmartDashboard.putNumber("Wrist Angular Velocity", Units.rotationsToDegrees(encoder.getVelocity() / reduction));
-        // SmartDashboard.putNumber("Wrist Encoder Position", encoder.getPosition());
-        // SmartDashboard.putNumber("Wrist encoder Velocity", encoder.getVelocity());
-        // SmartDashboard.putNumber("Wrist Target Angle", targetAngle);
-        // SmartDashboard.putNumber("Wrist Target Encoder Podition", setpoint);
     }
 
     public void periodic() {
@@ -135,11 +108,9 @@ public class IntakeJointSubsystem {
         SmartDashboard.putNumber("Absolute Encoder Value", boreConvertedOffsetValue);
         boreConvertedOffsetValue = boreConvertedValue - 117;
         
-
         double speed = 0;
 
         pidController.setPID(SmartDashboard.getNumber("IntakeJointkP", kP), SmartDashboard.getNumber("IntakeJointkI", kI), SmartDashboard.getNumber("IntakeJointkD", kD));
-
 
         pidController.setSetpoint(targetAngle);
 
@@ -159,7 +130,6 @@ public class IntakeJointSubsystem {
                 speed = 0;
             }
         }
-        SmartDashboard.putNumber("Intake Joint Encoder Output", encoder.getPosition());
         SmartDashboard.putNumber("Intake Joint Motor Output", speed);
 
         if (atTarget()) {

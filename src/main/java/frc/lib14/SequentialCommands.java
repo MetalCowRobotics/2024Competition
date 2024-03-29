@@ -2,10 +2,6 @@ package frc.lib14;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.autos.DriveToPointA;
-import frc.robot.autos.EjectIntake;
-
 public class SequentialCommands implements MCRCommand {
 	private ArrayList<MCRCommand> sequentialCommands = new ArrayList<MCRCommand>();
 	

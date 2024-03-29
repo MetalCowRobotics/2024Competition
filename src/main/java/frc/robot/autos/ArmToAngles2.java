@@ -1,7 +1,6 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib14.MCRCommand;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command sets the shooter and intake to different angles. */

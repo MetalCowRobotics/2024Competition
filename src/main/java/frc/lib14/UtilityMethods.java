@@ -70,7 +70,6 @@ public class UtilityMethods {
 		} else if(in < in_max) {
 			return out_max;
 		} else {
-			double x = ((in-in_min) / (in_max - in_min))*(out_max - out_min) + out_min;
 			return (in - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 		}
 	}

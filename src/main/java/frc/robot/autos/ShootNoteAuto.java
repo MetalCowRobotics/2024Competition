@@ -6,8 +6,6 @@ import frc.robot.subsystems.Swerve;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
 import frc.lib14.CommandPause;
-import frc.lib14.ParallelCommands;
-import frc.lib14.TimedCommandSet;
 
 /*This auto just shoots the preloaded note into the speaker */
 public class ShootNoteAuto implements MCRCommand{    
