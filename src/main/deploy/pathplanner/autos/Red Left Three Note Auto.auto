@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.273351613690038,
-      "y": 5.517804294740611
+      "x": 1.416655530465515,
+      "y": 5.526558259275838
     },
-    "rotation": 179.5786177036882
+    "rotation": -179.3388350990164
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Toggle Shooter"
+                  "name": "Shoot Pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot Pos"
+                  "name": "Toggle Shooter"
                 }
               }
             ]
@@ -33,7 +33,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -45,7 +45,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -53,15 +53,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Pos"
+                  "pathName": "Source Side Note"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Center To Right"
+                  "name": "Intake Pos"
                 }
               }
             ]
@@ -78,18 +78,24 @@
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Shooter far Pos"
+                  "pathName": "Clear Poll"
                 }
               }
             ]
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot Pos mid"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 2.0
           }
         },
         {
@@ -105,22 +111,21 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Pos"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right To Mid"
-                }
-              }
-            ]
+            "name": "Intake Pos"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back Center Note From SSN"
           }
         },
         {
@@ -145,57 +150,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Run"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Pos"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid To Left"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shooter far Pos"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {

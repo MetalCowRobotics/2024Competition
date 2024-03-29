@@ -51,7 +51,7 @@ public class IntakeSubsystem {
     }
 
     public boolean noteAcquired(){
-        return !intakeSensor.get();
+        return intakeSensor.get();
     }
 
     private void setStopDriving(){
@@ -82,6 +82,11 @@ public class IntakeSubsystem {
         speed = 0.85;
         intakeEnabled = true;
         backOutPressed = true;
+    }
+
+    public void feedIntakeAuto(){
+        speed = 1;
+        intakeEnabled = true;
     }
 
     public void setAlreadyStopped(boolean val){

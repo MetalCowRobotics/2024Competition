@@ -3,44 +3,44 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.273351613690038,
-        "y": 5.517804294740611
+        "x": 2.050243243741812,
+        "y": 5.578235494399397
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.491594544697268,
-        "y": 5.305478590061359
+        "x": 2.7258556580101443,
+        "y": 5.575256787829597
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "clear poll2"
     },
     {
       "anchor": {
-        "x": 2.592889892418666,
-        "y": 4.347886585976738
+        "x": 2.8769011400370323,
+        "y": 5.578235494399397
       },
       "prevControl": {
-        "x": 2.103305421555592,
-        "y": 4.532799251465085
+        "x": 2.865824978714381,
+        "y": 5.583341472941376
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 540.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 700.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 139.92131187380048,
-    "rotateFast": false
+    "rotation": -179.35179427197554,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
