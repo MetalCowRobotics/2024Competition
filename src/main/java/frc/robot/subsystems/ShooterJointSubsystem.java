@@ -97,10 +97,6 @@ public class ShooterJointSubsystem {
         return -((boreEncoder.get() * 360) - 329);
     }
 
-    public void resetEncoders(double angle) {
-        encoder.setPosition(angle);
-    }
-
     public void setTarget(double target) {
         this.targetAngle = target;
     }
