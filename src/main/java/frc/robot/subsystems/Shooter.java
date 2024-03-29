@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
@@ -42,7 +41,6 @@ public class Shooter {
         SmartDashboard.putBoolean("Shooter Spun Up", getShooterSpunUp());
         SmartDashboard.putNumber("ShooterSide1Speed", shooterEncoder1.getVelocity());
         SmartDashboard.putNumber("ShooterSide2Speed", shooterEncoder1.getVelocity());
-
     }
 
     public boolean getShooterSpunUp(){
@@ -71,13 +69,10 @@ public class Shooter {
     }
 
     public void stopShooter() {
-        // TODO Auto-generated method stub
       shooterEnabled = false;
     }
 
     public void startShooter() {
-        // TODO Auto-generated method stub
        shooterEnabled = true;
     }
-
 }
