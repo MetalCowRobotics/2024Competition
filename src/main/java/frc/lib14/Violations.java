@@ -1,14 +1,11 @@
 package frc.lib14;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class Violations {
     private final int rightEncoder = 0;
 
-    private void doCheckStyle() { // 1
-        double seconds = 0;
+    public void doCheckStyle() { // 1
         double baseSpeed = 0;
-        int a = 2, b = 3, a1 = 0, b1 = 0, a2 = 0, b2 = 0, c = 0, d = 1, c1 = 1, d1 = 12;
+        int a = 2, b = 3, a1 = 0, b1 = 0, a2 = 0, b2 = 0, c = 0, d = 1, c1 = 1;
         if (a != b) { // 2
             doIFs(a1, b1, a2, b2, c1);
         } else if (c != d) { // 7
@@ -32,9 +29,5 @@ public class Violations {
         }
     }
 
-    private void doNothing() {
-        String hi = "Here is some CODE... YAY";
-        // SmartDashboard.putString("doNothing", hi);
-        //TODO need to put some code here
-    }
+    private void doNothing() {}
 }
