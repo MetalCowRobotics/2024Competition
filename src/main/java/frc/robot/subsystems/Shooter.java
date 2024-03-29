@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel;
@@ -58,7 +59,7 @@ public class Shooter {
     }
 
     public void setAmpSpeed(){
-        speed = .5;
+        speed = .75;
     }
 
     public void toggleShooter(){
@@ -67,6 +68,16 @@ public class Shooter {
         }else{
             shooterEnabled = true;
         }
+    }
+
+    public void stopShooter() {
+        // TODO Auto-generated method stub
+      shooterEnabled = false;
+    }
+
+    public void startShooter() {
+        // TODO Auto-generated method stub
+       shooterEnabled = true;
     }
 
 }

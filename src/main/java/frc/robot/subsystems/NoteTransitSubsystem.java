@@ -96,6 +96,12 @@ public class NoteTransitSubsystem {
     public void toggleShooter(){
         m_Shooter.toggleShooter();
     }
+    public void startShooter(){
+        m_Shooter.startShooter();
+    }
+    public void stopShooter(){
+        m_Shooter.stopShooter();
+    }
 
     public boolean getShooterSpunUp(){
         return m_Shooter.getShooterSpunUp();

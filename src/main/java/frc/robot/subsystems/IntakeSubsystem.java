@@ -51,7 +51,7 @@ public class IntakeSubsystem {
     }
 
     public boolean noteAcquired(){
-        return intakeSensor.get();
+        return !intakeSensor.get();
     }
 
     private void setStopDriving(){
