@@ -23,11 +23,11 @@ public class SwerveModule {
 
     private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
-    /* drive motor control requests */
+    /* Drive Motor Control Requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
 
-    /* angle motor control requests */
+    /* Angle Motor Control Requests */
     private final PositionVoltage anglePosition = new PositionVoltage(0);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
