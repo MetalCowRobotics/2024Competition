@@ -21,8 +21,8 @@ public class ShooterJointSubsystem {
     private double minSetpoint;
     private double targetAngle;
 
-    private DigitalInput boreInput = new DigitalInput(2);
-    private DutyCycleEncoder boreEncoder = new DutyCycleEncoder(boreInput);
+    private DigitalInput boreInput;
+    private DutyCycleEncoder boreEncoder;
     private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
 
     private double nominalVoltage = 12.6;
@@ -55,6 +55,9 @@ public class ShooterJointSubsystem {
         shooterJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
         encoder = shooterJointMotor.getEncoder();
+
+        boreInput = new DigitalInput(2);
+        boreEncoder = new DutyCycleEncoder(boreInput);
         
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
@@ -66,7 +69,6 @@ public class ShooterJointSubsystem {
         SmartDashboard.putNumber("ShooterJointkp", kP);
         SmartDashboard.putNumber("ShooterJointkp", kI);
         SmartDashboard.putNumber("ShooterJointkp", kD);
-        boreEncoder.setPositionOffset(-325);
     }
 
     public static ShooterJointSubsystem getInstance(){
@@ -92,7 +94,7 @@ public class ShooterJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        return boreConvertedValue;
+        return -((boreEncoder.get() * 360) - 329);
     }
 
     public void resetEncoders(double angle) {
@@ -123,13 +125,6 @@ public class ShooterJointSubsystem {
     public void periodic() {
         writeStatus();
 
-        boreRawValue = boreEncoder.getAbsolutePosition();
-        boreConvertedValue = boreRawValue * (360);
-        SmartDashboard.putNumber("Absolute Encoder Value2", boreConvertedValue);
-        // boreConvertedOffsetValue = boreConvertedValue - 329;
-        // SmartDashboard.putNumber("Absolute Encoder Value3", boreConvertedOffsetValue);
-
-
         pidController.setPID(SmartDashboard.getNumber("ShooterJointkP", kP), SmartDashboard.getNumber("ShooterJointkI", kI), SmartDashboard.getNumber("ShooterJointkD", kD));
         double speed = 0;
 
@@ -151,7 +146,7 @@ public class ShooterJointSubsystem {
                 speed = 0;
             }
         }
-        SmartDashboard.putNumber("Shooter Joint Encoder Output", encoder.getPosition());
+        // SmartDashboard.putNumber("Shooter Joint Encoder Output", encoder.getPosition());
         SmartDashboard.putNumber("Shooter Joint Motor Output", speed);
 
         if (atTarget()) {
