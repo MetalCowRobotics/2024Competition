@@ -86,7 +86,7 @@ public class NoteTransitSubsystem {
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
     public void setAMPPosition(){
         shooterTarget = Constants.JointConstants.shooterAMP;
-        intakeTarget = Constants.JointConstants.intakeAmp;
+        intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setAmpSpeed();
         isShootingState = true;
