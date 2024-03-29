@@ -20,12 +20,12 @@ public final class Constants {
     public static final class Swerve {
         public static final int pigeonID = 14;
 
-        public static final COTSTalonFXSwerveConstants chosenModule =  //TODO: This must be tuned to specific robot
+        public static final COTSTalonFXSwerveConstants chosenModule =  //Tuned
         COTSTalonFXSwerveConstants.SDS.MK4.Falcon500(COTSTalonFXSwerveConstants.SDS.MK4.driveRatios.L3);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(19.50); //TODO: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(21.5); //TODO: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(19.50); //Tuned
+        public static final double wheelBase = Units.inchesToMeters(21.5); //Tuned
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -64,7 +64,6 @@ public final class Constants {
         public static final double closedLoopRamp = 0.0;
 
         /* Angle Motor PID Values */
-    //    public static final double angleKP = chosenModule.angleKP;
         public static final double angleKP = 10;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
@@ -76,16 +75,15 @@ public final class Constants {
         public static final double driveKF = 0.0;
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.32; //TODO: This must be tuned to specific robot
+        public static final double driveKS = 0.32; //Tuned
         public static final double driveKV = 1.51;
         public static final double driveKA = 0.27;
 
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 5; //TODO: This must be tuned to specific robot
-        public static final double maxAutoSpeed = 2;
+        public static final double maxAutoSpeed = 2.5;
         /** Radians per Second */
-        // public static final double maxAngularVelocity = (3 * Math.PI) / 2; //TODO: This must be tuned to specific robot
         public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
@@ -94,7 +92,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 { //TODO: This must be tuned to specific robot
+        public static final class Mod0 { //Tuned
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 3;
@@ -104,7 +102,7 @@ public final class Constants {
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 { //TODO: This must be tuned to specific robot
+        public static final class Mod1 { //Tuned
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 6;
@@ -114,7 +112,7 @@ public final class Constants {
         }
         
         /* Back Left Module - Module 2 */
-        public static final class Mod2 { //TODO: This must be tuned to specific robot
+        public static final class Mod2 { //Tuned
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 9;
@@ -124,7 +122,7 @@ public final class Constants {
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 { //TODO: This must be tuned to specific robot
+        public static final class Mod3 { //Tuned
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 11;
             public static final int canCoderID = 12;
@@ -162,7 +160,7 @@ public final class Constants {
         }
     }
 
-    public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
+    public static final class AutoConstants { //Tuned
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
@@ -180,14 +178,12 @@ public final class Constants {
     // Wrist and Intake angles for each position in degrees
     public static final class JointConstants{
         public static final double intakeStart = 0;
-        public static final double intakeDeployed = 200;
+        public static final double intakeDeployed = 204;
         public static final double intakeLoading = 12;
         public static final double shooterStart = 0;
         public static final double shooterClose = -28;
         public static final double shooterFar = -45;
-        public static final double shooterAMP = 3;
-
-
+        public static final double shooterAMP = -28;
     }
     public static double targetPositionTolerance = 0.1;
     public static double targetAngleTolerance = 3;

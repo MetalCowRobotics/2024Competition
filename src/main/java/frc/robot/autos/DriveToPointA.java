@@ -1,7 +1,6 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib14.InstantCommandBase;
 import frc.lib14.MCRCommand;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.IntakeSubsystem;

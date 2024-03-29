@@ -22,6 +22,16 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Swerve {
     public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
@@ -89,7 +99,7 @@ public class Swerve {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
-    }   
+    }
 
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = translation.getX();
@@ -130,7 +140,7 @@ public class Swerve {
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
-    }
+    }    
 
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
@@ -152,7 +162,18 @@ public class Swerve {
         return swervePoseEstimator.getEstimatedPosition();
     }
 
-    public void setPose(Pose2d pose) {
+    public ChassisSpeeds getRobotRelativeSpeeds(){
+        return new ChassisSpeeds();
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+        double rotation = speeds.omegaRadiansPerSecond;
+        drive(translation, rotation, false, false);
+        SmartDashboard.putString("bob", "3");
+    }
+
+    public void resetPose(Pose2d pose) {
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
@@ -187,7 +208,7 @@ public class Swerve {
     }
 
     public void setSprint() {
-        speedMultiplier = 0.833;
+        speedMultiplier = 1.3;
     }
 
     public void setCrawl() {
@@ -227,7 +248,6 @@ public class Swerve {
     }
 
     public void teleopSwerve(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
@@ -239,7 +259,7 @@ public class Swerve {
             false /* KEEP FALSE */
         );
     }
-        
+
     public void driveToPoint(double targetX, double targetY, double targetTheta) {
         double x = getPose().getX();
         double y = getPose().getY();
@@ -263,7 +283,6 @@ public class Swerve {
 
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
-        //double rotation = thetaController.calculate(yaw);
 
         // Check if the robot is close enough to the target position
         SmartDashboard.putNumber("X-pos", getPose().getX());

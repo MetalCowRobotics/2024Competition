@@ -2,16 +2,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShooterJointSubsystem {
 
     private static ShooterJointSubsystem instance = new ShooterJointSubsystem();
     private CANSparkMax shooterJointMotor;
-    private RelativeEncoder encoder;
 
     private PIDController pidController;
 
@@ -19,19 +18,20 @@ public class ShooterJointSubsystem {
     private double minSetpoint;
     private double targetAngle;
 
+    private DigitalInput boreInput;
+    private DutyCycleEncoder boreEncoder;
+
     private double nominalVoltage = 12.6;
     private double rampTime = 0.250;
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 6200; // 4000
-    private double minRPM = 0; // 2000
-    private double reduction = 100.0 * (24.0 / 12.0);
-    private double kP = 0.04; // 0.015
+    private double maxRPM = 6200;
+    private double minRPM = 0;
+    private double kP = 0.04;
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 2;
-    private double initialPosition = 0.0;
 
     private ShooterJointSubsystem() {
         shooterJointMotor = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
@@ -48,7 +48,8 @@ public class ShooterJointSubsystem {
 
         shooterJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
-        encoder = shooterJointMotor.getEncoder();
+        boreInput = new DigitalInput(2);
+        boreEncoder = new DutyCycleEncoder(boreInput);
         
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
@@ -85,11 +86,7 @@ public class ShooterJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
-    }
-
-    public void resetEncoders(double angle) {
-        encoder.setPosition(angle);
+        return -((boreEncoder.get() * 360) - 329);
     }
 
     public void setTarget(double target) {
@@ -101,16 +98,13 @@ public class ShooterJointSubsystem {
     }
 
     public boolean atTarget() {
+        SmartDashboard.putBoolean("Shooter atTarget", Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance);
+        SmartDashboard.putBoolean("Shooter atTarget", Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance);
         return Math.abs(targetAngle - getCurrentAngle()) < positionTolerance;
     }
 
     private void writeStatus() {
         SmartDashboard.putNumber("Shooter Angle", getCurrentAngle());
-        // SmartDashboard.putNumber("Wrist Angular Velocity", Units.rotationsToDegrees(encoder.getVelocity() / reduction));
-        // SmartDashboard.putNumber("Wrist Encoder Position", encoder.getPosition());
-        // SmartDashboard.putNumber("Wrist encoder Velocity", encoder.getVelocity());
-        // SmartDashboard.putNumber("Wrist Target Angle", targetAngle);
-        // SmartDashboard.putNumber("Wrist Target Encoder Podition", setpoint);
     }
 
     public void periodic() {
@@ -136,8 +130,7 @@ public class ShooterJointSubsystem {
             if (!allowPositiveMotion(speed)) {
                 speed = 0;
             }
-        }
-        SmartDashboard.putNumber("Shooter Joint Encoder Output", encoder.getPosition());
+        };
         SmartDashboard.putNumber("Shooter Joint Motor Output", speed);
 
         if (atTarget()) {

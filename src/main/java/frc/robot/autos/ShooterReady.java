@@ -2,7 +2,6 @@ package frc.robot.autos;
 
 import frc.lib14.MCRCommand;
 import frc.robot.subsystems.NoteTransitSubsystem;
-import frc.robot.subsystems.Swerve;
 
 public class ShooterReady implements MCRCommand{
     boolean finished_flag = false;

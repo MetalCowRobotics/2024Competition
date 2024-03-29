@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2710605898499454,
+      "y": 5.546776732453496
+    },
+    "rotation": -179.7542540320031
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center To Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right To Mid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid To Left"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

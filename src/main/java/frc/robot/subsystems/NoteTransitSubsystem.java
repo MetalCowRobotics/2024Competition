@@ -3,7 +3,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class NoteTransitSubsystem {
-
     private static NoteTransitSubsystem instance = new NoteTransitSubsystem();
     private IntakeJointSubsystem m_IntakeJointSubsystem;
     private ShooterJointSubsystem m_ShooterJointSubsystem;
@@ -12,10 +11,8 @@ public class NoteTransitSubsystem {
     private boolean isShootingState;
     private boolean alreadyLiftedIntake;
     private boolean isPickup;
-
     private double shooterTarget;
     private double intakeTarget;
-
 
     private NoteTransitSubsystem(){
         m_IntakeJointSubsystem = IntakeJointSubsystem.getInstance();
@@ -32,6 +29,7 @@ public class NoteTransitSubsystem {
     } 
 
     public boolean atTarget(){
+        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
         return m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget();
     }
 
@@ -94,10 +92,21 @@ public class NoteTransitSubsystem {
         m_Shooter.toggleShooter();
     }
 
+    public void startShooter(){
+        m_Shooter.startShooter();
+    }
+
+    public void stopShooter(){
+        m_Shooter.stopShooter();
+    }
+
     public boolean getShooterSpunUp(){
         return m_Shooter.getShooterSpunUp();
     }
 
+    public boolean getShootingState(){
+        return isShootingState;
+    }
 
     //Turns on the intake to the speed that the state requires, except if you are in a state where you are shooting, then if you try, it does not enable the intake unless the shooter is at speed
     public void enableIntake(){
@@ -107,6 +116,8 @@ public class NoteTransitSubsystem {
                 m_IntakeSubsystem.setAlreadyStopped(false);
                 alreadyLiftedIntake = false;
             }
+        }else if(((isShootingState) && (m_Shooter.getShooterSpunUp()))){
+            m_IntakeSubsystem.toggleIntake();
         }else{
             disableIntake();
         }
@@ -122,13 +133,12 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem.stopintake();
     }
 
-
-
     public void periodic() {
         m_IntakeJointSubsystem.setTarget(intakeTarget);
         m_ShooterJointSubsystem.setTarget(shooterTarget);
         SmartDashboard.putNumber("Intake Target", intakeTarget);
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
+        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
         //Automatically lifts the intake once tehre is a note inside
         if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
             setSpeakerPosition();

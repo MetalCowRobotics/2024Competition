@@ -12,7 +12,6 @@ public class DriveToPointB implements MCRCommand {
     private Swerve m_swerve;
 
     private final double TOLERANCE = 0.2;
-    private final double ANGLE_TOLERANCE = 3;
 
     private double targetX;
     private double targetY;

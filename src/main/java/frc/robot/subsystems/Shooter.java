@@ -41,11 +41,10 @@ public class Shooter {
         SmartDashboard.putBoolean("Shooter Spun Up", getShooterSpunUp());
         SmartDashboard.putNumber("ShooterSide1Speed", shooterEncoder1.getVelocity());
         SmartDashboard.putNumber("ShooterSide2Speed", shooterEncoder1.getVelocity());
-
     }
 
     public boolean getShooterSpunUp(){
-        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 5100.0) && (shooterEncoder2.getVelocity() > 5100.0))){
+        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 4300.0) && (shooterEncoder2.getVelocity() > 4300.0))){
             return true;        
         }else if((speed == .5) && ((shooterEncoder1.getVelocity() > 2500.0) && (shooterEncoder2.getVelocity() > 2500.0))){
             return true;
@@ -58,7 +57,7 @@ public class Shooter {
     }
 
     public void setAmpSpeed(){
-        speed = .5;
+        speed = .75;
     }
 
     public void toggleShooter(){
@@ -69,4 +68,11 @@ public class Shooter {
         }
     }
 
+    public void stopShooter() {
+      shooterEnabled = false;
+    }
+
+    public void startShooter() {
+       shooterEnabled = true;
+    }
 }
