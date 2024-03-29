@@ -6,6 +6,8 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShooterJointSubsystem {
 
@@ -18,6 +20,10 @@ public class ShooterJointSubsystem {
     private double maxSetpoint;
     private double minSetpoint;
     private double targetAngle;
+
+    private DigitalInput boreInput = new DigitalInput(2);
+    private DutyCycleEncoder boreEncoder = new DutyCycleEncoder(boreInput);
+    private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
 
     private double nominalVoltage = 12.6;
     private double rampTime = 0.250;
@@ -60,6 +66,7 @@ public class ShooterJointSubsystem {
         SmartDashboard.putNumber("ShooterJointkp", kP);
         SmartDashboard.putNumber("ShooterJointkp", kI);
         SmartDashboard.putNumber("ShooterJointkp", kD);
+        boreEncoder.setPositionOffset(-325);
     }
 
     public static ShooterJointSubsystem getInstance(){
@@ -85,7 +92,7 @@ public class ShooterJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        return Units.rotationsToDegrees(encoder.getPosition() / reduction) + initialPosition;
+        return boreConvertedValue;
     }
 
     public void resetEncoders(double angle) {
@@ -115,6 +122,13 @@ public class ShooterJointSubsystem {
 
     public void periodic() {
         writeStatus();
+
+        boreRawValue = boreEncoder.getAbsolutePosition();
+        boreConvertedValue = boreRawValue * (360);
+        SmartDashboard.putNumber("Absolute Encoder Value2", boreConvertedValue);
+        // boreConvertedOffsetValue = boreConvertedValue - 329;
+        // SmartDashboard.putNumber("Absolute Encoder Value3", boreConvertedOffsetValue);
+
 
         pidController.setPID(SmartDashboard.getNumber("ShooterJointkP", kP), SmartDashboard.getNumber("ShooterJointkI", kI), SmartDashboard.getNumber("ShooterJointkD", kD));
         double speed = 0;
