@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
   
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final double shootervalue = XboxController.Axis.kRightTrigger.value;
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton visionAlignment = new JoystickButton(driver, XboxController.Button.kB.value);
   
@@ -124,6 +123,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    s_Swerve.enableVisionControl();
     PathPlannerAuto autoCommand = new PathPlannerAuto("Center And Left");
     autoCommand.schedule();
     System.out.println("Autonomous command scheduled");
@@ -143,6 +143,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_NoteTransitSubsystem.stopShooter();
     m_NoteTransitSubsystem.setRestPosition();
+    s_Swerve.enableVisionControl();
   }
 
   /** This function is called periodically during operator control. */
