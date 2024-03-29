@@ -15,6 +15,6 @@ public class ZeroGyro extends InstantCommandBase{
         // s_swerve.setHeading(new Rotation2d(180));
 
         m_swerve.zeroGyro();
-        SmartDashboard.putString("auto", "running");
+        SmartDashboard.putString("auto", "zeroed the gyro");
     }
 }

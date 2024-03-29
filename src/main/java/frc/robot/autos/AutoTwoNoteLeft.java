@@ -14,12 +14,12 @@ import frc.lib14.TimedCommandSet;
 /*This auto shoots the preloaded note and drives to pick the note on the center spike mark and shoots that into the speaker.
  * points: 12
  */
-public class AutoTwoNoteCenter implements MCRCommand{    
+public class AutoTwoNoteLeft implements MCRCommand{    
     boolean first = true;
     double armMovementTimeout = .5;
     MCRCommand twoNoteAuto;
     
-    public AutoTwoNoteCenter(Swerve s_Swerve){
+    public AutoTwoNoteLeft(Swerve s_Swerve){
         twoNoteAuto = new SequentialCommands(
             // start with resetting
             new ZeroGyro(s_Swerve),
@@ -37,8 +37,9 @@ public class AutoTwoNoteCenter implements MCRCommand{
             // Set the arm angles to pick the note up that is in front of the robot
             new ArmToAngles("pickup"),
             new StartIntake(),
-            new DriveToPointB(s_Swerve, -1.4, 0, 0),
+            new DriveToPointB(s_Swerve, -1.4, 0, -45),
             new StopIntake(),
+
             
             // Setting the arm angles to speaker to shoot the picked up piece
             new ParallelCommands(
