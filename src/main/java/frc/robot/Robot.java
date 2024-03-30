@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
  
   @Override
   public void robotInit() {
+    SmartDashboard.putNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
     AutoBuilder.configureHolonomic(
             s_Swerve::getPose,
             s_Swerve::resetPose,
