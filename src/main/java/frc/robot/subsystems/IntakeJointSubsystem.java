@@ -102,11 +102,10 @@ public class IntakeJointSubsystem {
     }
 
     public void periodic() {
-        writeStatus();
         boreRawValue = boreEncoder.getAbsolutePosition();
         boreConvertedValue = boreRawValue * (360);
-        SmartDashboard.putNumber("Absolute Encoder Value", boreConvertedOffsetValue);
-        boreConvertedOffsetValue = boreConvertedValue - 117;
+        boreConvertedOffsetValue = (boreConvertedValue - 50);
+        writeStatus();
         
         double speed = 0;
 
