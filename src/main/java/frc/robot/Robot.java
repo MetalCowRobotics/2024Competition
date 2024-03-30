@@ -204,7 +204,7 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (intakeToggle()) {
+    if (operator.getRightBumper()) {
       m_NoteTransitSubsystem.enableIntake();
       LED.runDefault();
     }

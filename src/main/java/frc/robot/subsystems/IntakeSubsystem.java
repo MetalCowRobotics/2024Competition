@@ -39,57 +39,57 @@ public class IntakeSubsystem {
     }
 
     public void periodic(){
-        if(startUp.get() < 0.5){
-            intakeMotor.set(speed);
-            return;
-        }
-        if (noteAcquired()) {
-            setRetractReady(true);
+        // if(startUp.get() < 0.5){
+        //     intakeMotor.set(speed);
+        //     return;
+        // }
+        // if (noteAcquired()) {
+        //     setRetractReady(true);
+        //     stopintake();
+        //     setStopDriving();
+        // }
+        // if(intakeEnabled)
+        //     intakeMotor.set(speed);
+        // else{
+        //     intakeMotor.set(0);
+        // }
+
+       if(noteAcquired() && !alreadyStopped){
             stopintake();
-            setStopDriving();
+            LED.runOrange();
+            alreadyStopped = true;
+       }else{
+            LED.runDefault();
         }
         if(intakeEnabled)
             intakeMotor.set(speed);
         else{
             intakeMotor.set(0);
         }
-
-    //    if(noteAcquired() && !alreadyStopped){
-    //         stopintake();
-    //         LED.runOrange();
-    //         alreadyStopped = true;
-    //    }else{
-    //         LED.runDefault();
-    //     }
-    //     if(intakeEnabled)
-    //         intakeMotor.set(speed);
-    //     else{
-    //         intakeMotor.set(0);
-    //     }
         SmartDashboard.putNumber("IntakeSpeed", speed);
     }
 
-    public boolean noteAcquired2(){
+    public boolean noteAcquired(){
         return !intakeSensor.get();
     }
-    private boolean notePresent(){
-        return pdp.getCurrent(6) > 15;
-    }
+    // private boolean notePresent(){
+    //     return pdp.getCurrent(6) > 15;
+    // }
 
-    public boolean noteAcquired() {
-        if (notePresent() && !notedetected) {
-                notedetected = true;
-                timer.reset();
-                timer.start();
-            } 
-            if (notedetected && timer.get() >= expectedTime){
-                SmartDashboard.putString("auto", "stopped");
-                timer.stop();
-                return true;
-            }
+    // public boolean noteAcquired() {
+    //     if (notePresent() && !notedetected) {
+    //             notedetected = true;
+    //             timer.reset();
+    //             timer.start();
+    //         } 
+    //         if (notedetected && timer.get() >= expectedTime){
+    //             SmartDashboard.putString("auto", "stopped");
+    //             timer.stop();
+    //             return true;
+    //         }
 
-        return false;
-    }
+    //     return false;
+    // }
     
 
     public void setStopDriving(){
@@ -113,10 +113,10 @@ public class IntakeSubsystem {
     }
 
     public void startIntake(){
-        startUp.reset();
-        startUp.start();
-        speed = 0.9;
-        notedetected = false;
+        // startUp.reset();
+        // startUp.start();
+        // speed = 0.9;
+        // notedetected = false;
         intakeEnabled = true;
     }
 
