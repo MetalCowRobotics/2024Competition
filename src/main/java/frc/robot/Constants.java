@@ -154,6 +154,14 @@ public final class Constants {
         public static final double shooterClose = -28;
         public static final double shooterFar = -45;
         public static final double shooterAMP = -28;
+
+        public static final double[][] variableShootingConstants = {{0.0, -3.5, -6.9, -10.3, -13.62, -16.85, -19.97, -22.98, -25.85, -28.6},
+                                                                    {-31.2, -33.67, -36.01, -38.22, -40.3, -42.26, -44.1, -45.84, -47.47, -49},
+                                                                    {-50.46, -51.83, -53.1, -54.33, -55.48, -56.56, -57.6, -58.55, -59.47, -60.35},
+                                                                    {-61.2, -61.96, -62.7, -63.4, -64.1, -64.75, -65.36, -65.95, -66.5, -67.06},
+                                                                    {-67.6, -68.07, -68.54, -69, -69.43, -69.85, -70.26, -70.64, -71, -71.4},
+                                                                    {-71.7, -72.06, -72.4, -72.7, -73, -73.3, -73.6, -73.85, -74.1, -74.37}};
+        
     }
     public static double targetPositionTolerance = 0.1;
     public static double targetAngleTolerance = 3;
