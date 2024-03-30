@@ -36,7 +36,7 @@ public class Swerve implements Subsystem {
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
 
-    private PIDController angleHoldingPIDController = new PIDController(0.00004, 0, 0.001);
+    private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
     private PIDController thetaController = new PIDController(0.004, 0, 0.000);
@@ -44,6 +44,7 @@ public class Swerve implements Subsystem {
     private boolean positionReached = false;
 
     public Swerve() {
+        
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
@@ -61,20 +62,24 @@ public class Swerve implements Subsystem {
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX() * speedMultiplier);
+        SmartDashboard.putNumber("xTarget", translation.getX());
         double ySpeed = m_ySlewRateLimiter.calculate(translation.getY() * speedMultiplier);
+        SmartDashboard.putNumber("yTarget", translation.getX());
+        //SmartDashboard.putNumber("RotationTarget", rotation);
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    rotation, 
+                                    (rotation*(2*Math.PI)), 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    rotation)
-                                );
+                                    (rotation*(2*Math.PI))
+                                )
+            );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, desiredSpeed);
 
         for(SwerveModule mod : mSwerveMods){
@@ -218,6 +223,7 @@ public class Swerve implements Subsystem {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
+        SmartDashboard.putNumber("RotationTarget",rotationVal);
 
         drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
@@ -262,8 +268,13 @@ public class Swerve implements Subsystem {
         // Check if the robot is close enough to the target position
         SmartDashboard.putNumber("X-pos", getPose().getX());
         SmartDashboard.putNumber("y-pos", getPose().getX());
-        SmartDashboard.putNumber("ValueX", xCorrection);
-        SmartDashboard.putNumber("Valuey", Math.abs(y - targetY));
+        SmartDashboard.putNumber("XCorrection", xCorrection);
+        SmartDashboard.putNumber("YCorrection", yCorrection);
+        SmartDashboard.putNumber("ValueA", Math.abs(yaw - targetTheta));
+        SmartDashboard.putNumber("Gyro Angle", yaw);
+
+
+        SmartDashboard.putNumber("yDiff", Math.abs(y - targetY));
         SmartDashboard.putNumber("ValueA", Math.abs(yaw - targetTheta));
     if (Math.abs(x - targetX) < Constants.targetPositionTolerance &&
         Math.abs(y - targetY) < Constants.targetPositionTolerance &&

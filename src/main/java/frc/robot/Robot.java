@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
 import frc.robot.autos.ArmToAngles2;
+import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.subsystems.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -121,15 +123,19 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    PathPlannerAuto autoCommand = new PathPlannerAuto("Center And Left");
-    autoCommand.schedule();
+    s_Swerve.setHeading(new Rotation2d(Math.PI));
+    autoMission = new AutoTwoNoteCenter(s_Swerve);
+    
+    // PathPlannerAuto autoCommand = new PathPlannerAuto("Center And Left");
+    // autoCommand.schedule();
     System.out.println("Autonomous command scheduled");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    CommandScheduler.getInstance().run();
+    autoMission.run();
+    // CommandScheduler.getInstance().run();
     SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
     callPeriodic(); 
