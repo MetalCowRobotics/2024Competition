@@ -227,7 +227,7 @@ public class Robot extends TimedRobot {
 
     public boolean intakeToggle(){
       if(m_NoteTransitSubsystem.getShootingState()){
-        return operator.getRightBumperReleased();  
+        return operator.getRightBumper();  
       }else{
         return operator.getRightBumper();
       }
