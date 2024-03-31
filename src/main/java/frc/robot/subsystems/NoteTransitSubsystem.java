@@ -87,6 +87,9 @@ public class NoteTransitSubsystem {
         isShootingState = true;
     }
 
+    public void toggleIntake(){
+        m_IntakeSubsystem.toggleIntake();
+    }
     //Turns the shooter on or off
     public void toggleShooter(){
         m_Shooter.toggleShooter();
