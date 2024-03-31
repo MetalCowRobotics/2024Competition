@@ -38,7 +38,7 @@ public final class CTREConfigs {
         swerveAngleFXConfig0.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.angleCurrentThresholdTime;
 
         /* PID Config */
-        swerveAngleFXConfig0.Slot0.kP = Constants.Swerve.angleKP;
+        swerveAngleFXConfig0.Slot0.kP = 75;
         swerveAngleFXConfig0.Slot0.kI = Constants.Swerve.angleKI;
         swerveAngleFXConfig0.Slot0.kD = Constants.Swerve.angleKD;
 

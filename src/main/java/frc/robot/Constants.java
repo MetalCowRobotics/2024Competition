@@ -13,7 +13,7 @@ import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.2;
+    public static final double stickDeadband = 0.1;
 
     public static final class Swerve {
         public static final int pigeonID = 14;
@@ -82,7 +82,7 @@ public final class Constants {
         public static final double maxSpeed = 5; //TODO: This must be tuned to specific robot
         public static final double maxAutoSpeed = 2.5;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = Math.PI/(3.0); //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;

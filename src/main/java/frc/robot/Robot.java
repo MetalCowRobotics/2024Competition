@@ -36,7 +36,7 @@ import com.pathplanner.lib.auto.NamedCommands;
  */
 
 public class Robot extends TimedRobot {
-  public static final CTREConfigs ctreConfigs = new CTREConfigs();
+    public static final CTREConfigs ctreConfigs = new CTREConfigs();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
