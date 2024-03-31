@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // s_Swerve.periodicValues();
+    s_Swerve.periodicValues();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -149,7 +149,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_NoteTransitSubsystem.stopShooter();
     m_NoteTransitSubsystem.setRestPosition();
-    s_Swerve.enableVisionControl();
   }
 
   /** This function is called periodically during operator control. */

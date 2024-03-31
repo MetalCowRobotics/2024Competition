@@ -9,6 +9,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.MathUtil;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.photonvision.EstimatedRobotPose;
+
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -30,6 +33,8 @@ public class Swerve implements Subsystem{
     private Vision m_vision;
     private int lastTargetID;
     private boolean visionControl;
+    private EstimatedRobotPose visionPose;
+    private boolean visionToggle;
 
     private final double accelerationTime = 0.3;
     private double speedMultiplier = 1;
@@ -43,7 +48,8 @@ public class Swerve implements Subsystem{
     private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
-    private PIDController thetaController = new PIDController(0.004, 0, 0);
+    private PIDController thetaController = new PIDController(0.035, 0, 0);
+    private PIDController thetaController2 = new PIDController(0.0002, 0, 0);
 
     private boolean positionReached = false;
 
@@ -52,13 +58,18 @@ public class Swerve implements Subsystem{
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
-        xController.setTolerance(0.05);
-        thetaController.setTolerance(2);
+        xController.setTolerance(0.2);
+        yController.setTolerance(0.2);
+        thetaController.setTolerance(3);
+        thetaController2.setTolerance(3);
         thetaController.enableContinuousInput(0, 360);
+        thetaController2.enableContinuousInput(0, 360);
+        visionToggle = true;
 
         m_vision = new Vision();
         lastTargetID = -1;
         visionControl = false;
+        visionPose = new EstimatedRobotPose(new Pose3d(), 0, null, null);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -257,96 +268,89 @@ public class Swerve implements Subsystem{
         );
     }
 
-    public void driveToPoint(double targetX, double targetY, double targetTheta) {
+    public void visionDriveToPoint(double targetX, double targetY, double targetTheta) {
         double x = getPose().getX();
         double y = getPose().getY();
-        double yaw = getGyroYaw().getDegrees();
-        positionReached = false;
+        double yaw = getPose().getRotation().getDegrees();
 
         xController.setSetpoint(targetX);
         yController.setSetpoint(targetY);
 
-        yaw = yaw % 360;
-        if (yaw < 0) {
-            yaw += 360;
-        }
         if (targetTheta == 0) {
             if (yaw > 180) {
                 thetaController.setSetpoint(360);
             } else {
                 thetaController.setSetpoint(0);
             }
+        } else {
+            thetaController.setSetpoint(targetTheta);
         }
 
+        double rotation = thetaController.calculate(yaw);
         double xCorrection = xController.calculate(x);
         double yCorrection = yController.calculate(y);
 
-        // Check if the robot is close enough to the target position
-        SmartDashboard.putNumber("X-pos", getPose().getX());
-        SmartDashboard.putNumber("y-pos", getPose().getX());
-        SmartDashboard.putNumber("XCorrection", xCorrection);
-        SmartDashboard.putNumber("YCorrection", yCorrection);
-        SmartDashboard.putNumber("ValueA", Math.abs(yaw - targetTheta));
-        SmartDashboard.putNumber("Gyro Angle", yaw);
-
-
-        SmartDashboard.putNumber("yDiff", Math.abs(y - targetY));
-        SmartDashboard.putNumber("ValueA", Math.abs(yaw - targetTheta));
-    if (Math.abs(x - targetX) < Constants.targetPositionTolerance &&
-        Math.abs(y - targetY) < Constants.targetPositionTolerance &&
-        Math.abs(yaw - targetTheta) < Constants.targetAngleTolerance) {
-        // Stop the robot by setting the desired states to zero
-        SmartDashboard.putBoolean("ReachedPoint:", true);
-        SwerveModuleState[] stopStates = new SwerveModuleState[4];
-        for (int i = 0; i < 4; i++) {
-            stopStates[i] = new SwerveModuleState(0, new Rotation2d());
+        if (xController.atSetpoint() && yController.atSetpoint()){
+            xCorrection = 0;
+            yCorrection = 0;
         }
-        setModuleStates(stopStates);
-        } else {
-            SmartDashboard.putBoolean("ReachedPoint:", false);
-            driveAuto(
-                new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-                -yaw * 0, 
-                true, 
-                false
-            );
+        if(thetaController.atSetpoint()){
+            rotation = 0;
         }
+
+        driveAuto(
+            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
+            -rotation, 
+            true, 
+            false
+        );
+    }
+
+    public void visionAlign() {
+        if (visionToggle) {
+            setHeading(new Rotation2d(Math.toDegrees(m_vision.getYawOfBestTarget())));
+        }
+        visionToggle = false;
+        thetaController.setSetpoint(0);
+        double rotation = thetaController.calculate(getPose().getRotation().getDegrees());
+
+        if(thetaController.atSetpoint()){
+            rotation = 0;
+        }
+
+        driveAuto(
+            new Translation2d(0, 0).times(Constants.Swerve.maxAutoSpeed), 
+            -rotation, 
+            true, 
+            false
+        );
     }
 
     public void visionAndPosePeriodic() {
+        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> visionPose = estimatedRobotPose);
 
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
-            "Vision X Pose",
-            estimatedRobotPose.estimatedPose.getX()
-        ));
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
-            "Vision Y Pose",
-            estimatedRobotPose.estimatedPose.getY()
-        ));
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> SmartDashboard.putNumber(
-            "Vision Angle",
-            Math.toDegrees(estimatedRobotPose.estimatedPose.getRotation().getAngle())
-        ));
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.addVisionMeasurement(
-            estimatedRobotPose.estimatedPose.toPose2d(),
-            estimatedRobotPose.timestampSeconds
-        ));
+        SmartDashboard.putNumber("Vision X Pose", visionPose.estimatedPose.getX());
+        SmartDashboard.putNumber("Vision Y Pose", visionPose.estimatedPose.getY());
 
-        if (lastTargetID != m_vision.getBestID()) {
-            m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> resetPose(
-            estimatedRobotPose.estimatedPose.toPose2d()
-            ));
-        }
-        lastTargetID = m_vision.getBestID();
+        // swervePoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
+
+        SmartDashboard.putNumber("Vision Angle", visionPose.estimatedPose.toPose2d().getRotation().getDegrees());
+        SmartDashboard.putNumber("Best Target Angle", m_vision.getYawOfBestTarget());
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
+        visionAndPosePeriodic();
         if (visionControl) {
-            visionAndPosePeriodic();
+            // visionDriveToPoint(getPose().getX(), getPose().getY(), 178);
+            visionAlign();
         }
-        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+        else {
+            teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+            visionToggle = true;
+        }
         SmartDashboard.putNumber("X Pose", getPose().getX());
         SmartDashboard.putNumber("Y Pose", getPose().getY());
         SmartDashboard.putNumber("Drive Angle", getPose().getRotation().getDegrees());
+        SmartDashboard.putBoolean("Vision Toggle", visionToggle);
     }
 }
