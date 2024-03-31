@@ -1,12 +1,16 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+
+import java.text.DecimalFormat;
+
 import com.revrobotics.CANSparkLowLevel;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 public class ShooterJointSubsystem {
 
     private static ShooterJointSubsystem instance = new ShooterJointSubsystem();
@@ -32,32 +36,24 @@ public class ShooterJointSubsystem {
     private double kI = 0.0;
     private double kD = 0.00;
     private double positionTolerance = 2;
+    private DecimalFormat dFormatter;
+    private String distString;
 
     private ShooterJointSubsystem() {
+        dFormatter = new DecimalFormat("#.#");
         shooterJointMotor = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
-
         shooterJointMotor.enableVoltageCompensation(nominalVoltage);
-
         shooterJointMotor.setOpenLoopRampRate(rampTime);
-
         shooterJointMotor.setClosedLoopRampRate(rampTime);
-
         shooterJointMotor.setInverted(false);
-
         shooterJointMotor.setIdleMode(idleMode);
-
         shooterJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
-
         boreInput = new DigitalInput(2);
         boreEncoder = new DutyCycleEncoder(boreInput);
-        
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
-
         pidController = new PIDController(kP, kI, kD);
-
         pidController.setIntegratorRange(-0.65, 0.65);
-
         SmartDashboard.putNumber("ShooterJointkp", kP);
         SmartDashboard.putNumber("ShooterJointkp", kI);
         SmartDashboard.putNumber("ShooterJointkp", kD);
@@ -96,6 +92,15 @@ public class ShooterJointSubsystem {
     public double getTargetAngle() {
         return this.targetAngle;
     }
+
+    public void setVariableAngle(double xdist){
+        distString = (dFormatter.format(xdist)).toString();
+        setTarget(Constants.JointConstants.variableShootingConstants[Integer.parseInt(distString.substring(0,1))][Integer.parseInt(distString.substring(2))]);
+        
+
+        
+    }
+
 
     public boolean atTarget() {
         SmartDashboard.putBoolean("Shooter atTarget", Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance);
