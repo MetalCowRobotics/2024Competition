@@ -28,9 +28,9 @@ public class IntakeJointSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 1500;
     private double minRPM = 0;
-    private double kP = 0.007;
+    private double kP = 0.009;
     private double kI = 0.0;
-    private double kD = 0.00;
+    private double kD = 0.0;
     private double positionTolerance = 5;
 
     private IntakeJointSubsystem() {
@@ -102,11 +102,10 @@ public class IntakeJointSubsystem {
     }
 
     public void periodic() {
-        writeStatus();
         boreRawValue = boreEncoder.getAbsolutePosition();
         boreConvertedValue = boreRawValue * (360);
-        SmartDashboard.putNumber("Absolute Encoder Value", boreConvertedOffsetValue);
-        boreConvertedOffsetValue = boreConvertedValue - 117;
+        boreConvertedOffsetValue = (boreConvertedValue - 50);
+        writeStatus();
         
         double speed = 0;
 

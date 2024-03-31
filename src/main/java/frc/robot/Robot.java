@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
  
   @Override
   public void robotInit() {
+    SmartDashboard.putNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
     AutoBuilder.configureHolonomic(
             s_Swerve::getPose,
             s_Swerve::resetPose,
@@ -233,7 +234,7 @@ public class Robot extends TimedRobot {
 
     public boolean intakeToggle(){
       if(m_NoteTransitSubsystem.getShootingState()){
-        return operator.getRightBumperReleased();  
+        return operator.getRightBumper();  
       }else{
         return operator.getRightBumper();
       }
