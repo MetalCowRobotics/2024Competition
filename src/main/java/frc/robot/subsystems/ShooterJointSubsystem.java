@@ -96,9 +96,6 @@ public class ShooterJointSubsystem {
     public void setVariableAngle(double xdist){
         distString = (dFormatter.format(xdist)).toString();
         setTarget(Constants.JointConstants.variableShootingConstants[Integer.parseInt(distString.substring(0,1))][Integer.parseInt(distString.substring(2))]);
-        
-
-        
     }
 
 
