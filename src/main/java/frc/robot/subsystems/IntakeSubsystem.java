@@ -4,6 +4,9 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem {
@@ -13,8 +16,14 @@ public class IntakeSubsystem {
     private double speed = 0;
     private DigitalInput intakeSensor;
     private boolean alreadyStopped;
-    private boolean retractReady = false;
     private boolean driving = false;
+    private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
+    private Timer timer = new Timer();
+    private Timer startUp = new Timer();
+    // private double expectedTime = 0.18;
+    private double expectedTime = 0.0;
+    private boolean notedetected = false;
+    private boolean retractReady = false;
 
     private IntakeSubsystem() {
         intakeMotor = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
@@ -30,6 +39,21 @@ public class IntakeSubsystem {
     }
 
     public void periodic(){
+        // if(startUp.get() < 0.5){
+        //     intakeMotor.set(speed);
+        //     return;
+        // }
+        // if (noteAcquired()) {
+        //     setRetractReady(true);
+        //     stopintake();
+        //     setStopDriving();
+        // }
+        // if(intakeEnabled)
+        //     intakeMotor.set(speed);
+        // else{
+        //     intakeMotor.set(0);
+        // }
+
        if(noteAcquired() && !alreadyStopped){
             stopintake();
             LED.runOrange();
@@ -43,11 +67,31 @@ public class IntakeSubsystem {
             intakeMotor.set(0);
         }
         SmartDashboard.putNumber("IntakeSpeed", speed);
+        SmartDashboard.putBoolean("NoteAcquired", noteAcquired());
     }
 
     public boolean noteAcquired(){
-        return !intakeSensor.get();
+        return intakeSensor.get();
     }
+    // private boolean notePresent(){
+    //     return pdp.getCurrent(6) > 15;
+    // }
+
+    // public boolean noteAcquired() {
+    //     if (notePresent() && !notedetected) {
+    //             notedetected = true;
+    //             timer.reset();
+    //             timer.start();
+    //         } 
+    //         if (notedetected && timer.get() >= expectedTime){
+    //             SmartDashboard.putString("auto", "stopped");
+    //             timer.stop();
+    //             return true;
+    //         }
+
+    //     return false;
+    // }
+    
 
     public void setStopDriving(){
         driving = true;
@@ -70,6 +114,10 @@ public class IntakeSubsystem {
     }
 
     public void startIntake(){
+        // startUp.reset();
+        // startUp.start();
+        // speed = 0.9;
+        // notedetected = false;
         intakeEnabled = true;
     }
 
@@ -95,7 +143,7 @@ public class IntakeSubsystem {
     }
 
     public void setPickupSpeed(){
-        speed = -.9;
+        speed = -.75;
     }
 
     public void setFeedSpeed(){
