@@ -67,10 +67,11 @@ public class IntakeSubsystem {
             intakeMotor.set(0);
         }
         SmartDashboard.putNumber("IntakeSpeed", speed);
+        SmartDashboard.putBoolean("NoteAcquired", noteAcquired());
     }
 
     public boolean noteAcquired(){
-        return !intakeSensor.get();
+        return intakeSensor.get();
     }
     // private boolean notePresent(){
     //     return pdp.getCurrent(6) > 15;
@@ -142,7 +143,7 @@ public class IntakeSubsystem {
     }
 
     public void setPickupSpeed(){
-        speed = -.9;
+        speed = -.75;
     }
 
     public void setFeedSpeed(){
