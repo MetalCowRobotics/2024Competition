@@ -5,6 +5,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -131,6 +133,34 @@ public final class Constants {
             public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0.0); //-122.58
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset, configNum);
+        }
+    }
+
+    public static final class VisionConstants {
+        /* In Meters (Camera 10 Inches In Front of Gyro, Camera 4 Inches To The Gyro's Left, Camera 9 Inches Above Gyro). */
+        public static final Transform3d robotToCamTranslation = new Transform3d(0.254, 0.1016, 0.2286, new Rotation3d());
+
+        public static final class RobotCoordsForEachID {
+            public static final double[] redSpeakerCenterCoords = {15.15, 5.55, 180};
+            public static final double[] blueSpeakerCeneterCoords = {1.35, 5.55, 0};
+
+            public static final double[] redRightSpeakerCoords = {15.77, 6.66, 120};
+            public static final double[] blueRightSpeakerCoords = {0.77, 4.44, 300};
+
+            public static final double[] redLeftSpeakerCoords = {15.77, 4.44, 240};
+            public static final double[] blueLeftSpeakerCoords = {0.77, 6.66, 60};
+
+            public static final double[] redAmpCoords = {14.70, 7.60, 270};
+            public static final double[] blueAmpCoords = {1.84, 7.60, 270};
+
+            public static final double[] redWolfTrapCoords = {12.25, 4.90, 225};
+            public static final double[] blueWolfTrapCoords = {4.35, 4.90, 315};
+
+            public static final double[] redSourceTrapCoords = {12.20, 3.25, 135};
+            public static final double[] blueSourceTrapCoords = {4.40, 3.25, 45};
+
+            public static final double[] redOuterTrapCoords = {10.75, 4.10, 0};
+            public static final double[] blueOuterTrapCoords = {5.85, 4.10, 180};
         }
     }
 
