@@ -71,13 +71,13 @@ public class Swerve implements Subsystem {
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    (rotation*(2*Math.PI)), 
+                                    rotation, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    (rotation*(2*Math.PI))
+                                    rotation
                                 )
             );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, desiredSpeed);

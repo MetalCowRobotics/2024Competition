@@ -54,6 +54,7 @@ public class ShooterJointSubsystem {
         minSetpoint = minRPM / 5820;
         pidController = new PIDController(kP, kI, kD);
         pidController.setIntegratorRange(-0.65, 0.65);
+        SmartDashboard.putNumber("VariableShootingOffset", 0);
         SmartDashboard.putNumber("ShooterJointkp", kP);
         SmartDashboard.putNumber("ShooterJointkp", kI);
         SmartDashboard.putNumber("ShooterJointkp", kD);
@@ -95,9 +96,14 @@ public class ShooterJointSubsystem {
 
     public void setVariableAngle(double xdist){
         distString = (dFormatter.format(xdist)).toString();
-        setTarget(Constants.JointConstants.variableShootingConstants[Integer.parseInt(distString.substring(0,1))][Integer.parseInt(distString.substring(2))]);
+        setTarget((Constants.JointConstants.variableShootingConstants[Integer.parseInt(distString.substring(0,1))][Integer.parseInt(distString.substring(2))])+(SmartDashboard.getNumber("VariableShootingOffset",0)));
     }
 
+
+    public double getVariableAngle(double xdist){
+        distString = (dFormatter.format(xdist)).toString();
+        return (Constants.JointConstants.variableShootingConstants[Integer.parseInt(distString.substring(0,1))][Integer.parseInt(distString.substring(2))]);
+    }
 
     public boolean atTarget() {
         SmartDashboard.putBoolean("Shooter atTarget", Math.abs(this.targetAngle - getCurrentAngle()) < positionTolerance);
@@ -111,6 +117,8 @@ public class ShooterJointSubsystem {
 
     public void periodic() {
         writeStatus();
+
+
 
         pidController.setPID(SmartDashboard.getNumber("ShooterJointkP", kP), SmartDashboard.getNumber("ShooterJointkI", kI), SmartDashboard.getNumber("ShooterJointkD", kD));
         double speed = 0;
