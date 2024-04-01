@@ -77,6 +77,8 @@ public class Vision extends SubsystemBase {
         }
     }
 
+
+
     public double getYawOfBestTarget() {
         if (camera.getLatestResult().hasTargets()) {
             return camera.getLatestResult().getBestTarget().getYaw();

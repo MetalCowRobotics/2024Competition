@@ -172,7 +172,7 @@ public class Swerve implements Subsystem{
     }
 
     public Transform3d distFromTag(){
-        return m_vision.getCamToTag();
+        return m_vision.getDistFromScoringTag();
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds(){
@@ -184,6 +184,12 @@ public class Swerve implements Subsystem{
         double rotation = speeds.omegaRadiansPerSecond;
         drive(translation, rotation, false, false);
         SmartDashboard.putString("bob", "3");
+    }
+    public double getAngleFromTag(){
+        return Math.atan2(distFromTag().getY(), distFromTag().getX());
+    }
+    public double getAngleFromTag2(){
+        return m_vision.getYawOfBestTarget();
     }
 
     public void resetPose(Pose2d pose) {
