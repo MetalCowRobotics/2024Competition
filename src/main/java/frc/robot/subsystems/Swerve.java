@@ -11,7 +11,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -92,13 +94,13 @@ public class Swerve implements Subsystem{
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    (rotation*(2*Math.PI)), 
+                                    rotation, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    (rotation*(2*Math.PI))
+                                    rotation
                                 )
             );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, desiredSpeed);
@@ -167,6 +169,10 @@ public class Swerve implements Subsystem{
 
     public Pose2d getPose() {
         return swervePoseEstimator.getEstimatedPosition();
+    }
+
+    public Transform3d distFromTag(){
+        return m_vision.getCamToTag();
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds(){

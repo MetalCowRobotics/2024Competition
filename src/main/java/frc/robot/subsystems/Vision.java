@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
-
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -12,9 +10,11 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
 
@@ -51,6 +51,29 @@ public class Vision extends SubsystemBase {
         } else {
             SmartDashboard.putNumber("BestID", -1);
             return -1;
+        }
+    }
+
+    /*
+     * Speaker Tag IDs
+     * Red Alliance: 4
+     * Blue Alliance: 7
+     */
+    public Transform3d getDistFromScoringTag(){
+        if (camera.getLatestResult().hasTargets()){
+            if((camera.getLatestResult().getBestTarget().getFiducialId() == 4) || (camera.getLatestResult().getBestTarget().getFiducialId() == 7)){
+                return camera.getLatestResult().getBestTarget().getBestCameraToTarget();
+            }
+            return new Transform3d();
+        }
+        return new Transform3d();
+    }
+
+    public Transform3d getCamToTag(){
+        if (camera.getLatestResult().hasTargets()) {
+            return camera.getLatestResult().getBestTarget().getBestCameraToTarget();
+        } else {
+            return new Transform3d();
         }
     }
 

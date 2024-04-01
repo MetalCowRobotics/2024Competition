@@ -154,6 +154,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    System.out.println(s_Swerve.distFromTag().getRotation().getAngle());
+
     configureButtonBindings();
     callPeriodic();
     s_Swerve.periodic(
