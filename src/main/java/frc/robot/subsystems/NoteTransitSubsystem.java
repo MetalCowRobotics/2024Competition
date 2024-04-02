@@ -71,7 +71,7 @@ public class NoteTransitSubsystem {
    
     public void setVariableAngle(double xDist){
         m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
-        m_ShooterJointSubsystem.setVariableAngle(xDist);
+        m_ShooterJointSubsystem.setVariableAngle2(xDist);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
     }

@@ -110,6 +110,10 @@ public class Swerve implements Subsystem{
         }
     }
 
+    public double getTotalDist(){
+        return (m_vision.getTotalDist()-0.7112);
+    }
+
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = translation.getX();
         double ySpeed = translation.getY();
@@ -171,9 +175,9 @@ public class Swerve implements Subsystem{
         return swervePoseEstimator.getEstimatedPosition();
     }
 
-    public Transform3d distFromTag(){
-        return m_vision.getDistFromScoringTag();
-    }
+    // public Transform3d distFromTag(){
+    //     return m_vision.getDistFromScoringTag();
+    // }
 
     public ChassisSpeeds getRobotRelativeSpeeds(){
         return new ChassisSpeeds();
@@ -185,12 +189,12 @@ public class Swerve implements Subsystem{
         drive(translation, rotation, false, false);
         SmartDashboard.putString("bob", "3");
     }
-    public double getAngleFromTag(){
-        return Math.atan2(distFromTag().getY(), distFromTag().getX());
-    }
-    public double getAngleFromTag2(){
-        return m_vision.getYawOfBestTarget();
-    }
+    // public double getAngleFromTag(){
+    //     return Math.atan2(distFromTag().getY(), distFromTag().getX());
+    // }
+    // public double getAngleFromTag2(){
+    //     return m_vision.getYawOfBestTarget();
+    // }
 
     public void resetPose(Pose2d pose) {
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);

@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    System.out.println(s_Swerve.distFromTag().getRotation().getAngle());
+    System.out.println(s_Swerve.getTotalDist());
 
     configureButtonBindings();
     callPeriodic();
@@ -204,6 +204,10 @@ public class Robot extends TimedRobot {
      if (operator.getBButtonReleased()) {
       m_NoteTransitSubsystem.setStageShootingPosition();
       // if Button X is released, the arm and wrist will go to the climb final position
+    }
+
+    if (operator.getYButtonReleased()){
+      m_NoteTransitSubsystem.setVariableAngle(s_Swerve.getTotalDist());
     }
 
     if (operator.getLeftBumperReleased()) {

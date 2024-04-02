@@ -84,7 +84,7 @@ public final class Constants {
         public static final double maxSpeed = 5; //TODO: This must be tuned to specific robot
         public static final double maxAutoSpeed = 2.5;
         /** Radians per Second */
-        public static final double maxAngularVelocity = Math.PI/(3.0); //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = Math.PI*2; //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
@@ -183,14 +183,14 @@ public final class Constants {
     public static final class JointConstants{
         public static final double intakeStart = 0;
         public static final double intakeDeployed = 208;
-        public static final double intakeLoading = 12;
+        public static final double intakeLoading = 16;
         public static final double shooterStart = 0;
         public static final double shooterClose = -28;
         public static final double shooterFar = -45;
         public static final double shooterAMP = -28;
 
-        public static final double[][] variableShootingConstants = {{0.0, -3.5, -6.9, -10.3, -13.62, -16.85, -19.97, -22.98, -25.85, -28.6},
-                                                                    {-31.2, -33.67, -36.01, -38.22, -40.3, -42.26, -44.1, -45.84, -47.47, -49},
+        public static final double[][] variableShootingConstants = {{0.0, -3.5, -6.9, -10.3, -13.62, -16.85, -19.97, -22.98, -25.85, -33.6},
+                                                                    {-38.2, -33.67, -36.01, -38.22, -43.3, -42.26, -44.1, -45.84, -47.47, -49},
                                                                     {-50.46, -51.83, -53.1, -54.33, -55.48, -56.56, -57.6, -58.55, -59.47, -60.35},
                                                                     {-61.2, -61.96, -62.7, -63.4, -64.1, -64.75, -65.36, -65.95, -66.5, -67.06},
                                                                     {-67.6, -68.07, -68.54, -69, -69.43, -69.85, -70.26, -70.64, -71, -71.4},

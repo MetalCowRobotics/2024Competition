@@ -96,7 +96,23 @@ public class ShooterJointSubsystem {
 
     public void setVariableAngle(double xdist){
         distString = (dFormatter.format(xdist)).toString();
-        setTarget((Constants.JointConstants.variableShootingConstants[Integer.parseInt(distString.substring(0,1))][Integer.parseInt(distString.substring(2))])+(SmartDashboard.getNumber("VariableShootingOffset",0)));
+        if(distString.length()<4){
+            distString.concat("00000000000000");
+        }
+        SmartDashboard.putString("distString", distString);
+        int index1 = Integer.parseInt(distString.substring(0,1));
+        SmartDashboard.putNumber("index1", index1);
+        int index2 = Integer.parseInt(distString.substring(2,3));
+        SmartDashboard.putNumber("index2", index2);
+        setTarget((Constants.JointConstants.variableShootingConstants[index1][index2])+(SmartDashboard.getNumber("VariableShootingOffset",0)));
+    }
+
+    public void setVariableAngle2(double xdist){
+        int index1 = (int)xdist;
+        int index2 = (int)((xdist-index1) * 10.0);
+        SmartDashboard.putNumber("index1", index1);
+        SmartDashboard.putNumber("index2", index2);
+        setTarget((Constants.JointConstants.variableShootingConstants[index1][index2])+(SmartDashboard.getNumber("VariableShootingOffset",0)));
     }
 
 

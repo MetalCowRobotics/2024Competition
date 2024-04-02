@@ -12,6 +12,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -59,14 +60,21 @@ public class Vision extends SubsystemBase {
      * Red Alliance: 4
      * Blue Alliance: 7
      */
-    public Transform3d getDistFromScoringTag(){
+    public Translation3d getDistFromScoringTag(){
         if (camera.getLatestResult().hasTargets()){
             if((camera.getLatestResult().getBestTarget().getFiducialId() == 4) || (camera.getLatestResult().getBestTarget().getFiducialId() == 7)){
-                return camera.getLatestResult().getBestTarget().getBestCameraToTarget();
+                return camera.getLatestResult().getBestTarget().getBestCameraToTarget().getTranslation();
             }
-            return new Transform3d();
+            return new Translation3d();
         }
-        return new Transform3d();
+        return new Translation3d();
+    }
+
+    public double getTotalDist(){
+        Translation3d allDistances = getDistFromScoringTag();
+        double xcomp = allDistances.getX();
+        double ycomp = allDistances.getY();
+        return Math.sqrt((xcomp*xcomp)+(ycomp*ycomp));
     }
 
     public Transform3d getCamToTag(){
