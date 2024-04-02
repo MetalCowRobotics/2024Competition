@@ -62,7 +62,7 @@ public class Vision extends SubsystemBase {
      */
     public Translation3d getDistFromScoringTag(){
         if (camera.getLatestResult().hasTargets()){
-            if((camera.getLatestResult().getBestTarget().getFiducialId() == 4) || (camera.getLatestResult().getBestTarget().getFiducialId() == 7)){
+            if((camera.getLatestResult().getBestTarget().getFiducialId() == 4) || (camera.getLatestResult().getBestTarget().getFiducialId() == 7) || (camera.getLatestResult().getBestTarget().getFiducialId() == 8) ||(camera.getLatestResult().getBestTarget().getFiducialId() == 3)){
                 return camera.getLatestResult().getBestTarget().getBestCameraToTarget().getTranslation();
             }
             return new Translation3d();
