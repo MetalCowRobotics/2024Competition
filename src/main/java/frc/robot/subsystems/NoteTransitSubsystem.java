@@ -35,6 +35,7 @@ public class NoteTransitSubsystem {
 
     //Sets joints to pickup location, and sets the intake speed to the pickup speed for when it is enabled,
     public void setPickupPosition(){
+        m_IntakeSubsystem.setAlreadyStopped(false);
         shooterTarget = Constants.JointConstants.shooterClose;
         intakeTarget = Constants.JointConstants.intakeDeployed;
         m_IntakeSubsystem.setPickupSpeed();
@@ -54,7 +55,7 @@ public class NoteTransitSubsystem {
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
     public void setStageShootingPosition(){
         shooterTarget = Constants.JointConstants.shooterFar;
-        intakeTarget = Constants.JointConstants.intakeLoading;
+        intakeTarget = Constants.JointConstants.intakefarshot;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
@@ -63,7 +64,7 @@ public class NoteTransitSubsystem {
     //Sets joints to speaker from spike location, and sets the intake speed to the feed speed for when it is enabled,
     public void setSpeakerFromSpikeMark(){
         shooterTarget = SmartDashboard.getNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
-        intakeTarget = Constants.JointConstants.intakeLoading;
+        intakeTarget = Constants.JointConstants.intakefarshot;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
@@ -88,7 +89,19 @@ public class NoteTransitSubsystem {
     }
 
     public void toggleIntake(){
-        m_IntakeSubsystem.toggleIntake();
+        LED.runDefault();
+        m_IntakeSubsystem.setReadyToLift(false);
+        if((!isShootingState) || ((isShootingState) && (m_Shooter.getShooterSpunUp()))){
+            m_IntakeSubsystem.toggleIntake();
+            if(isPickup){
+                m_IntakeSubsystem.setAlreadyStopped(false);
+                alreadyLiftedIntake = false;
+            }
+        }else if(((isShootingState) && (m_Shooter.getShooterSpunUp()))){
+            m_IntakeSubsystem.toggleIntake();
+        }else{
+            disableIntake();
+        }    
     }
     //Turns the shooter on or off
     public void toggleShooter(){
@@ -143,10 +156,10 @@ public class NoteTransitSubsystem {
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
         SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
         //Automatically lifts the intake once tehre is a note inside
-        if(m_IntakeSubsystem.noteAcquired() && !alreadyLiftedIntake){
-            setSpeakerPosition();
-            alreadyLiftedIntake = true;
-        }
+        // if(m_IntakeSubsystem.getReadyToLift() && !alreadyLiftedIntake){
+        //     setSpeakerPosition();
+        //     alreadyLiftedIntake = true;
+        // }
         m_IntakeSubsystem.periodic();
         m_IntakeJointSubsystem.periodic();
         m_ShooterJointSubsystem.periodic();

@@ -153,10 +153,11 @@ public final class Constants {
     public static final class JointConstants{
         public static final double intakeStart = 0;
         public static final double intakeDeployed = 208;
+        public static final double intakefarshot = 18;
         public static final double intakeLoading = 12;
         public static final double shooterStart = 0;
-        public static final double shooterClose = -28;
-        public static final double shooterFar = -45;
+        public static final double shooterClose = -32;
+        public static final double shooterFar = -51;
         public static final double shooterAMP = -28;
 }
     public static double targetPositionTolerance = 0.1;

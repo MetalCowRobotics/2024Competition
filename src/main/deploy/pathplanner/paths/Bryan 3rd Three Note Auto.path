@@ -1,0 +1,65 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.640431641722019,
+        "y": 3.632251863110381
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.640431641722019,
+        "y": 3.132251863110381
+      },
+      "isLocked": false,
+      "linkedName": "Bryan Second Note"
+    },
+    {
+      "anchor": {
+        "x": 5.408200266364784,
+        "y": 1.8598632395396533
+      },
+      "prevControl": {
+        "x": 4.360232629876008,
+        "y": 2.2385146459658865
+      },
+      "nextControl": {
+        "x": 6.738255675112118,
+        "y": 1.3792879492240075
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.755223113929883,
+        "y": 2.4501053451279153
+      },
+      "prevControl": {
+        "x": 6.183611556995947,
+        "y": 2.465356803504715
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 0.75,
+    "maxAngularVelocity": 700.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

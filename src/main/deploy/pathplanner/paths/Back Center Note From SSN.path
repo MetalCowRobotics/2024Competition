@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3015432254088968,
+        "y": 5.699773557960957
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.9771556396772287,
+        "y": 5.696794851391156
+      },
+      "isLocked": false,
+      "linkedName": "clear poll2"
+    },
+    {
+      "anchor": {
+        "x": 3.034776937030565,
+        "y": 5.699773557960957
+      },
+      "prevControl": {
+        "x": 3.0237007757079137,
+        "y": 5.7048795365029354
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 700.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": true
+}
