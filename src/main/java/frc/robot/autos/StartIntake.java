@@ -9,7 +9,7 @@ public class StartIntake implements MCRCommand{
     @Override
     public void run(){
         SmartDashboard.putString("auto", "enables intake");
-        // IntakeSubsystem.getInstance().setAlreadyStopped(true);
+        IntakeSubsystem.getInstance().setAlreadyStopped(false);
         NoteTransitSubsystem.getInstance().enableIntake();
         // i_intake.setIntakeTrue();
         

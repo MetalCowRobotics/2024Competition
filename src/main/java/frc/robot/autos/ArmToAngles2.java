@@ -14,17 +14,16 @@ public class ArmToAngles2 extends Command{
     @Override
     public void execute() {
         
-        if(pos.equals("pickup")){
+        if(pos.equals("pickupPosition")){
             NoteTransitSubsystem.getInstance().setPickupPosition();
         }
-        if(pos.equals("rest")){
+        if(pos.equals("restPosition")){
             NoteTransitSubsystem.getInstance().setRestPosition();
         }
-        if(pos.equals("speaker")){
+        if(pos.equals("speakerPosition")){
             NoteTransitSubsystem.getInstance().setSpeakerPosition();
-            
         }
-        if(pos.equals("speakerFromNote")){
+        if(pos.equals("speakerFromNotePosition")){
             NoteTransitSubsystem.getInstance().setSpeakerFromSpikeMark();
         }
         first_time = false;

@@ -28,10 +28,10 @@ public class IntakeJointSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 1500;
     private double minRPM = 0;
-    private double kP = 0.009;
+    private double kP = 0.005; //0.009
     private double kI = 0.0;
     private double kD = 0.0;
-    private double positionTolerance = 5;
+    private double positionTolerance = 3; 
 
     private IntakeJointSubsystem() {
         intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
@@ -113,9 +113,9 @@ public class IntakeJointSubsystem {
 
         pidController.setSetpoint(targetAngle);
 
-        if (!atTarget()) {
+        // if (!atTarget()) {
             speed = pidController.calculate(getCurrentAngle());
-        }
+        // }
 
         speed = limitSpeed(speed);
         if (speed < 0) {
