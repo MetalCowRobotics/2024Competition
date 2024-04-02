@@ -69,6 +69,9 @@ public class Robot extends TimedRobot {
     
     /* autos */
     MCRCommand twoNoteCenter;
+
+     SendableChooser<Command> autoChooser ;
+
   /*
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -83,8 +86,8 @@ public class Robot extends TimedRobot {
             s_Swerve::getRobotRelativeSpeeds,
             s_Swerve::driveRobotRelative,
             new HolonomicPathFollowerConfig(
-                new PIDConstants(0.0, 0.0, 0.02),
-                new PIDConstants(0.031, 0.0, 0.0),
+                new PIDConstants(0.0, 0.0, 0.0),
+                new PIDConstants(0.0, 0.0, 0.0),
                 1.5,
                 0.4,
                 new ReplanningConfig(true,true)
@@ -95,15 +98,16 @@ public class Robot extends TimedRobot {
             },
              s_Swerve
         );
-          NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNote"));
-          NamedCommands.registerCommand("rest Pos", new ArmToAngles2("rest"));
-          NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speaker"));
-          NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickup"));
+          NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNotePosition"));
+          NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
+          NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
+          NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
           NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
-          NamedCommands.registerCommand("Intake Run", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
+          NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
+          NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
           NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
      // Build an auto chooser. This will use Commands.none() as the default option.
-    SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Center And Left");
+    autoChooser = AutoBuilder.buildAutoChooser("Center Three Note Auto");
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -126,19 +130,19 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    s_Swerve.enableVisionControl();
-    autoMission = new AutoTwoNoteCenter(s_Swerve);
-    
-    // PathPlannerAuto autoCommand = new PathPlannerAuto("Center And Left");
-    // autoCommand.schedule();
+    // s_Swerve.setHeading(new Rotation2d(Math.PI));
+    // autoMission = new AutoTwoNoteCenter(s_Swerve);
+
+    Command autoCommand = autoChooser.getSelected();
+    autoCommand.schedule();
     System.out.println("Autonomous command scheduled");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    autoMission.run();
-    // CommandScheduler.getInstance().run();
+    // autoMission.run();
+    CommandScheduler.getInstance().run();
     SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
     callPeriodic(); 
@@ -215,16 +219,16 @@ public class Robot extends TimedRobot {
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (operator.getRightBumper()) {
-      m_NoteTransitSubsystem.enableIntake();
+    if (operator.getRightBumperReleased()) {
+      m_NoteTransitSubsystem.toggleIntake();
       LED.runDefault();
     }
     else if (operator.getBackButton()) {
       m_NoteTransitSubsystem.quickOuttake();
     }
-    else {
-      m_NoteTransitSubsystem.disableIntake();
-    }
+    // else {
+    //   m_NoteTransitSubsystem.disableIntake();
+    // }
 
     if (operator.getStartButtonReleased()) {
       m_NoteTransitSubsystem.setAMPPosition();

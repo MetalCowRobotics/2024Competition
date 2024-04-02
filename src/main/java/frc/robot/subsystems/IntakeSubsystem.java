@@ -17,6 +17,7 @@ public class IntakeSubsystem {
     private DigitalInput intakeSensor;
     private boolean alreadyStopped;
     private boolean driving = false;
+    private boolean readyToLift = false;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
     private Timer timer = new Timer();
     private Timer startUp = new Timer();
@@ -56,11 +57,11 @@ public class IntakeSubsystem {
 
        if(noteAcquired() && !alreadyStopped){
             stopintake();
+            readyToLift = true;
+            //intakeMotor.set(0);
             LED.runOrange();
             alreadyStopped = true;
-       }else{
-            LED.runDefault();
-        }
+       }
         if(intakeEnabled)
             intakeMotor.set(speed);
         else{
@@ -68,6 +69,7 @@ public class IntakeSubsystem {
         }
         SmartDashboard.putNumber("IntakeSpeed", speed);
         SmartDashboard.putBoolean("NoteAcquired", noteAcquired());
+        SmartDashboard.putBoolean("AlreadyStopped", alreadyStopped);
     }
 
     public boolean noteAcquired(){
@@ -109,6 +111,14 @@ public class IntakeSubsystem {
         retractReady = b;
     }
 
+    public void setReadyToLift(Boolean b){
+        readyToLift = b;
+    }
+
+    public boolean getReadyToLift(){
+        return readyToLift;
+    }
+
     public boolean getRetractReady(){
         return retractReady;
     }
@@ -117,7 +127,7 @@ public class IntakeSubsystem {
         // startUp.reset();
         // startUp.start();
         // speed = 0.9;
-        // notedetected = false;
+        notedetected = false;
         intakeEnabled = true;
     }
 

@@ -186,7 +186,7 @@ public class Swerve implements Subsystem{
     public void driveRobotRelative(ChassisSpeeds speeds) {
         Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
         double rotation = speeds.omegaRadiansPerSecond;
-        drive(translation, rotation, false, false);
+        drive(translation, -rotation, false, false);
         SmartDashboard.putString("bob", "3");
     }
     // public double getAngleFromTag(){
