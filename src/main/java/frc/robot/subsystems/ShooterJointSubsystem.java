@@ -109,7 +109,7 @@ public class ShooterJointSubsystem {
 
     public void setVariableAngle2(double xdist){
         int index1 = (int)xdist;
-        int index2 = (int)((xdist-index1) * 10.0);
+        int index2 = (int)((xdist-(double)index1) * 10.0);
         SmartDashboard.putNumber("index1", index1);
         SmartDashboard.putNumber("index2", index2);
         setTarget((Constants.JointConstants.variableShootingConstants[index1][index2])+(SmartDashboard.getNumber("VariableShootingOffset",0)));

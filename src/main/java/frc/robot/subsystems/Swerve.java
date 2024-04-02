@@ -111,7 +111,10 @@ public class Swerve implements Subsystem{
     }
 
     public double getTotalDist(){
-        return (m_vision.getTotalDist()-0.7112);
+        if((m_vision.getTotalDist()-0.7112) > 0.0){
+            return (m_vision.getTotalDist()-0.7112);
+        }
+        return 0.0;
     }
 
     public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
