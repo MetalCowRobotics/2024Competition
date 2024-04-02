@@ -5,7 +5,7 @@
       "x": 1.273351613690038,
       "y": 5.517804294740611
     },
-    "rotation": 179.5786177036882
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -39,13 +39,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Run"
+            "name": "Toggle Intake"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -74,68 +74,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shooter far Pos"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Run"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Pos"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right To Mid"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "Shoot far Pos"
                 }
               }
@@ -145,51 +83,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.75
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Run"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Pos"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid To Left"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shooter far Pos"
-                }
-              }
-            ]
+            "name": "Toggle Intake"
           }
         },
         {
@@ -201,7 +101,31 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Run"
+            "name": "Intake Pos"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right To Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot far Pos"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Toggle Intake"
           }
         }
       ]

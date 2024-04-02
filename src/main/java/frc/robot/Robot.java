@@ -82,8 +82,8 @@ public class Robot extends TimedRobot {
             s_Swerve::driveRobotRelative,
             new HolonomicPathFollowerConfig(
                 new PIDConstants(0.0, 0.0, 0.0),
-                new PIDConstants(0.0, 0.0, 0.0),
-                1.5,
+                new PIDConstants(0.0, 0.0, 0.1),
+                3,
                 0.4,
                 new ReplanningConfig(true,true)
             ),
@@ -94,6 +94,7 @@ public class Robot extends TimedRobot {
              s_Swerve
         );
           NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNotePosition"));
+          NamedCommands.registerCommand("Shoot mid Pos", new ArmToAngles2("speakerMidPosition"));
           NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
           NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
           NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
@@ -101,6 +102,7 @@ public class Robot extends TimedRobot {
           NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
           NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
           NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
+          NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
      // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser("Center Three Note Auto");
 

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3586175117754289,
-      "y": 5.496865839152879
+      "x": 1.645720356706914,
+      "y": 5.561393840130965
     },
     "rotation": 0
   },
@@ -12,15 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Pos"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Run"
+            "pathName": "New Path"
           }
         }
       ]
