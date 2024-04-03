@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Toggle Intake"
+            "name": "Enable Intake"
           }
         },
         {
@@ -89,7 +89,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Toggle Intake"
+            "name": "Enable Intake"
           }
         },
         {
@@ -125,7 +125,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Toggle Intake"
+            "name": "Enable Intake"
           }
         }
       ]
