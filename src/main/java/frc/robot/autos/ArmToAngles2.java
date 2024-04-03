@@ -26,6 +26,9 @@ public class ArmToAngles2 extends Command{
         if(pos.equals("speakerFromNotePosition")){
             NoteTransitSubsystem.getInstance().setSpeakerFromSpikeMark();
         }
+        if(pos.equals("speakerMidPosition")){
+            NoteTransitSubsystem.getInstance().setSpeakerMidPosition();
+        }
         first_time = false;
     }
 

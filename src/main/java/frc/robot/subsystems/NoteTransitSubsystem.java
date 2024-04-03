@@ -69,6 +69,15 @@ public class NoteTransitSubsystem {
         m_Shooter.setShootingSpeed();
         isShootingState = true;
     }
+
+    public void setSpeakerMidPosition(){
+        shooterTarget = SmartDashboard.getNumber("Shooter Mid Target", 
+        Constants.JointConstants.shooterMid);
+        intakeTarget = Constants.JointConstants.intakeLoading;
+        m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
+        isShootingState = true;
+    }
    
     //Sets joints to rest location, and sets the intake speed to the off 
     public void setRestPosition(){
