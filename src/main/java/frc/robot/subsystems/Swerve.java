@@ -83,6 +83,15 @@ public class Swerve implements Subsystem{
         swervePoseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), new Pose2d());
     }
 
+public void setDriveOffsets(){
+    mSwerveMods[0].setAngleOffset();
+    mSwerveMods[1].setAngleOffset();
+    mSwerveMods[2].setAngleOffset();
+    mSwerveMods[3].setAngleOffset();
+
+
+}
+
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX() * speedMultiplier);
         SmartDashboard.putNumber("xTarget", translation.getX());
@@ -94,13 +103,13 @@ public class Swerve implements Subsystem{
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    rotation, 
+                                    -rotation, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    rotation
+                                    -rotation
                                 )
             );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, desiredSpeed);

@@ -152,6 +152,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //s_Swerve.setDriveOffsets();
     CommandScheduler.getInstance().cancelAll();
     m_NoteTransitSubsystem.stopShooter();
     m_NoteTransitSubsystem.setRestPosition();

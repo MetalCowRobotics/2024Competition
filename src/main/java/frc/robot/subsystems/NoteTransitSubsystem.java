@@ -13,6 +13,8 @@ public class NoteTransitSubsystem {
     private boolean isPickup;
     private double shooterTarget;
     private double intakeTarget;
+    private enum positions {rest, pickup, shortshot, longshot, amp};
+    private positions curPosition = positions.rest;
 
     private NoteTransitSubsystem(){
         m_IntakeJointSubsystem = IntakeJointSubsystem.getInstance();
@@ -41,6 +43,7 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem.setPickupSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = false;
+        curPosition = positions.pickup;
     }
 
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
@@ -52,6 +55,7 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
+        curPosition = positions.shortshot;
     }
 
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
@@ -61,6 +65,7 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
+        curPosition = positions.longshot;
     }
 
     //Sets joints to speaker from spike location, and sets the intake speed to the feed speed for when it is enabled,
@@ -70,6 +75,7 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
+        curPosition = positions.longshot;
     }
 
     public void setSpeakerMidPosition(){
@@ -90,6 +96,7 @@ public class NoteTransitSubsystem {
         m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
+        curPosition = positions.longshot;
     }
 
     //Sets joints to rest location, and sets the intake speed to the off 
@@ -99,15 +106,17 @@ public class NoteTransitSubsystem {
         m_IntakeSubsystem.stopintake();
         m_Shooter.setShootingSpeed();
         isShootingState = false;
+        curPosition = positions.rest;
     }
 
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
     public void setAMPPosition(){
-        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeDeployed);
         m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterAMP);
-        m_IntakeSubsystem.setFeedSpeed();
+        m_IntakeSubsystem.setPickupSpeed();
         m_Shooter.setAmpSpeed();
         isShootingState = true;
+        curPosition = positions.amp;
     }
 
     public void toggleIntake(){
@@ -180,6 +189,9 @@ public class NoteTransitSubsystem {
         //     setSpeakerPosition();
         //     alreadyLiftedIntake = true;
         // }
+        if (positions.pickup == curPosition && m_IntakeSubsystem.noteAcquired()) {
+            setRestPosition();
+        }
         m_IntakeSubsystem.periodic();
         m_IntakeJointSubsystem.periodic();
         m_ShooterJointSubsystem.periodic();
