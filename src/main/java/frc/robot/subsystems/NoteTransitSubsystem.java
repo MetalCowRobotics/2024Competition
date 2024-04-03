@@ -61,6 +61,14 @@ public class NoteTransitSubsystem {
         isShootingState = true;
     }
 
+    public void setStageShootingPositionmid(){
+        shooterTarget = Constants.JointConstants.shooterFarmid;
+        intakeTarget = Constants.JointConstants.intakeLoading;
+        m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
+        isShootingState = true;
+    }
+
     //Sets joints to speaker from spike location, and sets the intake speed to the feed speed for when it is enabled,
     public void setSpeakerFromSpikeMark(){
         shooterTarget = SmartDashboard.getNumber("Shooter Far Target", Constants.JointConstants.shooterFar);

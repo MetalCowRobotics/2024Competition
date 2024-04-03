@@ -30,6 +30,7 @@ public class ArmToAngles2 extends Command{
             NoteTransitSubsystem.getInstance().setSpeakerMidPosition();
         }
         first_time = false;
+
     }
 
     @Override

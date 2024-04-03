@@ -144,6 +144,11 @@ public class IntakeSubsystem {
         intakeEnabled = true;
     }
 
+    public void feedIntakeAuto(){
+        speed = 1;
+        intakeEnabled = true;
+    }
+
     public void setAlreadyStopped(boolean val){
         alreadyStopped = val;
     }

@@ -71,6 +71,9 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+    SendableChooser<Command> autoChooser; 
+
  
   @Override
   public void robotInit() {
@@ -108,6 +111,7 @@ public class Robot extends TimedRobot {
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -127,6 +131,7 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
+  
   public void autonomousInit() {
     // s_Swerve.setHeading(new Rotation2d(Math.PI));
     // autoMission = new AutoTwoNoteCenter(s_Swerve);
