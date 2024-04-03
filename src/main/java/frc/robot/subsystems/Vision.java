@@ -7,6 +7,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -61,7 +62,9 @@ public class Vision extends SubsystemBase {
      * Blue Alliance: 7
      */
     public Translation3d getDistFromScoringTag(){
-        if (camera.getLatestResult().hasTargets()){
+        PhotonTrackedTarget x = camera.getLatestResult().getBestTarget();
+        //if (camera.getLatestResult().hasTargets()){
+        if (x != null) {
             if((camera.getLatestResult().getBestTarget().getFiducialId() == 4) || (camera.getLatestResult().getBestTarget().getFiducialId() == 7) || (camera.getLatestResult().getBestTarget().getFiducialId() == 8) ||(camera.getLatestResult().getBestTarget().getFiducialId() == 3)){
                 return camera.getLatestResult().getBestTarget().getBestCameraToTarget().getTranslation();
             }
@@ -88,7 +91,10 @@ public class Vision extends SubsystemBase {
 
 
     public double getYawOfBestTarget() {
-        if (camera.getLatestResult().hasTargets()) {
+        PhotonTrackedTarget x = camera.getLatestResult().getBestTarget();
+        //if (camera.getLatestResult().hasTargets()){
+        if (x != null) {
+        // if (camera.getLatestResult().hasTargets()) {
             return camera.getLatestResult().getBestTarget().getYaw();
         } else {
             return 0;
