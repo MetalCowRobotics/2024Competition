@@ -5,7 +5,7 @@
       "x": 1.416655530465515,
       "y": 5.526558259275838
     },
-    "rotation": 0.0
+    "rotation": -179.3388350990164
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Toggle Shooter"
+                  "name": "Shoot Pos"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot Pos"
+                  "name": "Toggle Shooter"
                 }
               }
             ]
@@ -33,13 +33,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Enable Intake"
+            "name": "Intake Run"
           }
         },
         {
@@ -72,15 +72,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Clear Poll"
+                  "name": "Intake Stop"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Shoot mid Pos"
+                  "pathName": "Clear Poll"
                 }
               }
             ]
@@ -89,13 +89,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Enable Intake"
+            "name": "Shoot Pos mid"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Run"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -105,27 +117,46 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Back Center Note From SSN"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Shoot far Pos"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot far Pos"
+                }
+              }
+            ]
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Enable Intake"
+            "name": "Intake Run"
           }
         }
       ]
