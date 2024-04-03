@@ -72,7 +72,6 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
 
-    SendableChooser<Command> autoChooser; 
 
  
   @Override
