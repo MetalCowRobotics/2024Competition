@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3015432254088968,
-        "y": 5.699773557960957
+        "x": 1.6962748023599892,
+        "y": 5.6717483271537645
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9771556396772287,
-        "y": 5.696794851391156
+        "x": 2.3718872166283154,
+        "y": 5.668769620583964
       },
       "isLocked": false,
       "linkedName": "clear poll2"
     },
     {
       "anchor": {
-        "x": 3.034776937030565,
-        "y": 5.699773557960957
+        "x": 2.84961150776445,
+        "y": 5.911633921896296
       },
       "prevControl": {
-        "x": 3.0237007757079137,
-        "y": 5.7048795365029354
+        "x": 2.8385353464417986,
+        "y": 5.916739900438275
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,14 +32,14 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 5.0,
     "maxAcceleration": 1.0,
-    "maxAngularVelocity": 700.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 100.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -1.005669417597993,
     "rotateFast": true
   },
   "reversed": false,

@@ -71,6 +71,15 @@ public class NoteTransitSubsystem {
         m_Shooter.setShootingSpeed();
         isShootingState = true;
     }
+
+    public void setSpeakerMidPosition(){
+        shooterTarget = SmartDashboard.getNumber("Shooter Mid Target", 
+        Constants.JointConstants.shooterMid);
+        intakeTarget = Constants.JointConstants.intakeLoading;
+        m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
+        isShootingState = true;
+    }
    
     public void setVariableAngle(double xDist){
         if(!(xDist == 0.0)){
