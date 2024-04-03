@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.text.DecimalFormat;
+
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -42,7 +44,7 @@ public class Shooter {
         SmartDashboard.putNumber("ShooterSide1Speed", shooterEncoder1.getVelocity());
         SmartDashboard.putNumber("ShooterSide2Speed", shooterEncoder1.getVelocity());
     }
-
+    
     public boolean getShooterSpunUp(){
         if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 4300.0) && (shooterEncoder2.getVelocity() > 4300.0))){
             return true;        

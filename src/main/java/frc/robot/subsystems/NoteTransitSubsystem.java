@@ -36,8 +36,8 @@ public class NoteTransitSubsystem {
     //Sets joints to pickup location, and sets the intake speed to the pickup speed for when it is enabled,
     public void setPickupPosition(){
         m_IntakeSubsystem.setAlreadyStopped(false);
-        shooterTarget = Constants.JointConstants.shooterClose;
-        intakeTarget = Constants.JointConstants.intakeDeployed;
+        m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterClose);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeDeployed);
         m_IntakeSubsystem.setPickupSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = false;
@@ -45,8 +45,10 @@ public class NoteTransitSubsystem {
 
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
     public void setSpeakerPosition(){
-        shooterTarget = Constants.JointConstants.shooterClose;
+        m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterClose);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
         intakeTarget = Constants.JointConstants.intakeLoading;
+        shooterTarget = Constants.JointConstants.shooterClose;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
@@ -54,8 +56,8 @@ public class NoteTransitSubsystem {
 
     //Sets joints to speaker location, and sets the intake speed to the feed speed for when it is enabled,
     public void setStageShootingPosition(){
-        shooterTarget = Constants.JointConstants.shooterFar;
-        intakeTarget = Constants.JointConstants.intakefarshot;
+        m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterFar);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakefarshot);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
@@ -63,8 +65,8 @@ public class NoteTransitSubsystem {
 
     //Sets joints to speaker from spike location, and sets the intake speed to the feed speed for when it is enabled,
     public void setSpeakerFromSpikeMark(){
-        shooterTarget = SmartDashboard.getNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
-        intakeTarget = Constants.JointConstants.intakefarshot;
+        m_ShooterJointSubsystem.setTarget(SmartDashboard.getNumber("Shooter Far Target", Constants.JointConstants.shooterFar));
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakefarshot);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
@@ -79,10 +81,21 @@ public class NoteTransitSubsystem {
         isShootingState = true;
     }
    
+    public void setVariableAngle(double xDist){
+        if(!(xDist == 0.0)){
+            m_ShooterJointSubsystem.setVariableAngle2(xDist);
+        }else{
+            m_ShooterJointSubsystem.setTarget(0.0);
+        }
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
+        m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
+    }
+
     //Sets joints to rest location, and sets the intake speed to the off 
     public void setRestPosition(){
-        shooterTarget = Constants.JointConstants.shooterStart;
-        intakeTarget = Constants.JointConstants.intakeStart;
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeStart);
+        m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterStart);
         m_IntakeSubsystem.stopintake();
         m_Shooter.setShootingSpeed();
         isShootingState = false;
@@ -90,8 +103,8 @@ public class NoteTransitSubsystem {
 
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
     public void setAMPPosition(){
-        shooterTarget = Constants.JointConstants.shooterAMP;
-        intakeTarget = Constants.JointConstants.intakeLoading;
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
+        m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterAMP);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setAmpSpeed();
         isShootingState = true;
@@ -159,8 +172,6 @@ public class NoteTransitSubsystem {
     }
 
     public void periodic() {
-        m_IntakeJointSubsystem.setTarget(intakeTarget);
-        m_ShooterJointSubsystem.setTarget(shooterTarget);
         SmartDashboard.putNumber("Intake Target", intakeTarget);
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
         SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
