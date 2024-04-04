@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.9314929858759,
+        "y": 4.125855954079781
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.652963077038506,
+        "y": 3.9305071116332937
+      },
+      "isLocked": false,
+      "linkedName": "Back Center"
+    },
+    {
+      "anchor": {
+        "x": 3.9014521012760173,
+        "y": 5.437519307830189
+      },
+      "prevControl": {
+        "x": 4.259092565622527,
+        "y": 3.9975409668836916
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 100.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Two Note Center Auto",
+  "previewStartingState": null,
+  "useDefaultConstraints": true
+}

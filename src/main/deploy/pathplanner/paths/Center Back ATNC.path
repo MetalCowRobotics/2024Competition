@@ -1,0 +1,65 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6962748023599892,
+        "y": 5.6717483271537645
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.2870329695810179,
+        "y": 4.392022972467285
+      },
+      "isLocked": false,
+      "linkedName": "Aim Mid"
+    },
+    {
+      "anchor": {
+        "x": 4.9096505685222125,
+        "y": 4.696250281659267
+      },
+      "prevControl": {
+        "x": 4.303203412830921,
+        "y": 5.335491377944252
+      },
+      "nextControl": {
+        "x": 4.944063221410768,
+        "y": 4.659976746938044
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.9314929858759,
+        "y": 4.125855954079781
+      },
+      "prevControl": {
+        "x": 5.521034692800065,
+        "y": 4.019292172568139
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Back Center"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 100.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Two Note Center Auto",
+  "previewStartingState": null,
+  "useDefaultConstraints": true
+}

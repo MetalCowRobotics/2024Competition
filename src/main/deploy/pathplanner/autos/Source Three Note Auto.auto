@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.416655530465515,
-      "y": 5.526558259275838
+      "x": 0.6474630550383277,
+      "y": 4.366623029634231
     },
-    "rotation": 0.0
+    "rotation": -58.86029472515588
   },
   "command": {
     "type": "sequential",
@@ -33,7 +33,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -45,7 +45,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Source Side Note CTN"
+                  "pathName": "Source Start Note STN"
                 }
               },
               {
@@ -72,15 +72,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Aim Mid CTN"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Shoot mid Pos"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Aim Mid STN"
                 }
               }
             ]
@@ -105,21 +105,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Center Note CTN"
+            "waitTime": 1.0
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot far Pos"
+            "pathName": "Center Note STN"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot far Pos"
+                }
+              }
+            ]
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 0.5
           }
         },
         {
@@ -131,6 +144,6 @@
       ]
     }
   },
-  "folder": "Center",
+  "folder": "Source",
   "choreoAuto": false
 }

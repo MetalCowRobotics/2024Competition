@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.273351613690038,
-      "y": 5.517804294740611
+      "x": 0.6007436330624963,
+      "y": 6.774358384539465
     },
-    "rotation": 0.0
+    "rotation": 57.41807560902432
   },
   "command": {
     "type": "sequential",
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Toggle Intake"
+            "name": "Enable Intake"
           }
         },
         {
@@ -52,17 +52,17 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Note ATNC"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake Pos"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center To Right"
-                }
               }
             ]
           }
@@ -74,22 +74,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot far Pos"
+                  "name": "Shoot mid Pos"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Aim Mid ATNC"
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Toggle Intake"
+            "name": "Enable Intake"
           }
         },
         {
@@ -99,38 +99,33 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Pos"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Back ATNC"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Pos"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right To Center"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot far Pos"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Toggle Intake"
+            "pathName": "Aim Shot Tele ATNC"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Amp",
   "choreoAuto": false
 }

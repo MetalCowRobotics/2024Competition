@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.2599265895647735,
+        "y": 5.362574284355578
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.75520951275798,
+        "y": 5.371285057457753
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.51240622491621,
+        "y": 5.626123901900194
+      },
+      "prevControl": {
+        "x": 1.8219008411653996,
+        "y": 5.650326127515862
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Center Close CTNB"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 100.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Center Three Note Back Auto",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

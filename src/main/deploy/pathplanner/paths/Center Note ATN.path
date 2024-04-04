@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.645720356706914,
-        "y": 5.561393840130965
+        "x": 1.6962748023599892,
+        "y": 5.6717483271537645
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.944323953526825,
-        "y": 5.565134593810853
+        "x": 2.3718872166283154,
+        "y": 5.668769620583964
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.416598219065056,
-        "y": 5.292700310698822
+        "x": 2.84961150776445,
+        "y": 5.911633921896296
       },
       "prevControl": {
-        "x": 3.1543067867440957,
-        "y": 5.261928480327269
+        "x": 2.8385353464417986,
+        "y": 5.916739900438275
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,17 +33,17 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 100.0,
     "maxAngularAcceleration": 100.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -89.3643480531833,
-    "rotateFast": false
+    "rotation": -1.005669417597993,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Amp Three Note Auto",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

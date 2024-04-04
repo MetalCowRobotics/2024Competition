@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6962748023599892,
-        "y": 5.6717483271537645
+        "x": 7.9314929858759,
+        "y": 4.125855954079781
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3718872166283154,
-        "y": 5.668769620583964
+        "x": 6.530230694360896,
+        "y": 3.9810373325260926
       },
       "isLocked": false,
-      "linkedName": "clear poll2"
+      "linkedName": "Back Center"
     },
     {
       "anchor": {
-        "x": 2.84961150776445,
-        "y": 5.911633921896296
+        "x": 2.51240622491621,
+        "y": 5.626123901900194
       },
       "prevControl": {
-        "x": 2.8385353464417986,
-        "y": 5.916739900438275
+        "x": 4.651593398950959,
+        "y": 4.5558552140053505
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center Close CTNB"
     }
   ],
   "rotationTargets": [],
@@ -33,17 +33,17 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 100.0,
     "maxAngularAcceleration": 100.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.005669417597993,
-    "rotateFast": true
+    "rotation": 0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Center Three Note Back Auto",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
