@@ -69,7 +69,7 @@ public class NoteTransitSubsystem {
     }
 
     public void setStageShootingPositionmid(){
-        shooterTarget = Constants.JointConstants.shooterFarmid;
+        shooterTarget = Constants.JointConstants.shooterFar;
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
