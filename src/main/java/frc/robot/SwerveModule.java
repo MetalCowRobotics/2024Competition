@@ -64,6 +64,10 @@ public class SwerveModule {
         setSpeed(desiredState, isOpenLoop);
     }
 
+    public void setAngleOffset(){
+        this.angleOffset  = new Rotation2d(Math.PI);
+    }
+
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
@@ -79,6 +83,7 @@ public class SwerveModule {
     public Rotation2d getCANcoder(){
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
     }
+
 
     public void resetToAbsolute(){
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -13,7 +14,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
@@ -49,20 +49,25 @@ public class Robot extends TimedRobot {
   
     private final Trigger crawl = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     private final Trigger sprint = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
-    private final double shootervalue = XboxController.Axis.kRightTrigger.value;
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-
+    private final JoystickButton visionAlignment = new JoystickButton(driver, XboxController.Button.kB.value);
+  
     /* Operator Controls */
     private final Trigger intakePosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     private final Trigger shooterPosition = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.8);
     public boolean intakeStatus = false;
+    
+    // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
+    // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
+
+    MCRCommand autoMission;
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
     
     /* autos */
-    MCRCommand autoMission;
     MCRCommand twoNoteCenter;
 
      SendableChooser<Command> autoChooser ;
@@ -118,7 +123,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     s_Swerve.periodicValues();
-    SmartDashboard.putNumber("Shooter Value", shootervalue);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -152,6 +156,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    //s_Swerve.setDriveOffsets();
     CommandScheduler.getInstance().cancelAll();
     m_NoteTransitSubsystem.stopShooter();
     m_NoteTransitSubsystem.setRestPosition();
@@ -160,10 +165,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    System.out.println(s_Swerve.getTotalDist());
+
     configureButtonBindings();
     callPeriodic();
-
-    s_Swerve.teleopSwerve(
+    s_Swerve.periodic(
       () -> -driver.getRawAxis(translationAxis), 
       () -> -driver.getRawAxis(strafeAxis), 
       () -> -driver.getRawAxis(rotationAxis), 
@@ -181,20 +187,23 @@ public class Robot extends TimedRobot {
     /* Driver Related */
     if (zeroGyro.getAsBoolean()) {
       s_Swerve.zeroGyro();
-      // if the Y button is pressed, the gyro will reset
     }
 
     if (crawl.getAsBoolean()) {
       s_Swerve.setCrawl();
-      // if the left trigger is pressed, the robot will crawl
     }
     else if (sprint.getAsBoolean()) {
       s_Swerve.setSprint();
-      // if the right trigger is pressed, the robot will sprint
     }
     else {
       s_Swerve.setBase();
-      // if neither the left trigger or the right trigger is pressed, the robot will be in the base state
+    }
+
+    if (visionAlignment.getAsBoolean()) {
+      s_Swerve.enableVisionControl();
+    }
+    else {
+      s_Swerve.disableVisionControl();
     }
 
     /* Operator Related */
@@ -206,6 +215,10 @@ public class Robot extends TimedRobot {
      if (operator.getBButtonReleased()) {
       m_NoteTransitSubsystem.setStageShootingPosition();
       // if Button X is released, the arm and wrist will go to the climb final position
+    }
+
+    if (operator.getYButtonReleased()){
+      m_NoteTransitSubsystem.setVariableAngle(s_Swerve.getTotalDist());
     }
 
     if (operator.getLeftBumperReleased()) {
