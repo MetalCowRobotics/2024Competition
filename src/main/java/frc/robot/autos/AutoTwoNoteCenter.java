@@ -3,6 +3,7 @@ package frc.robot.autos;
 import frc.robot.subsystems.Swerve;
 import frc.lib14.MCRCommand;
 import frc.lib14.SequentialCommands;
+import frc.lib14.TimedCommandSet;
 import frc.lib14.CommandPause;
 import frc.lib14.ParallelCommands;
 
@@ -22,11 +23,12 @@ public class AutoTwoNoteCenter implements MCRCommand{
             new ArmToAngles("rest"),            
             // Setting the arm angles to point the shooter and shoot the preloaded note
             new ToggleShooter(),
-            new ArmToAngles("speaker"),
+            new TimedCommandSet(new ArmToAngles("speaker"), 1),
+            
             new CommandPause(1),
             new StartIntake(),
             new CommandPause(.5),
-            new ToggleShooter(),
+           // new ToggleShooter(),
             new StopIntake(),
 
             // Set the arm angles to pick the note up that is in front of the robot

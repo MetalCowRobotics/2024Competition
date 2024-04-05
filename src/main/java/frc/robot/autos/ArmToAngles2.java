@@ -18,7 +18,7 @@ public class ArmToAngles2 extends Command{
             NoteTransitSubsystem.getInstance().setPickupPosition();
         }
         if (pos.equals("stagePosition")) {
-            //NoteTransitSubsystem.getInstance().setStage();
+            NoteTransitSubsystem.getInstance().setStage();
         }
         if(pos.equals("restPosition")){
             NoteTransitSubsystem.getInstance().setRestPosition();

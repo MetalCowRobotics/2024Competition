@@ -33,23 +33,23 @@ public class Shooter {
     }
 
     public void periodic() {
+        
         if(shooterEnabled){
             shooterMotor1.set(speed);
             shooterMotor2.set(speed);
         } else {
-            shooterMotor1.set(0);
-            shooterMotor2.set(0);
+            shooterMotor1.set(.40);
+            shooterMotor2.set(.40);
         }
+        SmartDashboard.putBoolean("Shooter Enabled", shooterEnabled);
         SmartDashboard.putBoolean("Shooter Spun Up", getShooterSpunUp());
         SmartDashboard.putNumber("ShooterSide1Speed", shooterEncoder1.getVelocity());
         SmartDashboard.putNumber("ShooterSide2Speed", shooterEncoder1.getVelocity());
     }
     
     public boolean getShooterSpunUp(){
-        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 4300.0) && (shooterEncoder2.getVelocity() > 4300.0))){
+        if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 4000.0) && (shooterEncoder2.getVelocity() > 4000.0))){
             return true;        
-        }else if((speed == .5) && ((shooterEncoder1.getVelocity() > 2500.0) && (shooterEncoder2.getVelocity() > 2500.0))){
-            return true;
         }
         return false;
     }
@@ -59,7 +59,7 @@ public class Shooter {
     }
 
     public void setAmpSpeed(){
-        speed = .75;
+        speed = .40;
     }
 
     public void toggleShooter(){

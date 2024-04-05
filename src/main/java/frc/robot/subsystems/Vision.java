@@ -65,8 +65,8 @@ public class Vision extends SubsystemBase {
         PhotonTrackedTarget x = camera.getLatestResult().getBestTarget();
         //if (camera.getLatestResult().hasTargets()){
         if (x != null) {
-            if((camera.getLatestResult().getBestTarget().getFiducialId() == 4) || (camera.getLatestResult().getBestTarget().getFiducialId() == 7) || (camera.getLatestResult().getBestTarget().getFiducialId() == 8) ||(camera.getLatestResult().getBestTarget().getFiducialId() == 3)){
-                return camera.getLatestResult().getBestTarget().getBestCameraToTarget().getTranslation();
+            if((x.getFiducialId() == 4) || (x.getFiducialId() == 7) || (x.getFiducialId() == 8) ||(x.getFiducialId() == 3)){
+                return x.getBestCameraToTarget().getTranslation();
             }
             return new Translation3d();
         }
@@ -95,7 +95,7 @@ public class Vision extends SubsystemBase {
         //if (camera.getLatestResult().hasTargets()){
         if (x != null) {
         // if (camera.getLatestResult().hasTargets()) {
-            return camera.getLatestResult().getBestTarget().getYaw();
+            return x.getYaw();
         } else {
             return 0;
         }

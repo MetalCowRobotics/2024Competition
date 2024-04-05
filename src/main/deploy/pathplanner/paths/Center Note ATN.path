@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6962748023599892,
-        "y": 5.6717483271537645
+        "x": 0.6924444618120005,
+        "y": 6.7241388044029655
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3718872166283154,
-        "y": 5.668769620583964
+        "x": 0.48194968184808146,
+        "y": 8.057272410841119
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.84961150776445,
-        "y": 5.911633921896296
+        "x": 7.755713745045723,
+        "y": 7.472564688719121
       },
       "prevControl": {
-        "x": 2.8385353464417986,
-        "y": 5.916739900438275
+        "x": 4.2006907945439815,
+        "y": 7.624588696470841
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Amp Back Note"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,19 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.005669417597993,
+    "rotation": 0,
     "rotateFast": true
   },
   "reversed": false,
+<<<<<<<< HEAD:src/main/deploy/pathplanner/paths/Center Note ATN.path
   "folder": "Amp Three Note Auto",
   "previewStartingState": null,
+========
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 60.802513953935545,
+    "velocity": 0
+  },
+>>>>>>>> origin/KCTuning:src/main/deploy/pathplanner/paths/Amp.path
   "useDefaultConstraints": true
 }

@@ -136,7 +136,7 @@ public class ShooterJointSubsystem {
 
 
 
-        pidController.setPID(SmartDashboard.getNumber("ShooterJointkP", kP), SmartDashboard.getNumber("ShooterJointkI", kI), SmartDashboard.getNumber("ShooterJointkD", kD));
+        //pidController.setPID(SmartDashboard.getNumber("ShooterJointkP", kP), SmartDashboard.getNumber("ShooterJointkI", kI), SmartDashboard.getNumber("ShooterJointkD", kD));
         double speed = 0;
 
         pidController.setSetpoint(targetAngle);

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -21,6 +22,7 @@ import frc.robot.autos.ArmToAngles2;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.subsystems.*;
 
+import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -70,7 +72,7 @@ public class Robot extends TimedRobot {
     /* autos */
     MCRCommand twoNoteCenter;
 
-     SendableChooser<Command> autoChooser ;
+    //  SendableChooser<Command> autoChooser ;
 
   /*
    * This function is run when the robot is first started up and should be used for any
@@ -101,23 +103,23 @@ public class Robot extends TimedRobot {
              s_Swerve
         );
           NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNotePosition"));
-          NamedCommands.registerCommand("Shoot mid Pos", new ArmToAngles2("speakerMidPosition"));
+          // NamedCommands.registerCommand("Shoot mid Pos", new ArmToAngles2("speakerMidPosition"));
           NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
           NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
           NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
           NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
-          NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
-          NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
-          NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
+          // NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
+          // NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
+          // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
           NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
      // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser("Center Three Note Auto");
+  //   autoChooser = AutoBuilder.buildAutoChooser("Amp");
 
-    // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-    autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
+  //   // Another option that allows you to specify the default auto by its name
+  //   // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+  //  // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+  //   SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   @Override
@@ -137,19 +139,19 @@ public class Robot extends TimedRobot {
   
   public void autonomousInit() {
     // s_Swerve.setHeading(new Rotation2d(Math.PI));
-    // autoMission = new AutoTwoNoteCenter(s_Swerve);
+    autoMission = new AutoTwoNoteCenter(s_Swerve);
 
-    Command autoCommand = autoChooser.getSelected();
-    autoCommand.schedule();
+    // Command autoCommand = autoChooser.getSelected();
+    // autoCommand.schedule();
     System.out.println("Autonomous command scheduled");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // autoMission.run();
-    CommandScheduler.getInstance().run();
-    SmartDashboard.putString("hy", "5");
+    autoMission.run();
+    // CommandScheduler.getInstance().run();
+    // SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
     callPeriodic(); 
   }
@@ -160,6 +162,10 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_NoteTransitSubsystem.stopShooter();
     m_NoteTransitSubsystem.setRestPosition();
+    s_Swerve.zeroGyro();
+    if (DriverStation.getAlliance().equals(Alliance.Red)) {
+      s_Swerve.setHeading(new Rotation2d(Math.toDegrees(Math.PI)));
+    }
   }
 
   /** This function is called periodically during operator control. */
@@ -227,7 +233,7 @@ public class Robot extends TimedRobot {
     }
 
     if (operator.getRightBumperReleased()) {
-      m_NoteTransitSubsystem.toggleIntake();
+      m_NoteTransitSubsystem.enableIntake();
       LED.runDefault();
     }
     else if (operator.getBackButton()) {
