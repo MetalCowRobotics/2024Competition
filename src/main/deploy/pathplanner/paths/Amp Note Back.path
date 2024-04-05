@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.645720356706914,
-        "y": 5.561393840130965
+        "x": 0.5404204540602812,
+        "y": 6.583808951093687
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.944323953526825,
-        "y": 5.565134593810853
+        "x": 1.5404204540602813,
+        "y": 6.583808951093687
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "New"
     },
     {
       "anchor": {
-        "x": 3.416598219065056,
-        "y": 5.292700310698822
+        "x": 7.790796208373042,
+        "y": 7.4608705342766815
       },
       "prevControl": {
-        "x": 3.1543067867440957,
-        "y": 5.261928480327269
+        "x": 6.790796208373042,
+        "y": 7.4608705342766815
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,17 +33,20 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 100.0,
     "maxAngularAcceleration": 100.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -89.3643480531833,
-    "rotateFast": false
+    "rotation": 0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "Amp Round 7 Test",
+  "previewStartingState": {
+    "rotation": 55.49147701169961,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

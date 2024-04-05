@@ -48,12 +48,12 @@ public final class Constants {
         public static final SensorDirectionValue cancoderInvert = chosenModule.cancoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 15;
+        public static final int angleCurrentLimit = 10;
         public static final int angleCurrentThreshold = 20;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 15;
+        public static final int driveCurrentLimit = 25;
         public static final int driveCurrentThreshold = 30;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
@@ -81,7 +81,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 6; //TODO: This must be tuned to specific robot
         public static final double maxAutoSpeed = 2.5;
         /** Radians per Second */
         public static final double maxAngularVelocity = Math.PI*3; //TODO: This must be tuned to specific robot
@@ -188,6 +188,7 @@ public final class Constants {
         public static final double shooterStart = 0;
         public static final double shooterClose = -32;
         public static final double shooterFar = -52;
+        public static final double shooterStage = -49;
         public static final double shooterAMP = -28;
         public static final double shooterMid = -44;
 

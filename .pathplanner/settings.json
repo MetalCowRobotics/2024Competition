@@ -2,7 +2,16 @@
   "robotWidth": 0.6604,
   "robotLength": 0.7112,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Amp Round 7 Test",
+    "Amp Three Note Auto",
+    "Amp Two Note Center Auto",
+    "Center Center Left",
+    "Center Three Note Auto",
+    "Center Three Note Back Auto",
+    "Amp Back Left",
+    "Source Three Note Auto"
+  ],
   "autoFolders": [
     "Test"
   ],

@@ -32,7 +32,7 @@ public class IntakeSubsystem {
         intakeSensor = new DigitalInput(1);
         intakeEnabled = false;
         alreadyStopped = false;
-        SmartDashboard.putBoolean("IntakeEnabled", intakeEnabled);
+        SmartDashboard.putBoolean("Intake Enabled", intakeEnabled);
     }
 
     public static IntakeSubsystem getInstance(){
@@ -67,6 +67,7 @@ public class IntakeSubsystem {
         else{
             intakeMotor.set(0);
         }
+        SmartDashboard.putBoolean("Intake Enabled", intakeEnabled);
         SmartDashboard.putNumber("IntakeSpeed", speed);
         SmartDashboard.putBoolean("NoteAcquired", noteAcquired());
         SmartDashboard.putBoolean("AlreadyStopped", alreadyStopped);
@@ -158,7 +159,7 @@ public class IntakeSubsystem {
     }
 
     public void setPickupSpeed(){
-        speed = -.75;
+        speed = -.95;
     }
 
     public void setFeedSpeed(){

@@ -22,18 +22,19 @@ public class IntakeJointSubsystem {
     private double boreRawValue, boreConvertedValue, boreConvertedOffsetValue;
 
     private double nominalVoltage = 12.6;
-    private double rampTime = 0.250;
+    private double rampTime = 0.50;
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 1500;
+    private double maxRPM = 2000;
     private double minRPM = 0;
-    private double kP = 0.005; //0.009
+    private double kP = 0.006; //0.005
     private double kI = 0.0;
-    private double kD = 0.0;
-    private double positionTolerance = 3; 
+    private double kD = 0.0001;
+    private double positionTolerance = 6; 
 
     private IntakeJointSubsystem() {
+
         intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
         intakeJointMotor.enableVoltageCompensation(nominalVoltage);
 
