@@ -138,7 +138,31 @@
         {
           "type": "named",
           "data": {
-            "name": "Enable Intake"
+            "name": "Intake Pos"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot far Pos"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Toggle Intake"
           }
         }
       ]
