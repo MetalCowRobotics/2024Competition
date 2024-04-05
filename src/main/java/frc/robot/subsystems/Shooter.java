@@ -33,6 +33,7 @@ public class Shooter {
     }
 
     public void periodic() {
+        
         if(shooterEnabled){
             shooterMotor1.set(speed);
             shooterMotor2.set(speed);
@@ -49,8 +50,6 @@ public class Shooter {
     public boolean getShooterSpunUp(){
         if((speed == 1.0) && ((shooterEncoder1.getVelocity() > 4000.0) && (shooterEncoder2.getVelocity() > 4000.0))){
             return true;        
-        }else if((speed == .5) && ((shooterEncoder1.getVelocity() > 2500.0) && (shooterEncoder2.getVelocity() > 2500.0))){
-            return true;
         }
         return false;
     }

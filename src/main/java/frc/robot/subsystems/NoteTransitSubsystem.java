@@ -107,9 +107,9 @@ public class NoteTransitSubsystem {
         if(!(xDist == 0.0)){
             m_ShooterJointSubsystem.setVariableAngle2(xDist);
         }else{
-            m_ShooterJointSubsystem.setTarget(0.0);
+            m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterFar);
         }
-        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakefarshot);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         curPosition = positions.longshot;

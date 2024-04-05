@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     /* autos */
     MCRCommand twoNoteCenter;
 
-     SendableChooser<Command> autoChooser ;
+    //  SendableChooser<Command> autoChooser ;
 
   /*
    * This function is run when the robot is first started up and should be used for any
@@ -108,18 +108,18 @@ public class Robot extends TimedRobot {
           NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
           NamedCommands.registerCommand("Shoot Stage Pos", new ArmToAngles2("stagePosition"));
           NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
-          // NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
+          NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
           NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
           NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
           NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
      // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser("Center Three Note Auto");
+    // autoChooser = AutoBuilder.buildAutoChooser("Amp");
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-    autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
+   // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   @Override
@@ -139,18 +139,18 @@ public class Robot extends TimedRobot {
   
   public void autonomousInit() {
     // s_Swerve.setHeading(new Rotation2d(Math.PI));
-    // autoMission = new AutoTwoNoteCenter(s_Swerve);
+    autoMission = new AutoTwoNoteCenter(s_Swerve);
 
-    Command autoCommand = autoChooser.getSelected();
-    autoCommand.schedule();
+    // Command autoCommand = autoChooser.getSelected();
+    // autoCommand.schedule();
     System.out.println("Autonomous command scheduled");
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // autoMission.run();
-    CommandScheduler.getInstance().run();
+    autoMission.run();
+    // CommandScheduler.getInstance().run();
     SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
     callPeriodic(); 

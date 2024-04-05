@@ -74,7 +74,7 @@ public class IntakeSubsystem {
     }
 
     public boolean noteAcquired(){
-        return intakeSensor.get();
+        return !intakeSensor.get();
     }
     // private boolean notePresent(){
     //     return pdp.getCurrent(6) > 15;

@@ -26,9 +26,9 @@ public class IntakeJointSubsystem {
     private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
-    private double maxRPM = 2000;
+    private double maxRPM = 1500;
     private double minRPM = 0;
-    private double kP = 0.006; //0.005
+    private double kP = 0.005; //0.005
     private double kI = 0.0;
     private double kD = 0.0001;
     private double positionTolerance = 6; 
