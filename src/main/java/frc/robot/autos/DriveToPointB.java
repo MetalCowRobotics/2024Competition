@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib14.MCRCommand;
 import frc.robot.Constants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 
 public class DriveToPointB implements MCRCommand {
@@ -122,7 +123,7 @@ public class DriveToPointB implements MCRCommand {
         System.out.println("ifStatement: " + (Math.abs(x - targetX) < TOLERANCE && Math.abs(y - targetY) < TOLERANCE));
 
         // Stop the robot and return true if the robot is at the target.
-        if (xController.atSetpoint() && yController.atSetpoint() && anglePIDController.atSetpoint()){
+        if ((xController.atSetpoint() && yController.atSetpoint() && anglePIDController.atSetpoint())||IntakeSubsystem.getInstance().noteAcquired()){
             m_swerve.stop();
             return true;
         }

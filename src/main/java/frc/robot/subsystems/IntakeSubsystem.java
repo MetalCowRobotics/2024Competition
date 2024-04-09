@@ -141,7 +141,7 @@ public class IntakeSubsystem {
     }
 
     public void startIntakeReverse(){
-        speed = 0.85;
+        speed = 1;
         intakeEnabled = true;
     }
 

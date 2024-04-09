@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     /* autos */
     MCRCommand twoNoteCenter;
 
-    //  SendableChooser<Command> autoChooser ;
+      //SendableChooser<Command> autoChooser ;
 
   /*
    * This function is run when the robot is first started up and should be used for any
@@ -112,13 +112,13 @@ public class Robot extends TimedRobot {
           // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
           NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
      // Build an auto chooser. This will use Commands.none() as the default option.
-  //   autoChooser = AutoBuilder.buildAutoChooser("Amp");
+    //autoChooser = AutoBuilder.buildAutoChooser("Amp");
 
   //   // Another option that allows you to specify the default auto by its name
-  //   // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-  //  // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+   // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
 
-  //   SmartDashboard.putData("Auto Chooser", autoChooser);
+    //SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   @Override
@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     autoMission.run();
-    // CommandScheduler.getInstance().run();
+    //CommandScheduler.getInstance().run();
     // SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
     callPeriodic(); 
@@ -258,11 +258,11 @@ public class Robot extends TimedRobot {
       m_NoteTransitSubsystem.periodic();
     }
 
-    public boolean intakeToggle(){
-      if(m_NoteTransitSubsystem.getShootingState()){
-        return operator.getRightBumper();  
-      }else{
-        return operator.getRightBumper();
-      }
+    // public boolean intakeToggle(){
+    //   if(m_NoteTransitSubsystem.getShootingState()){
+    //     return operator.getRightBumper();  
+    //   }else{
+    //     return operator.getRightBumper();
+    //   }
     }
-  }
+  

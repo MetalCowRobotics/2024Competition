@@ -17,7 +17,7 @@ public class StartIntake implements MCRCommand{
 
     @Override
     public boolean isFinished(){
-        if(IntakeSubsystem.getInstance().noteAcquired()){
+        if(!IntakeSubsystem.getInstance().noteAcquired()){
             return true;
         }
         return false;

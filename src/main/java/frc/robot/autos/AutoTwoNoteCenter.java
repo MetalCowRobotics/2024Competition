@@ -18,42 +18,44 @@ public class AutoTwoNoteCenter implements MCRCommand{
     public AutoTwoNoteCenter(Swerve s_Swerve){
         twoNoteAuto = new SequentialCommands(
             // start with resetting
-            new ZeroGyro(s_Swerve),
+            //new ZeroGyro(s_Swerve),
 
-            new ArmToAngles("rest"),            
+            //new ArmToAngles("rest"),            
             // Setting the arm angles to point the shooter and shoot the preloaded note
             new ToggleShooter(),
-            new TimedCommandSet(new ArmToAngles("speaker"), 1),
+            new TimedCommandSet(new ArmToAngles("speaker"), 1.5),
             
-            new CommandPause(1),
-            new StartIntake(),
-            new CommandPause(.5),
-           // new ToggleShooter(),
-            new StopIntake(),
 
-            // Set the arm angles to pick the note up that is in front of the robot
-            new ArmToAngles("pickup"),
-            new StartIntake(),
-            new DriveToPointB(s_Swerve, -1.4, 0, 0),
-            new StopIntake(),
+            new EjectIntake(),
+            //new CommandPause(1),
+            new CommandPause(2)
+        //    // new ToggleShooter(),
+            // new StopIntake(),
+
+        //     // Set the arm angles to pick the note up that is in front of the robot
+        //      new ArmToAngles("pickup"),
+        //     new StartIntake(),
+        //     new TimedCommandSet(new DriveToPointB(s_Swerve, 1.4, 0, 0), 1.8),
+        //     new CommandPause(.5),
             
-            // Setting the arm angles to speaker to shoot the picked up piece
-            new ParallelCommands(
-                new ArmToAngles("speaker"),
-                new DriveToPointB(s_Swerve, 0, 0, 0)
-            ),
-            new ToggleShooter(),
-            new CommandPause(1),
-            new StartIntake(),
-            new CommandPause(.5),
-            new ToggleShooter(),
-            new StopIntake(),
+        // // //     // Setting the arm angles to speaker to shoot the picked up piece
+        //    // new ParallelCommands(
+        //         new ArmToAngles("speaker"),
+        //         new DriveToPointB(s_Swerve, 0, 0, 0),
+        //    // ),
+        //     new ToggleShooter(),
+        //     new ToggleShooter(),
+        //     new CommandPause(1),
+        //     new EjectIntake(),
+        //     new CommandPause(1.5),
+        //     new ToggleShooter(),
+        //     new StopIntake()
 
-            // Set the arm angles to stow
-            new ArmToAngles("rest")
+        // // //     // Set the arm angles to stow
+        //     // new ArmToAngles("rest")
 
-
-        );
+        
+         );
     }
     
     @Override
