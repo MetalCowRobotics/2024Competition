@@ -32,7 +32,7 @@ public class IntakeSubsystem {
         intakeSensor = new DigitalInput(1);
         intakeEnabled = false;
         alreadyStopped = false;
-        SmartDashboard.putBoolean("IntakeEnabled", intakeEnabled);
+        SmartDashboard.putBoolean("Intake Enabled", intakeEnabled);
     }
 
     public static IntakeSubsystem getInstance(){
@@ -67,13 +67,14 @@ public class IntakeSubsystem {
         else{
             intakeMotor.set(0);
         }
+        SmartDashboard.putBoolean("Intake Enabled", intakeEnabled);
         SmartDashboard.putNumber("IntakeSpeed", speed);
         SmartDashboard.putBoolean("NoteAcquired", noteAcquired());
         SmartDashboard.putBoolean("AlreadyStopped", alreadyStopped);
     }
 
     public boolean noteAcquired(){
-        return intakeSensor.get();
+        return !intakeSensor.get();
     }
     // private boolean notePresent(){
     //     return pdp.getCurrent(6) > 15;
@@ -140,7 +141,7 @@ public class IntakeSubsystem {
     }
 
     public void startIntakeReverse(){
-        speed = 0.85;
+        speed = 1;
         intakeEnabled = true;
     }
 
@@ -158,7 +159,7 @@ public class IntakeSubsystem {
     }
 
     public void setPickupSpeed(){
-        speed = -.75;
+        speed = -.95;
     }
 
     public void setFeedSpeed(){

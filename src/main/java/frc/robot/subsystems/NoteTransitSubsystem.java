@@ -50,8 +50,6 @@ public class NoteTransitSubsystem {
     public void setSpeakerPosition(){
         m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterClose);
         m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
-        intakeTarget = Constants.JointConstants.intakeLoading;
-        shooterTarget = Constants.JointConstants.shooterClose;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         isShootingState = true;
@@ -86,12 +84,22 @@ public class NoteTransitSubsystem {
         curPosition = positions.longshot;
     }
 
+     public void setStage(){
+        m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterStage);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakefarshot);
+        m_IntakeSubsystem.setFeedSpeed();
+        m_Shooter.setShootingSpeed();
+        isShootingState = true;
+        curPosition = positions.longshot;
+    }
+
     public void setSpeakerMidPosition(){
         shooterTarget = SmartDashboard.getNumber("Shooter Mid Target", 
         Constants.JointConstants.shooterMid);
         intakeTarget = Constants.JointConstants.intakeLoading;
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
+
         isShootingState = true;
     }
    
@@ -99,9 +107,9 @@ public class NoteTransitSubsystem {
         if(!(xDist == 0.0)){
             m_ShooterJointSubsystem.setVariableAngle2(xDist);
         }else{
-            m_ShooterJointSubsystem.setTarget(0.0);
+            m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterFar);
         }
-        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeLoading);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakefarshot);
         m_IntakeSubsystem.setFeedSpeed();
         m_Shooter.setShootingSpeed();
         curPosition = positions.longshot;
