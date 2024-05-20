@@ -21,8 +21,6 @@ import frc.lib14.MCRCommand;
 import frc.robot.autos.ArmToAngles2;
 import frc.robot.autos.AutoTwoNoteCenter;
 import frc.robot.subsystems.*;
-
-import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
