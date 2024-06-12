@@ -82,6 +82,8 @@ public class Robot extends TimedRobot {
  
   @Override
   public void robotInit() {
+    // IMPORTANT NOTE FOR AUTOS IF YOU MAKE AN AUTO THAT BREAKS IT IS ON THE ROBO RIO UNTELL YOU REFORMAT IT 
+    // SO EVAN IF YOU FIX THE CODE IT WONT WORK TELL YOU REFORMAT THE ROBO RIO
     SmartDashboard.putNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
     AutoBuilder.configureHolonomic(
             s_Swerve::getPose,
