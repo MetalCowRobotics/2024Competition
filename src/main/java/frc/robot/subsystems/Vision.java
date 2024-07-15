@@ -26,6 +26,7 @@ public class Vision extends SubsystemBase {
     private PhotonPoseEstimator photonPoseEstimator;
     private Transform3d robotToCam;
     public double bestYaw;
+    private Translation3d visionPlaceholder;
 
     public Vision() {
         camera = new PhotonCamera("MicrosoftLifeCamHD-3000");
@@ -39,8 +40,10 @@ public class Vision extends SubsystemBase {
 
     public Optional<EstimatedRobotPose> getPoseEstimate() {
         if (cameraPipelineResult.hasTargets()) {
+            SmartDashboard.putBoolean("Bruh", true);
             return photonPoseEstimator.update();
         } else {
+            SmartDashboard.putBoolean("Bruh", false);
             return Optional.empty();
         }
     }
@@ -66,9 +69,10 @@ public class Vision extends SubsystemBase {
         //if (camera.getLatestResult().hasTargets()){
         if (x != null) {
             if((x.getFiducialId() == 4) || (x.getFiducialId() == 7) || (x.getFiducialId() == 8) ||(x.getFiducialId() == 3)){
-                return x.getBestCameraToTarget().getTranslation();
+                visionPlaceholder = x.getBestCameraToTarget().getTranslation();
+                return visionPlaceholder;
             }
-            return new Translation3d();
+            return visionPlaceholder;
         }
         return new Translation3d();
     }
