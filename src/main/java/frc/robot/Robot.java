@@ -222,8 +222,9 @@ public class Robot extends TimedRobot {
       // if Button X is released, the arm and wrist will go to the climb final position
     }
 
-    if (operator.getYButtonReleased()){
+    if (operator.getYButton()){
       m_NoteTransitSubsystem.setVariableAngle(s_Swerve.getTotalDist());
+      
     }
 
     if (operator.getLeftBumperReleased()) {
