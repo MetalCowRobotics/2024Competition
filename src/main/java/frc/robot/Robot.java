@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     /* autos */
     MCRCommand twoNoteCenter;
 
-      //SendableChooser<Command> autoChooser ;
+      SendableChooser<Command> autoChooser ;
 
   /*
    * This function is run when the robot is first started up and should be used for any
@@ -82,6 +82,27 @@ public class Robot extends TimedRobot {
  
   @Override
   public void robotInit() {
+    //              ||||||||               ||||||||               ||||||||   
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //              ||||||||               ||||||||               ||||||||
+    //         \\\\\\||||||//////     \\\\\\||||||//////     \\\\\\||||||//////
+    //          \\\\\\||||//////       \\\\\\||||//////       \\\\\\||||//////
+    //           \\\\\\||//////         \\\\\\||//////         \\\\\\||//////  
+    //            \\\\\\//////           \\\\\\//////           \\\\\\//////
+    //             \\\\\/////             \\\\\/////             \\\\\/////
+    //              \\\\////               \\\\////               \\\\////
+    //               \\\///                 \\\///                 \\\/// 
+    //                \\//                   \\//                   \\//
+    //                 \/                     \/                     \/
+    // IMPORTANT NOTE FOR AUTOS IF YOU MAKE AN AUTO THAT BREAKS IT IS ON THE ROBO RIO UNTELL YOU REFORMAT IT 
+    // SO EVAN IF YOU FIX THE CODE IT WONT WORK TELL YOU REFORMAT THE ROBO RIO
     SmartDashboard.putNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
     AutoBuilder.configureHolonomic(
             s_Swerve::getPose,
@@ -112,13 +133,13 @@ public class Robot extends TimedRobot {
           // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
           NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
      // Build an auto chooser. This will use Commands.none() as the default option.
-    //autoChooser = AutoBuilder.buildAutoChooser("Amp");
+    autoChooser = AutoBuilder.buildAutoChooser("Amp");
 
   //   // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
    // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
 
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
+  SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   @Override
@@ -140,8 +161,8 @@ public class Robot extends TimedRobot {
     // s_Swerve.setHeading(new Rotation2d(Math.PI));
     autoMission = new AutoTwoNoteCenter(s_Swerve);
 
-    // Command autoCommand = autoChooser.getSelected();
-    // autoCommand.schedule();
+    Command autoCommand = autoChooser.getSelected();
+     autoCommand.schedule();
     System.out.println("Autonomous command scheduled");
   }
 
@@ -149,8 +170,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     autoMission.run();
-    //CommandScheduler.getInstance().run();
-    // SmartDashboard.putString("hy", "5");
+    CommandScheduler.getInstance().run();
+    SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
     callPeriodic(); 
   }
