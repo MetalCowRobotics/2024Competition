@@ -360,7 +360,7 @@ public void setDriveOffsets(){
         SmartDashboard.putNumber("Vision X Pose", visionPose.estimatedPose.getX());
         SmartDashboard.putNumber("Vision Y Pose", visionPose.estimatedPose.getY());
 
-        // swervePoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
+        swervePoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
 
         SmartDashboard.putNumber("Vision Angle", visionPose.estimatedPose.toPose2d().getRotation().getDegrees());
         SmartDashboard.putNumber("Best Target Angle", m_vision.getYawOfBestTarget());
