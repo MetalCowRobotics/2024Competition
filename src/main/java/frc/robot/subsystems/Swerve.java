@@ -243,15 +243,15 @@ public void setDriveOffsets(){
     }
 
     public void setSprint() {
-        speedMultiplier = 1.3;
+        speedMultiplier = 0.8;
     }
 
     public void setCrawl() {
-        speedMultiplier = 0.4375;
+        speedMultiplier = 0.3;
     }
 
     public void setBase() {
-        speedMultiplier = 1;
+        speedMultiplier = 0.55;
     }
 
     public void enableVisionControl() {
