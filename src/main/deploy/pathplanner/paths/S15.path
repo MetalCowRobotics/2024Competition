@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6924444618120005,
-        "y": 6.7241388044029655
+        "x": 0.6665236859882154,
+        "y": 4.445571244081855
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0588958888654245,
-        "y": 7.670265420388872
+        "x": 1.6471562354886085,
+        "y": 3.3730043930658
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "S"
     },
     {
       "anchor": {
-        "x": 2.3700523709849786,
-        "y": 7.619276001635642
+        "x": 7.806754437038286,
+        "y": 0.7643685875607041
       },
       "prevControl": {
-        "x": 0.8476540111926956,
-        "y": 7.539149772172891
+        "x": 6.952531552121928,
+        "y": 0.5881611763223529
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "15"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -1.668337448293402,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Sorce",
   "previewStartingState": {
-    "rotation": -120.0,
+    "rotation": -58.82865097228022,
     "velocity": 0.0
   },
   "useDefaultConstraints": true

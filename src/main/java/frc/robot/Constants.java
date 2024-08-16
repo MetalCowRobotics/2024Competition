@@ -191,6 +191,7 @@ public final class Constants {
         public static final double shooterStage = -49;
         public static final double shooterAMP = -28;
         public static final double shooterMid = -44;
+        public static final double intakeAMP = 98;
 
         public static final double[][] variableShootingConstants = {{0.0, -3.5, -6.9, -10.3, -13.62, -16.85, -19.97, -22.98, -25.85, -33.6},
                                                                     {-38.2, -33.67, -36.01, -38.22, -43.3, -42.26, -44.1, -45.84, -46.47, -49},
