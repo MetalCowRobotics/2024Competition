@@ -29,6 +29,7 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class Swerve implements Subsystem{
+    private static Swerve instance = new Swerve();
     public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -91,6 +92,10 @@ public void setDriveOffsets(){
 
 
 }
+
+public static Swerve getInstance(){
+    return instance;
+} 
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         double xSpeed = m_xSlewRateLimiter.calculate(translation.getX() * speedMultiplier);

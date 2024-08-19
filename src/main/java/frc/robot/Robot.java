@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib14.MCRCommand;
 import frc.robot.autos.ArmToAngles2;
 import frc.robot.autos.AutoTwoNoteCenter;
+import frc.robot.autos.VariablePos;
 import frc.robot.subsystems.*;
 
 import com.fasterxml.jackson.core.sym.Name;
@@ -132,6 +133,7 @@ public class Robot extends TimedRobot {
           // NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
           // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
           NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
+          NamedCommands.registerCommand("Variable Pos", new VariablePos());
      // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser("Amp");
 
