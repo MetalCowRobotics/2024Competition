@@ -183,6 +183,7 @@ public final class Constants {
     public static final class JointConstants{
         public static final double intakeStart = 0;
         public static final double intakeDeployed = 208;
+        public static final double intakeAMP = 98;
         public static final double intakefarshot = 15;
         public static final double intakeLoading = 12;
         public static final double shooterStart = 0;

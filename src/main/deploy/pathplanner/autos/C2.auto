@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7336934388833163,
-      "y": 6.7858317189318464
+      "x": 1.2690658005429483,
+      "y": 5.611141435048828
     },
-    "rotation": -120.0
+    "rotation": 178.85423716182504
   },
   "command": {
     "type": "sequential",
@@ -18,7 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Toggle Shooter"
+                  "name": "Start Shooter"
                 }
               },
               {
@@ -45,13 +45,44 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 0.5
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Amp"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Pos"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C to 2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Pos"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Enable Intake"
           }
         }
       ]

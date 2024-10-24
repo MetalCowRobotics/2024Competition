@@ -101,8 +101,8 @@ public class Robot extends TimedRobot {
     //               \\\///                 \\\///                 \\\/// 
     //                \\//                   \\//                   \\//
     //                 \/                     \/                     \/
-    // IMPORTANT NOTE FOR AUTOS IF YOU MAKE AN AUTO THAT BREAKS IT IS ON THE ROBO RIO UNTELL YOU REFORMAT IT 
-    // SO EVAN IF YOU FIX THE CODE IT WONT WORK TELL YOU REFORMAT THE ROBO RIO
+    // IMPORTANT NOTE FOR AUTOS IF YOU MAKE AN AUTO THAT BREAKS IT IS ON THE ROBO RIO UNTILL YOU REFORMAT IT 
+    // SO EVEN IF YOU FIX THE CODE IT WONT WORK TILL YOU REFORMAT THE ROBO RIO
     SmartDashboard.putNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
     AutoBuilder.configureHolonomic(
             s_Swerve::getPose,
@@ -128,6 +128,8 @@ public class Robot extends TimedRobot {
           NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
           NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
           NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
+          NamedCommands.registerCommand("Start Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.startShooter()));
+          NamedCommands.registerCommand("Stop Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.stopShooter()));
           // NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
           // NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
           // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
@@ -159,7 +161,7 @@ public class Robot extends TimedRobot {
   
   public void autonomousInit() {
     // s_Swerve.setHeading(new Rotation2d(Math.PI));
-    autoMission = new AutoTwoNoteCenter(s_Swerve);
+    
 
     Command autoCommand = autoChooser.getSelected();
      autoCommand.schedule();
@@ -169,7 +171,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    autoMission.run();
+  
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();
