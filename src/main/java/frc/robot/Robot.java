@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
     // private final Trigger shooterTrigger = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.8);
     // private final JoystickButton armWrist = new JoystickButton(operator, XboxController.Button.kA.value);
 
-    MCRCommand autoMission;
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -127,13 +126,15 @@ public class Robot extends TimedRobot {
           NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
           NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
           NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
+
           NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
+          NamedCommands.registerCommand("Start Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.startShooter()));
           // NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
           // NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
-          // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
-          NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
+          NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
+          NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntakeAuto2()));
      // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser("Amp");
+    autoChooser = AutoBuilder.buildAutoChooser("Center2");
 
   //   // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -159,7 +160,7 @@ public class Robot extends TimedRobot {
   
   public void autonomousInit() {
     // s_Swerve.setHeading(new Rotation2d(Math.PI));
-    autoMission = new AutoTwoNoteCenter(s_Swerve);
+    // autoMission = new AutoTwoNoteCenter(s_Swerve);
 
     Command autoCommand = autoChooser.getSelected();
      autoCommand.schedule();
@@ -169,7 +170,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    autoMission.run();
+   
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("hy", "5");
     s_Swerve.periodicValues();

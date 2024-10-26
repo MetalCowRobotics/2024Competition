@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7336934388833163,
-      "y": 6.7858317189318464
+      "x": 0.5521146085027211,
+      "y": 6.665668032190766
     },
-    "rotation": -120.0
+    "rotation": -122.00538320805246
   },
   "command": {
     "type": "sequential",
@@ -18,7 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Toggle Shooter"
+                  "name": "Start Shooter"
                 }
               },
               {
@@ -33,7 +33,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.7
           }
         },
         {
@@ -45,13 +45,25 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Amp"
+            "pathName": "Match 1 Auto Amp"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 8.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New Path"
           }
         }
       ]

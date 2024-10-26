@@ -103,7 +103,7 @@ public void setDriveOffsets(){
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                                     xSpeed, 
                                     ySpeed, 
-                                    -rotation, 
+                                    rotation, 
                                     getHeading()
                                 )
                                 : new ChassisSpeeds(
@@ -198,7 +198,7 @@ public void setDriveOffsets(){
     public void driveRobotRelative(ChassisSpeeds speeds) {
         Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
         double rotation = speeds.omegaRadiansPerSecond;
-        drive(translation, rotation, false, false);
+        drive(translation, -rotation, false, false);
         SmartDashboard.putString("bob", "3");
     }
     // public double getAngleFromTag(){

@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
-public class NoteTransitSubsystem {
+public class                                                                    NoteTransitSubsystem {
     private static NoteTransitSubsystem instance = new NoteTransitSubsystem();
     private IntakeJointSubsystem m_IntakeJointSubsystem;
     private ShooterJointSubsystem m_ShooterJointSubsystem;
@@ -31,8 +31,8 @@ public class NoteTransitSubsystem {
     } 
 
     public boolean atTarget(){
-        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
-        return m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget();
+        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atAngle(m_IntakeJointSubsystem.getTargetAngle()) && m_ShooterJointSubsystem.atTarget());
+        return m_IntakeJointSubsystem.atAngle(m_IntakeJointSubsystem.getTargetAngle()) && m_ShooterJointSubsystem.atTarget();
     }
 
     //Sets joints to pickup location, and sets the intake speed to the pickup speed for when it is enabled,
@@ -127,7 +127,7 @@ public class NoteTransitSubsystem {
 
     //Sets joints to amp location, and sets the intake speed to the amp speed when it is enabled
     public void setAMPPosition(){
-        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeDeployed);
+        m_IntakeJointSubsystem.setTarget(Constants.JointConstants.intakeAMP);
         m_ShooterJointSubsystem.setTarget(Constants.JointConstants.shooterAMP);
         m_IntakeSubsystem.setPickupSpeed();
         m_Shooter.setAmpSpeed();
@@ -156,6 +156,7 @@ public class NoteTransitSubsystem {
     }
 
     public void startShooter(){
+        SmartDashboard.putString("Start Shooter Auto", "enables Shooter`");
         m_Shooter.startShooter();
     }
 
@@ -173,6 +174,7 @@ public class NoteTransitSubsystem {
 
     //Turns on the intake to the speed that the state requires, except if you are in a state where you are shooting, then if you try, it does not enable the intake unless the shooter is at speed
     public void enableIntake(){
+        SmartDashboard.putString("auto", "enables intake");
         if((!isShootingState) || ((isShootingState) && (m_Shooter.getShooterSpunUp()))){
             m_IntakeSubsystem.startIntake();
             if(isPickup){
@@ -182,6 +184,7 @@ public class NoteTransitSubsystem {
         }else if(((isShootingState) && (m_Shooter.getShooterSpunUp()))){
             m_IntakeSubsystem.toggleIntake();
         }else{
+            SmartDashboard.putString("auto234567", "enables intake234567");
             disableIntake();
         }
     }
@@ -189,6 +192,9 @@ public class NoteTransitSubsystem {
     //Spits out a piece regardless of position, ideal to be done in amp position
     public void quickOuttake(){
         m_IntakeSubsystem.startIntakeReverse();
+    }
+    public void enableIntakeAuto2(){
+        m_IntakeSubsystem.feedIntakeAuto();
     }
 
     //Turns off the intake
@@ -199,7 +205,7 @@ public class NoteTransitSubsystem {
     public void periodic() {
         SmartDashboard.putNumber("Intake Target", intakeTarget);
         SmartDashboard.putNumber("Shooter Target", shooterTarget);
-        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atTarget() && m_ShooterJointSubsystem.atTarget());
+        SmartDashboard.putBoolean("atTarget", m_IntakeJointSubsystem.atAngle(m_IntakeJointSubsystem.getTargetAngle()) && m_ShooterJointSubsystem.atTarget());
         //Automatically lifts the intake once tehre is a note inside
         // if(m_IntakeSubsystem.getReadyToLift() && !alreadyLiftedIntake){
         //     setSpeakerPosition();

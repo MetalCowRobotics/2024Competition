@@ -28,10 +28,10 @@ public class IntakeJointSubsystem {
     private int freeCurrentLimit = 30;
     private double maxRPM = 1500;
     private double minRPM = 0;
-    private double kP = 0.005; //0.005
-    private double kI = 0.0;
-    private double kD = 0.0001;
-    private double positionTolerance = 6; 
+    private double kP = 0.0038; //0.005
+    private double kI = 0.00023;
+    private double kD = 0.00009;
+    private double positionTolerance = 12; 
 
     private IntakeJointSubsystem() {
 
@@ -51,7 +51,7 @@ public class IntakeJointSubsystem {
         minSetpoint = minRPM / 5820;
 
         pidController = new PIDController(kP, kI, kD);
-        pidController.setTolerance(positionTolerance);
+        pidController.setTolerance(2);
         pidController.setIntegratorRange(-0.65, 0.65);
     }
 
@@ -90,11 +90,12 @@ public class IntakeJointSubsystem {
     }
 
     public boolean atTarget() {
-        SmartDashboard.putBoolean("Intake atTarget", pidController.atSetpoint());
+        SmartDashboard.putBoolean("Intake at Target", pidController.atSetpoint());
         return pidController.atSetpoint();
     }
 
     public boolean atAngle(double desiredAngle) {
+         SmartDashboard.putBoolean("Intake at Target Angle Route", Math.abs(desiredAngle - getCurrentAngle()) < positionTolerance);
         return Math.abs(desiredAngle - getCurrentAngle()) < positionTolerance;
     }
 
@@ -105,7 +106,7 @@ public class IntakeJointSubsystem {
     public void periodic() {
         boreRawValue = boreEncoder.getAbsolutePosition();
         boreConvertedValue = boreRawValue * (360);
-        boreConvertedOffsetValue = (boreConvertedValue - 50);
+        boreConvertedOffsetValue = (boreConvertedValue - 114);
         writeStatus();
         
         double speed = 0;
