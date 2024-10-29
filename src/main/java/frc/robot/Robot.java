@@ -17,14 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.lib14.MCRCommand;
-import frc.robot.autos.ArmToAngles2;
-import frc.robot.autos.AutoTwoNoteCenter;
+import frc.robot.autoCommands.ArmToAngles;
 import frc.robot.subsystems.*;
-
-import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -67,9 +62,7 @@ public class Robot extends TimedRobot {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final NoteTransitSubsystem m_NoteTransitSubsystem = NoteTransitSubsystem.getInstance();
-    
-    /* autos */
-    MCRCommand twoNoteCenter;
+
 
       SendableChooser<Command> autoChooser ;
 
@@ -121,11 +114,11 @@ public class Robot extends TimedRobot {
             },
              s_Swerve
         );
-          NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNotePosition"));
+          NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles("speakerFromNotePosition"));
           // NamedCommands.registerCommand("Shoot mid Pos", new ArmToAngles2("speakerMidPosition"));
-          NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
-          NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
-          NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
+          NamedCommands.registerCommand("rest Pos", new ArmToAngles("restPosition"));
+          NamedCommands.registerCommand("Shoot Pos", new ArmToAngles("speakerPosition"));
+          NamedCommands.registerCommand("Intake Pos", new ArmToAngles("pickupPosition"));
 
           NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
           NamedCommands.registerCommand("Start Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.startShooter()));
@@ -181,9 +174,6 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     //s_Swerve.setDriveOffsets();
     CommandScheduler.getInstance().cancelAll();
-    m_NoteTransitSubsystem.stopShooter();
-    m_NoteTransitSubsystem.setRestPosition();
-    s_Swerve.zeroGyro();
     if (DriverStation.getAlliance().equals(Alliance.Red)) {
       s_Swerve.setHeading(new Rotation2d(Math.toDegrees(Math.PI)));
     }
@@ -193,7 +183,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     System.out.println(s_Swerve.getTotalDist());
-
     configureButtonBindings();
     callPeriodic();
     s_Swerve.periodic(
@@ -256,7 +245,6 @@ public class Robot extends TimedRobot {
 
     if (operator.getRightBumperReleased()) {
       m_NoteTransitSubsystem.enableIntake();
-      LED.runDefault();
     }
     else if (operator.getBackButton()) {
       m_NoteTransitSubsystem.quickOuttake();

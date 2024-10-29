@@ -92,6 +92,16 @@ public class Vision extends SubsystemBase {
         }
     }
 
+    public double getTotalXDist(){
+        Translation3d allDistances = getDistFromScoringTag();
+        return allDistances.getX();
+    }
+
+    public double getTotalYDist(){
+        Translation3d allDistances = getDistFromScoringTag();
+        return allDistances.getY();
+    }
+
 
 
     public double getYawOfBestTarget() {

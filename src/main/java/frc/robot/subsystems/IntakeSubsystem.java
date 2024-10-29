@@ -59,7 +59,6 @@ public class IntakeSubsystem {
             stopintake();
             readyToLift = true;
             //intakeMotor.set(0);
-            LED.runOrange();
             alreadyStopped = true;
        }
         if(intakeEnabled)

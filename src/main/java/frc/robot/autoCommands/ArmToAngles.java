@@ -1,14 +1,14 @@
-package frc.robot.autos;
+package frc.robot.autoCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command sets the shooter and intake to different angles. */
-public class ArmToAngles2 extends Command{
+public class ArmToAngles extends Command{
     String pos;
     boolean finished_flag = false;
     boolean first_time = true;
-    public ArmToAngles2(String position){
+    public ArmToAngles(String position){
         pos = position;
     }
     @Override

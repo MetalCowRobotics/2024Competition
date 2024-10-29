@@ -47,7 +47,7 @@ public class Swerve implements Subsystem{
     private SlewRateLimiter m_xSlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
     private SlewRateLimiter m_ySlewRateLimiter = new SlewRateLimiter(linearAcceleration, -linearAcceleration, 0);
 
-    private PIDController angleHoldingPIDController = new PIDController(0.0004, 0, 0.001);
+    private PIDController angleHoldingPIDController = new PIDController(0.001, 0.00001, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
     private PIDController thetaController = new PIDController(0.035, 0, 0);
@@ -70,8 +70,8 @@ public class Swerve implements Subsystem{
 
         m_vision = new Vision();
         lastTargetID = -1;
-        visionControl = false;
-        visionPose = new EstimatedRobotPose(new Pose3d(), 0, null, null);
+        visionControl = true;
+        visionPose = m_vision.getPoseEstimate().get();
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -182,7 +182,6 @@ public void setDriveOffsets(){
         }
         return positions;
     }
-
     public Pose2d getPose() {
         return swervePoseEstimator.getEstimatedPosition();
     }
@@ -243,7 +242,7 @@ public void setDriveOffsets(){
     }
 
     public void setSprint() {
-        speedMultiplier = 1.3;
+        speedMultiplier = 1;
     }
 
     public void setCrawl() {
@@ -251,7 +250,7 @@ public void setDriveOffsets(){
     }
 
     public void setBase() {
-        speedMultiplier = 1;
+        speedMultiplier = 0.8;
     }
 
     public void enableVisionControl() {
@@ -274,6 +273,7 @@ public void setDriveOffsets(){
     }
 
     public void periodicValues(){
+         visionAndPosePeriodic();
         swervePoseEstimator.update(getGyroYaw(), getModulePositions());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
@@ -296,63 +296,63 @@ public void setDriveOffsets(){
         );
     }
 
-    public void visionDriveToPoint(double targetX, double targetY, double targetTheta) {
-        double x = getPose().getX();
-        double y = getPose().getY();
-        double yaw = getPose().getRotation().getDegrees();
+    // public void visionDriveToPoint(double targetX, double targetY, double targetTheta) {
+    //     double x = getPose().getX();
+    //     double y = getPose().getY();
+    //     double yaw = getPose().getRotation().getDegrees();
 
-        xController.setSetpoint(targetX);
-        yController.setSetpoint(targetY);
+    //     xController.setSetpoint(targetX);
+    //     yController.setSetpoint(targetY);
 
-        if (targetTheta == 0) {
-            if (yaw > 180) {
-                thetaController.setSetpoint(360);
-            } else {
-                thetaController.setSetpoint(0);
-            }
-        } else {
-            thetaController.setSetpoint(targetTheta);
-        }
+    //     if (targetTheta == 0) {
+    //         if (yaw > 180) {
+    //             thetaController.setSetpoint(360);
+    //         } else {
+    //             thetaController.setSetpoint(0);
+    //         }
+    //     } else {
+    //         thetaController.setSetpoint(targetTheta);
+    //     }
 
-        double rotation = thetaController.calculate(yaw);
-        double xCorrection = xController.calculate(x);
-        double yCorrection = yController.calculate(y);
+    //     double rotation = thetaController.calculate(yaw);
+    //     double xCorrection = xController.calculate(x);
+    //     double yCorrection = yController.calculate(y);
 
-        if (xController.atSetpoint() && yController.atSetpoint()){
-            xCorrection = 0;
-            yCorrection = 0;
-        }
-        if(thetaController.atSetpoint()){
-            rotation = 0;
-        }
+    //     if (xController.atSetpoint() && yController.atSetpoint()){
+    //         xCorrection = 0;
+    //         yCorrection = 0;
+    //     }
+    //     if(thetaController.atSetpoint()){
+    //         rotation = 0;
+    //     }
 
-        driveAuto(
-            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation, 
-            true, 
-            false
-        );
-    }
+    //     driveAuto(
+    //         new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
+    //         -rotation, 
+    //         true, 
+    //         false
+    //     );
+    // }
 
-    public void visionAlign() {
-        if (visionToggle) {
-            setHeading(new Rotation2d(Math.toDegrees(m_vision.getYawOfBestTarget())));
-        }
-        visionToggle = false;
-        thetaController.setSetpoint(0);
-        double rotation = thetaController.calculate(getPose().getRotation().getDegrees());
+    // public void visionAlign() {
+    //     if (visionToggle) {
+    //         setHeading(new Rotation2d(Math.toDegrees(m_vision.getYawOfBestTarget())));
+    //     }
+    //     visionToggle = false;
+    //     thetaController.setSetpoint(0);
+    //     double rotation = thetaController.calculate(getPose().getRotation().getDegrees());
 
-        if(thetaController.atSetpoint()){
-            rotation = 0;
-        }
+    //     if(thetaController.atSetpoint()){
+    //         rotation = 0;
+    //     }
 
-        driveAuto(
-            new Translation2d(0, 0).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation, 
-            true, 
-            false
-        );
-    }
+    //     driveAuto(
+    //         new Translation2d(0, 0).times(Constants.Swerve.maxAutoSpeed), 
+    //         -rotation, 
+    //         true, 
+    //         false
+    //     );
+    // }
 
     public void visionAndPosePeriodic() {
         m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> visionPose = estimatedRobotPose);
@@ -368,14 +368,14 @@ public void setDriveOffsets(){
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
         visionAndPosePeriodic();
-        if (visionControl) {
-            // visionDriveToPoint(getPose().getX(), getPose().getY(), 178);
-            visionAlign();
-        }
-        else {
-            teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
-            visionToggle = true;
-        }
+        // if (visionControl) {
+        //     // visionDriveToPoint(getPose().getX(), getPose().getY(), 178);
+        //     visionAlign();
+        // }
+        // else {
+        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+            // visionToggle = true;
+        // }
         SmartDashboard.putNumber("X Pose", getPose().getX());
         SmartDashboard.putNumber("Y Pose", getPose().getY());
         SmartDashboard.putNumber("Drive Angle", getPose().getRotation().getDegrees());
