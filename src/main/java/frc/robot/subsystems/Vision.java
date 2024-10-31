@@ -38,12 +38,25 @@ public class Vision extends SubsystemBase {
         bestYaw = 0;
     }
 
-    public Optional<EstimatedRobotPose> getPoseEstimate() {
+    @Override
+    public void periodic() {
+        cameraPipelineResult = camera.getLatestResult();
+        
+        SmartDashboard.putBoolean("Camera Connected", camera.isConnected());
+        SmartDashboard.putBoolean("Has Targets", cameraPipelineResult.hasTargets());
         if (cameraPipelineResult.hasTargets()) {
-            SmartDashboard.putBoolean("Bruh", true);
-            return photonPoseEstimator.update();
+            SmartDashboard.putNumber("Target ID", cameraPipelineResult.getBestTarget().getFiducialId());
+            SmartDashboard.putNumber("Target Yaw", cameraPipelineResult.getBestTarget().getYaw());
+        }
+    }
+
+    public Optional<EstimatedRobotPose> getPoseEstimate() {
+        var result = camera.getLatestResult();
+        if (result.hasTargets()) {
+            SmartDashboard.putBoolean("Vision Pose Estimation", true);
+            return photonPoseEstimator.update(result);
         } else {
-            SmartDashboard.putBoolean("Bruh", false);
+            SmartDashboard.putBoolean("Vision Pose Estimation", false);
             return Optional.empty();
         }
     }
@@ -105,13 +118,22 @@ public class Vision extends SubsystemBase {
 
 
     public double getYawOfBestTarget() {
-        PhotonTrackedTarget x = camera.getLatestResult().getBestTarget();
-        //if (camera.getLatestResult().hasTargets()){
-        if (x != null) {
-        // if (camera.getLatestResult().hasTargets()) {
-            return x.getYaw();
-        } else {
-            return 0;
+        var result = camera.getLatestResult();
+        if (result.hasTargets()) {
+            return -result.getBestTarget().getYaw();
         }
+        return 0.0;
+    }
+
+    public boolean hasTargets() {
+        return camera.getLatestResult().hasTargets();
+    }
+
+    public int getBestTargetID() {
+        var result = camera.getLatestResult();
+        if (result.hasTargets()) {
+            return result.getBestTarget().getFiducialId();
+        }
+        return -1;
     }
 }

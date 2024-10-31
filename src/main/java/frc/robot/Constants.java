@@ -31,10 +31,10 @@ public final class Constants {
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
          public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
-            new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
             new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-            new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+            new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+            new Translation2d(wheelBase / 2.0, trackWidth / 2.0));
 
         /* Module Gear Ratios */
         public static final double driveGearRatio = chosenModule.driveGearRatio;
@@ -138,7 +138,7 @@ public final class Constants {
 
     public static final class VisionConstants {
         /* In Meters (Camera 10 Inches In Front of Gyro, Camera 4 Inches To The Gyro's Left, Camera 9 Inches Above Gyro). */
-        public static final Transform3d robotToCamTranslation = new Transform3d(0.254, 0.1016, 0.2286, new Rotation3d());
+        public static final Transform3d robotToCamTranslation = new Transform3d(0.254, 0.28, 0.2286, new Rotation3d());
 
         public static final class RobotCoordsForEachID {
             public static final double[] redSpeakerCenterCoords = {15.15, 5.55, 180};

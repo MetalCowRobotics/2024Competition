@@ -55,6 +55,10 @@ public class Swerve implements Subsystem{
 
     private boolean positionReached = false;
 
+    private final Translation2d TARGET_POINT = new Translation2d(0, 5.5);
+    private final double ALIGNMENT_RADIUS = 3.0; // meters
+    private boolean isAligning = false;
+
     public Swerve() {
         
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -71,7 +75,7 @@ public class Swerve implements Subsystem{
         m_vision = new Vision();
         lastTargetID = -1;
         visionControl = true;
-        visionPose = m_vision.getPoseEstimate().get();
+        visionPose = null;
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -195,7 +199,7 @@ public void setDriveOffsets(){
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+        Translation2d translation = new Translation2d(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond);
         double rotation = speeds.omegaRadiansPerSecond;
         drive(translation, -rotation, false, false);
         SmartDashboard.putString("bob", "3");
@@ -355,27 +359,96 @@ public void setDriveOffsets(){
     // }
 
     public void visionAndPosePeriodic() {
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> visionPose = estimatedRobotPose);
+        m_vision.getPoseEstimate().ifPresentOrElse(
+            estimatedPose -> {
+                // We have a valid pose estimate
+                visionPose = estimatedPose;
+                
+                SmartDashboard.putNumber("Vision X Pose", visionPose.estimatedPose.getX());
+                SmartDashboard.putNumber("Vision Y Pose", visionPose.estimatedPose.getY());
+                SmartDashboard.putNumber("Vision Angle", visionPose.estimatedPose.toPose2d().getRotation().getDegrees());
+                
+                // Add vision measurement to pose estimator
+                swervePoseEstimator.addVisionMeasurement(
+                    visionPose.estimatedPose.toPose2d(), 
+                    visionPose.timestampSeconds
+                );
+            },
+            () -> {
+                // No valid pose estimate
+                SmartDashboard.putNumber("Vision X Pose", 0);
+                SmartDashboard.putNumber("Vision Y Pose", 0);
+                SmartDashboard.putNumber("Vision Angle", 0);
+            }
+        );
 
-        SmartDashboard.putNumber("Vision X Pose", visionPose.estimatedPose.getX());
-        SmartDashboard.putNumber("Vision Y Pose", visionPose.estimatedPose.getY());
-
-        swervePoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
-
-        SmartDashboard.putNumber("Vision Angle", visionPose.estimatedPose.toPose2d().getRotation().getDegrees());
+        // Always update best target angle regardless of pose estimate
         SmartDashboard.putNumber("Best Target Angle", m_vision.getYawOfBestTarget());
+    }
+
+    private boolean shouldAlign() {
+        Translation2d currentPosition = getPose().getTranslation();
+        double distanceToTarget = currentPosition.getDistance(TARGET_POINT);
+        return distanceToTarget <= ALIGNMENT_RADIUS;
+    }
+
+    private double calculateTargetAngle() {
+        Translation2d currentPosition = getPose().getTranslation();
+        double dx = TARGET_POINT.getX() - currentPosition.getX();
+        double dy = TARGET_POINT.getY() - currentPosition.getY();
+        double angle = Math.toDegrees(Math.atan2(dy, dx));
+        SmartDashboard.putNumber("Raw Target Angle", angle);
+        return angle;
     }
 
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
         visionAndPosePeriodic();
-        // if (visionControl) {
-        //     // visionDriveToPoint(getPose().getX(), getPose().getY(), 178);
-        //     visionAlign();
-        // }
-        // else {
-        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
-            // visionToggle = true;
-        // }
+        
+        if (shouldAlign()) {
+            // Get driver inputs with deadband
+            double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
+            double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
+            double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
+            
+            double rotation;
+            // Check if driver is trying to manually rotate
+            if (Math.abs(rotationVal) > Constants.stickDeadband) {
+                // Use driver's manual rotation input
+                rotation = rotationVal;
+                SmartDashboard.putString("Control Mode", "Manual");
+            } else {
+                // Use auto-alignment
+                double targetAngle = calculateTargetAngle();
+                double currentAngle = getPose().getRotation().getDegrees();
+                
+                thetaController.setSetpoint(targetAngle);
+                rotation = thetaController.calculate(currentAngle);
+                
+                // Limit the maximum rotation speed for smoother control
+                rotation = Math.min(Math.max(rotation, -0.2), 0.2);
+                SmartDashboard.putString("Control Mode", "Auto");
+            }
+            
+            drive(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+                rotation * Constants.Swerve.maxAngularVelocity,
+                !robotCentricSup.getAsBoolean(),
+                false
+            );
+            
+            // Debug values
+            SmartDashboard.putBoolean("Is Aligning", true);
+            SmartDashboard.putNumber("Target Angle", calculateTargetAngle());
+            SmartDashboard.putNumber("Current Angle", getPose().getRotation().getDegrees());
+            SmartDashboard.putNumber("Distance to Target", getPose().getTranslation().getDistance(TARGET_POINT));
+        } else {
+            // Normal teleop control when outside alignment radius
+            teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+            SmartDashboard.putBoolean("Is Aligning", false);
+            SmartDashboard.putString("Control Mode", "Manual");
+        }
+
+        // Existing dashboard updates
         SmartDashboard.putNumber("X Pose", getPose().getX());
         SmartDashboard.putNumber("Y Pose", getPose().getY());
         SmartDashboard.putNumber("Drive Angle", getPose().getRotation().getDegrees());

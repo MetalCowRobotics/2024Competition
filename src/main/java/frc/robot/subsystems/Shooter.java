@@ -38,8 +38,8 @@ public class Shooter {
             shooterMotor1.set(speed);
             shooterMotor2.set(speed);
         } else {
-            shooterMotor1.set(.40);
-            shooterMotor2.set(.40);
+            shooterMotor1.set(.0);
+            shooterMotor2.set(.0);
         }
         SmartDashboard.putBoolean("Shooter Enabled", shooterEnabled);
         SmartDashboard.putBoolean("Shooter Spun Up", getShooterSpunUp());
