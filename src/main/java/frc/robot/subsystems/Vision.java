@@ -29,7 +29,7 @@ public class Vision extends SubsystemBase {
     private Translation3d visionPlaceholder;
 
     public Vision() {
-        camera = new PhotonCamera("MicrosoftLifeCamHD-3000");
+        camera = new PhotonCamera("2024Crescendo");
         camera.setDriverMode(false);
         cameraPipelineResult = camera.getLatestResult();
         aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -37,6 +37,7 @@ public class Vision extends SubsystemBase {
         photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.LOWEST_AMBIGUITY, camera, robotToCam);
         bestYaw = 0;
     }
+
 
     @Override
     public void periodic() {
@@ -51,12 +52,11 @@ public class Vision extends SubsystemBase {
     }
 
     public Optional<EstimatedRobotPose> getPoseEstimate() {
-        var result = camera.getLatestResult();
-        if (result.hasTargets()) {
-            SmartDashboard.putBoolean("Vision Pose Estimation", true);
-            return photonPoseEstimator.update(result);
+        if (cameraPipelineResult.hasTargets()) {
+            SmartDashboard.putBoolean("Bruh", true);
+            return photonPoseEstimator.update();
         } else {
-            SmartDashboard.putBoolean("Vision Pose Estimation", false);
+            SmartDashboard.putBoolean("Bruh", false);
             return Optional.empty();
         }
     }
@@ -120,7 +120,7 @@ public class Vision extends SubsystemBase {
     public double getYawOfBestTarget() {
         var result = camera.getLatestResult();
         if (result.hasTargets()) {
-            return -result.getBestTarget().getYaw();
+            return result.getBestTarget().getYaw();
         }
         return 0.0;
     }

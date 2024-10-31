@@ -425,9 +425,10 @@ public void setDriveOffsets(){
                 rotation = thetaController.calculate(currentAngle);
                 
                 // Limit the maximum rotation speed for smoother control
-                rotation = Math.min(Math.max(rotation, -0.2), 0.2);
+
+                rotation = Math.min(Math.max(rotation, -0.5), 0.5);
                 SmartDashboard.putString("Control Mode", "Auto");
-            }
+            }}
             
             drive(
                 new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
