@@ -199,7 +199,7 @@ public void setDriveOffsets(){
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        Translation2d translation = new Translation2d(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond);
+        Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
         double rotation = speeds.omegaRadiansPerSecond;
         drive(translation, -rotation, false, false);
         SmartDashboard.putString("bob", "3");
@@ -425,10 +425,9 @@ public void setDriveOffsets(){
                 rotation = thetaController.calculate(currentAngle);
                 
                 // Limit the maximum rotation speed for smoother control
-
                 rotation = Math.min(Math.max(rotation, -0.5), 0.5);
                 SmartDashboard.putString("Control Mode", "Auto");
-            }}
+            }
             
             drive(
                 new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
