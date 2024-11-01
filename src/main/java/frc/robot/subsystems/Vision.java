@@ -29,7 +29,7 @@ public class Vision extends SubsystemBase {
     private Translation3d visionPlaceholder;
 
     public Vision() {
-        camera = new PhotonCamera("2024Crescendo");
+        camera = new PhotonCamera("MicrosoftLifeCamHD-3000");
         camera.setDriverMode(false);
         cameraPipelineResult = camera.getLatestResult();
         aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();

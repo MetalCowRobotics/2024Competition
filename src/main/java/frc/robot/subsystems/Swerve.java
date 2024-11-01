@@ -50,7 +50,7 @@ public class Swerve implements Subsystem{
     private PIDController angleHoldingPIDController = new PIDController(0.001, 0.00001, 0.001);
     private PIDController xController = new PIDController(0.6, 0, 0);
     private PIDController yController = new PIDController(0.6, 0, 0);
-    private PIDController thetaController = new PIDController(0.035, 0, 0);
+    private PIDController thetaController = new PIDController(0.001, 0.00001, 0.00001);
     private PIDController thetaController2 = new PIDController(0.0002, 0, 0);
 
     private boolean positionReached = false;
@@ -236,7 +236,7 @@ public void setDriveOffsets(){
     }
 
     public Rotation2d getGyroYaw() {
-        return Rotation2d.fromDegrees(gyro.getYaw().getValue());
+        return Rotation2d.fromDegrees(-gyro.getYaw().getValue());
     }
 
     public void resetModulesToAbsolute(){
@@ -418,7 +418,7 @@ public void setDriveOffsets(){
                 SmartDashboard.putString("Control Mode", "Manual");
             } else {
                 // Use auto-alignment
-                double targetAngle = calculateTargetAngle();
+                double targetAngle = calculateTargetAngle()-180;
                 double currentAngle = getPose().getRotation().getDegrees();
                 
                 thetaController.setSetpoint(targetAngle);
