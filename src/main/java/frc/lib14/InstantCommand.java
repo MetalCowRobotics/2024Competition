@@ -1,6 +1,6 @@
 package frc.lib14;
 
-public class InstantCommandBase implements MCRCommand{
+public class InstantCommand implements MCRCommand{
     boolean first = true;
     public void run(){
     }

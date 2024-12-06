@@ -1,11 +1,11 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib14.InstantCommandBase;
+import frc.lib14.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
-public class StartIntakeAuto extends InstantCommandBase{
+public class StartIntakeAuto extends InstantCommand{
     
    @Override
     public void run(){

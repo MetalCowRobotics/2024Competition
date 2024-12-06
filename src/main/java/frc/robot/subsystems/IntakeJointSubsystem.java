@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkLowLevel;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -10,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeJointSubsystem {
     private static IntakeJointSubsystem instance = new IntakeJointSubsystem();
-    private CANSparkMax intakeJointMotor;
+    private SparkMax intakeJointMotor;
 
     private PIDController pidController;
     private double maxSetpoint;
@@ -23,7 +27,6 @@ public class IntakeJointSubsystem {
 
     private double nominalVoltage = 12.6;
     private double rampTime = 0.50;
-    private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
     private double maxRPM = 1500;
@@ -35,17 +38,18 @@ public class IntakeJointSubsystem {
 
     private IntakeJointSubsystem() {
 
-        intakeJointMotor = new CANSparkMax(16, CANSparkLowLevel.MotorType.kBrushless);
-        intakeJointMotor.enableVoltageCompensation(nominalVoltage);
+        intakeJointMotor = new SparkMax(16, SparkLowLevel.MotorType.kBrushless);
 
-        intakeJointMotor.setOpenLoopRampRate(rampTime);
-        intakeJointMotor.setClosedLoopRampRate(rampTime);
+        SparkMaxConfig config = new SparkMaxConfig();
 
-        intakeJointMotor.setInverted(false);
+        config.inverted(false);
+        config.idleMode(IdleMode.kBrake);
+        config.closedLoopRampRate(rampTime);
+        config.voltageCompensation(nominalVoltage);
+        config.openLoopRampRate(rampTime);
+        config.smartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
 
-        intakeJointMotor.setIdleMode(idleMode);
-
-        intakeJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+        intakeJointMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         maxSetpoint = maxRPM / 5820;
         minSetpoint = minRPM / 5820;
@@ -97,13 +101,14 @@ public class IntakeJointSubsystem {
     public boolean atAngle(double desiredAngle) {
         return Math.abs(desiredAngle - getCurrentAngle()) < positionTolerance;
     }
+    
 
     private void writeStatus() {
         SmartDashboard.putNumber("Intake Angle", getCurrentAngle());
     }
 
     public void periodic() {
-        boreRawValue = boreEncoder.getAbsolutePosition();
+        boreRawValue = boreEncoder.get();
         boreConvertedValue = boreRawValue * (360);
         boreConvertedOffsetValue = (boreConvertedValue - 50);
         writeStatus();

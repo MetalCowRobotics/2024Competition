@@ -34,8 +34,8 @@ public final class CTREConfigs {
         /* Current Limiting */
         swerveAngleFXConfig0.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.angleEnableCurrentLimit;
         swerveAngleFXConfig0.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-        swerveAngleFXConfig0.CurrentLimits.SupplyCurrentThreshold = Constants.Swerve.angleCurrentThreshold;
-        swerveAngleFXConfig0.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.angleCurrentThresholdTime;
+        swerveAngleFXConfig0.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.angleCurrentThreshold;
+        swerveAngleFXConfig0.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.angleCurrentThresholdTime;
 
         /* PID Config */
         swerveAngleFXConfig0.Slot0.kP = 75;
@@ -56,8 +56,8 @@ public final class CTREConfigs {
         /* Current Limiting */
         swerveAngleFXConfig1.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.angleEnableCurrentLimit;
         swerveAngleFXConfig1.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-        swerveAngleFXConfig1.CurrentLimits.SupplyCurrentThreshold = Constants.Swerve.angleCurrentThreshold;
-        swerveAngleFXConfig1.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.angleCurrentThresholdTime;
+        swerveAngleFXConfig1.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.angleCurrentThreshold;
+        swerveAngleFXConfig1.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.angleCurrentThresholdTime;
 
         /* PID Config */
         swerveAngleFXConfig1.Slot0.kP = Constants.Swerve.angleKP;
@@ -78,8 +78,8 @@ public final class CTREConfigs {
         /* Current Limiting */
         swerveAngleFXConfig2.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.angleEnableCurrentLimit;
         swerveAngleFXConfig2.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-        swerveAngleFXConfig2.CurrentLimits.SupplyCurrentThreshold = Constants.Swerve.angleCurrentThreshold;
-        swerveAngleFXConfig2.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.angleCurrentThresholdTime;
+        swerveAngleFXConfig2.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.angleCurrentThreshold;
+        swerveAngleFXConfig2.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.angleCurrentThresholdTime;
 
         /* PID Config */
         swerveAngleFXConfig2.Slot0.kP = Constants.Swerve.angleKP;
@@ -100,8 +100,8 @@ public final class CTREConfigs {
         /* Current Limiting */
         swerveAngleFXConfig3.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.angleEnableCurrentLimit;
         swerveAngleFXConfig3.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-        swerveAngleFXConfig3.CurrentLimits.SupplyCurrentThreshold = Constants.Swerve.angleCurrentThreshold;
-        swerveAngleFXConfig3.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.angleCurrentThresholdTime;
+        swerveAngleFXConfig3.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.angleCurrentThreshold;
+        swerveAngleFXConfig3.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.angleCurrentThresholdTime;
 
         /* PID Config */
         swerveAngleFXConfig3.Slot0.kP = Constants.Swerve.angleKP;
@@ -121,8 +121,9 @@ public final class CTREConfigs {
         /* Current Limiting */
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.driveEnableCurrentLimit;
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.driveCurrentLimit;
-        swerveDriveFXConfig.CurrentLimits.SupplyCurrentThreshold = Constants.Swerve.driveCurrentThreshold;
-        swerveDriveFXConfig.CurrentLimits.SupplyTimeThreshold = Constants.Swerve.driveCurrentThresholdTime;
+        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.driveCurrentThreshold;
+        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.driveCurrentThresholdTime;
+
 
         /* PID Config */
         swerveDriveFXConfig.Slot0.kP = Constants.Swerve.driveKP;

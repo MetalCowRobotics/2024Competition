@@ -1,9 +1,9 @@
 package frc.robot.autos;
 
-import frc.lib14.InstantCommandBase;
+import frc.lib14.InstantCommand;
 import frc.robot.subsystems.Swerve;
 
-public class ResetModulesToAbsolute extends InstantCommandBase{
+public class ResetModulesToAbsolute extends InstantCommand{
     Swerve s_swerve;
     public ResetModulesToAbsolute(Swerve m_swerve){
         s_swerve = m_swerve;

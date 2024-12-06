@@ -1,11 +1,11 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib14.InstantCommandBase;
+import frc.lib14.InstantCommand;
 import frc.robot.subsystems.Swerve;
 
 /*This command resets the gyro to make it the starting position. */
-public class ZeroGyro extends InstantCommandBase{
+public class ZeroGyro extends InstantCommand{
     Swerve m_swerve;
     public ZeroGyro(Swerve s_swerve){
         m_swerve = s_swerve;

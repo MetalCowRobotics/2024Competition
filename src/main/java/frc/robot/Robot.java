@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -25,9 +26,9 @@ import frc.robot.subsystems.*;
 import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.config.PIDConstants;
+// import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.auto.NamedCommands;
 
 /*
@@ -104,42 +105,42 @@ public class Robot extends TimedRobot {
     // IMPORTANT NOTE FOR AUTOS IF YOU MAKE AN AUTO THAT BREAKS IT IS ON THE ROBO RIO UNTELL YOU REFORMAT IT 
     // SO EVAN IF YOU FIX THE CODE IT WONT WORK TELL YOU REFORMAT THE ROBO RIO
     SmartDashboard.putNumber("Shooter Far Target", Constants.JointConstants.shooterFar);
-    AutoBuilder.configureHolonomic(
-            s_Swerve::getPose,
-            s_Swerve::resetPose,
-            s_Swerve::getRobotRelativeSpeeds,
-            s_Swerve::driveRobotRelative,
-            new HolonomicPathFollowerConfig(
-                new PIDConstants(0.0, 0.0, 0.0),
-                new PIDConstants(0.0, 0.0, 0.1),
-                3,
-                0.4,
-                new ReplanningConfig(true,true)
-            ),
-            () -> {
-                var alliance = DriverStation.getAlliance();
-                return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
-            },
-             s_Swerve
-        );
-          NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNotePosition"));
-          // NamedCommands.registerCommand("Shoot mid Pos", new ArmToAngles2("speakerMidPosition"));
-          NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
-          NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
-          NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
-          NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
-          // NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
-          // NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
-          // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
-          NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
-     // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser("Amp");
+  //   AutoBuilder.configureHolonomic(
+  //           s_Swerve::getPose,
+  //           s_Swerve::resetPose,
+  //           s_Swerve::getRobotRelativeSpeeds,
+  //           s_Swerve::driveRobotRelative,
+  //           new HolonomicPathFollowerConfig(
+  //               new PIDConstants(0.0, 0.0, 0.0),
+  //               new PIDConstants(0.0, 0.0, 0.1),
+  //               3,
+  //               0.4,
+  //               new ReplanningConfig(true,true)
+  //           ),
+  //           () -> {
+  //               var alliance = DriverStation.getAlliance();
+  //               return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+  //           },
+  //            s_Swerve
+  //       );
+  //         NamedCommands.registerCommand("Shoot far Pos", new ArmToAngles2("speakerFromNotePosition"));
+  //         // NamedCommands.registerCommand("Shoot mid Pos", new ArmToAngles2("speakerMidPosition"));
+  //         NamedCommands.registerCommand("rest Pos", new ArmToAngles2("restPosition"));
+  //         NamedCommands.registerCommand("Shoot Pos", new ArmToAngles2("speakerPosition"));
+  //         NamedCommands.registerCommand("Intake Pos", new ArmToAngles2("pickupPosition"));
+  //         NamedCommands.registerCommand("Toggle Shooter", new InstantCommand(() -> m_NoteTransitSubsystem.toggleShooter()));
+  //         // NamedCommands.registerCommand("Toggle Intake", new InstantCommand(() -> m_NoteTransitSubsystem.toggleIntake()));
+  //         // NamedCommands.registerCommand("Intake Feed", new InstantCommand(() -> m_NoteTransitSubsystem.quickOuttake()));
+  //         // NamedCommands.registerCommand("Intake Stop", new InstantCommand(() -> m_NoteTransitSubsystem.disableIntake()));
+  //         NamedCommands.registerCommand("Enable Intake", new InstantCommand(() -> m_NoteTransitSubsystem.enableIntake()));
+  //    // Build an auto chooser. This will use Commands.none() as the default option.
+  //   autoChooser = AutoBuilder.buildAutoChooser("Amp");
 
-  //   // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-   // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
+  // //   // Another option that allows you to specify the default auto by its name
+  //   // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+  //  // autoChooser =  AutoBuilder.buildAutoChooser("Red Left Three Note Auto");
 
-  SmartDashboard.putData("Auto Chooser", autoChooser);
+  // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   @Override
@@ -248,12 +249,12 @@ public class Robot extends TimedRobot {
       
     }
 
-    if (operator.getLeftBumperReleased()) {
+    if (operator.getLeftBumperButtonReleased()) {
       m_NoteTransitSubsystem.toggleShooter();
       // if the left bumper is released, the arm and wrist will go to the speaker position
     }
 
-    if (operator.getRightBumperReleased()) {
+    if (operator.getRightBumperButtonReleased()) {
       m_NoteTransitSubsystem.enableIntake();
       LED.runDefault();
     }

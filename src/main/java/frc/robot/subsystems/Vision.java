@@ -11,7 +11,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,17 +30,17 @@ public class Vision extends SubsystemBase {
     public Vision() {
         camera = new PhotonCamera("MicrosoftLifeCamHD-3000");
         camera.setDriverMode(false);
-        cameraPipelineResult = camera.getLatestResult();
-        aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+        cameraPipelineResult = camera.getAllUnreadResults().get(camera.getAllUnreadResults().size() - 1);
+        aprilTagFieldLayout =  AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
         robotToCam = Constants.VisionConstants.robotToCamTranslation;
-        photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.LOWEST_AMBIGUITY, camera, robotToCam);
+        photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.LOWEST_AMBIGUITY, robotToCam);
         bestYaw = 0;
     }
 
     public Optional<EstimatedRobotPose> getPoseEstimate() {
         if (cameraPipelineResult.hasTargets()) {
             SmartDashboard.putBoolean("Bruh", true);
-            return photonPoseEstimator.update();
+            return photonPoseEstimator.update(cameraPipelineResult);
         } else {
             SmartDashboard.putBoolean("Bruh", false);
             return Optional.empty();
@@ -65,7 +64,7 @@ public class Vision extends SubsystemBase {
      * Blue Alliance: 7
      */
     public Translation3d getDistFromScoringTag(){
-        PhotonTrackedTarget x = camera.getLatestResult().getBestTarget();
+        PhotonTrackedTarget x = camera.getAllUnreadResults().get(camera.getAllUnreadResults().size() - 1).getBestTarget();
         //if (camera.getLatestResult().hasTargets()){
         if (x != null) {
             if((x.getFiducialId() == 4) || (x.getFiducialId() == 7) || (x.getFiducialId() == 8) ||(x.getFiducialId() == 3)){
@@ -85,8 +84,8 @@ public class Vision extends SubsystemBase {
     }
 
     public Transform3d getCamToTag(){
-        if (camera.getLatestResult().hasTargets()) {
-            return camera.getLatestResult().getBestTarget().getBestCameraToTarget();
+        if (camera.getAllUnreadResults().get(camera.getAllUnreadResults().size() - 1).hasTargets()) {
+            return camera.getAllUnreadResults().get(camera.getAllUnreadResults().size() - 1).getBestTarget().getBestCameraToTarget();
         } else {
             return new Transform3d();
         }
@@ -95,7 +94,7 @@ public class Vision extends SubsystemBase {
 
 
     public double getYawOfBestTarget() {
-        PhotonTrackedTarget x = camera.getLatestResult().getBestTarget();
+        PhotonTrackedTarget x = camera.getAllUnreadResults().get(camera.getAllUnreadResults().size() - 1).getBestTarget();
         //if (camera.getLatestResult().hasTargets()){
         if (x != null) {
         // if (camera.getLatestResult().hasTargets()) {

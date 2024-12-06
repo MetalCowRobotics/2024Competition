@@ -2,26 +2,38 @@ package frc.robot.subsystems;
 
 import java.text.DecimalFormat;
 
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter {
     private static Shooter instance = new Shooter();
-    private CANSparkMax shooterMotor1;   
-    private CANSparkMax shooterMotor2;  
+    private SparkMax shooterMotor1;   
+    private SparkMax shooterMotor2;  
     private RelativeEncoder shooterEncoder1;
     private RelativeEncoder shooterEncoder2;
     private double speed;
     private boolean shooterEnabled;
 
     private Shooter() {
-        shooterMotor1 = new CANSparkMax(18, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotor2 = new CANSparkMax(52, CANSparkLowLevel.MotorType.kBrushless);
-        shooterMotor1.setInverted(true);
-        shooterMotor2.setInverted(false);
+        shooterMotor1 = new SparkMax(18, SparkLowLevel.MotorType.kBrushless);
+        shooterMotor2 = new SparkMax(52, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig config1 = new SparkMaxConfig();
+        SparkMaxConfig config2 = new SparkMaxConfig();
+
+        config1.inverted(true);
+        config2.inverted(false);
+
+        shooterMotor1.configure(config1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        shooterMotor2.configure(config2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         shooterEncoder1 = shooterMotor1.getEncoder();
         shooterEncoder2 = shooterMotor2.getEncoder();
         speed = 0;
