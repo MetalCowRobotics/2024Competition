@@ -136,7 +136,6 @@ public class NoteTransitSubsystem {
     }
 
     public void toggleIntake(){
-        LED.runDefault();
         m_IntakeSubsystem.setReadyToLift(false);
         if((!isShootingState) || ((isShootingState) && (m_Shooter.getShooterSpunUp()))){
             m_IntakeSubsystem.toggleIntake();

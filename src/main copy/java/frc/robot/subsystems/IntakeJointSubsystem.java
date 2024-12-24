@@ -110,7 +110,7 @@ public class IntakeJointSubsystem {
     public void periodic() {
         boreRawValue = boreEncoder.get();
         boreConvertedValue = boreRawValue * (360);
-        boreConvertedOffsetValue = (boreConvertedValue - 50);
+        boreConvertedOffsetValue = (boreConvertedValue - 106.084371);
         writeStatus();
         
         double speed = 0;

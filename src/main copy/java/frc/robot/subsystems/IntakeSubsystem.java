@@ -5,10 +5,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,10 +20,6 @@ public class IntakeSubsystem {
     private boolean driving = false;
     private boolean readyToLift = false;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
-    private Timer timer = new Timer();
-    private Timer startUp = new Timer();
-    // private double expectedTime = 0.18;
-    private double expectedTime = 0.0;
     private boolean notedetected = false;
     private boolean retractReady = false;
 
@@ -68,7 +62,6 @@ public class IntakeSubsystem {
             stopintake();
             readyToLift = true;
             //intakeMotor.set(0);
-            LED.runOrange();
             alreadyStopped = true;
        }
         if(intakeEnabled)
