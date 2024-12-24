@@ -1,11 +1,11 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.lib14.InstantCommandBase;
+import frc.lib14.InstantCommand;
 import frc.robot.subsystems.NoteTransitSubsystem;
 
 /*This command quickly ejects the note out of the intake */
-public class EjectIntake extends InstantCommandBase{
+public class EjectIntake extends InstantCommand{
     
     public EjectIntake(){
         }

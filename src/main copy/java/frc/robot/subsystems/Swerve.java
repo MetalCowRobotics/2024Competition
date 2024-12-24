@@ -19,12 +19,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
@@ -32,11 +28,6 @@ public class Swerve implements Subsystem{
     public SwerveDrivePoseEstimator swervePoseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    private Vision m_vision;
-    private int lastTargetID;
-    private boolean visionControl;
-    private EstimatedRobotPose visionPose;
-    private boolean visionToggle;
 
     private final double accelerationTime = 0.3;
     private double speedMultiplier = 1;
@@ -66,12 +57,6 @@ public class Swerve implements Subsystem{
         thetaController2.setTolerance(3);
         thetaController.enableContinuousInput(0, 360);
         thetaController2.enableContinuousInput(0, 360);
-        visionToggle = true;
-
-        m_vision = new Vision();
-        lastTargetID = -1;
-        visionControl = false;
-        visionPose = new EstimatedRobotPose(new Pose3d(), 0, null, null);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -118,45 +103,6 @@ public void setDriveOffsets(){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }
-
-    public double getTotalDist(){
-        if((m_vision.getTotalDist()-0.7112) > 0.0){
-            return (m_vision.getTotalDist()-0.7112);
-        }
-        return 0.0;
-    }
-
-    public void driveAuto(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        double xSpeed = translation.getX();
-        double ySpeed = translation.getY();
-        double angularVelocity = rotation;
-        angleHoldingPIDController.setSetpoint(getGyroYaw().getDegrees());
-        SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    xSpeed, 
-                                    ySpeed, 
-                                    angularVelocity, 
-                                    getGyroYaw()
-                                )
-                                : new ChassisSpeeds(
-                                    xSpeed, 
-                                    ySpeed, 
-                                    angularVelocity
-                                )
-                                );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed * speedMultiplier);
-
-        for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-        }
-    }
-
-    // Stops the robot from moving
-    public void stop(){
-        SmartDashboard.putBoolean("stoppedRobot", true);
-        driveAuto(new Translation2d(0,0), 0, true, false);
-    }
            
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -187,10 +133,6 @@ public void setDriveOffsets(){
         return swervePoseEstimator.getEstimatedPosition();
     }
 
-    // public Transform3d distFromTag(){
-    //     return m_vision.getDistFromScoringTag();
-    // }
-
     public ChassisSpeeds getRobotRelativeSpeeds(){
         return new ChassisSpeeds();
     }
@@ -199,14 +141,7 @@ public void setDriveOffsets(){
         Translation2d translation = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
         double rotation = speeds.omegaRadiansPerSecond;
         drive(translation, rotation, false, false);
-        SmartDashboard.putString("bob", "3");
     }
-    // public double getAngleFromTag(){
-    //     return Math.atan2(distFromTag().getY(), distFromTag().getX());
-    // }
-    // public double getAngleFromTag2(){
-    //     return m_vision.getYawOfBestTarget();
-    // }
 
     public void resetPose(Pose2d pose) {
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
@@ -224,16 +159,8 @@ public void setDriveOffsets(){
         swervePoseEstimator.resetPosition(getGyroYaw(), getModulePositions(), new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
-    public void visionToGyro() {
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> swervePoseEstimator.resetPosition(
-            estimatedRobotPose.estimatedPose.toPose2d().getRotation(),
-            getModulePositions(),
-            estimatedRobotPose.estimatedPose.toPose2d()
-        ));
-    }
-
     public Rotation2d getGyroYaw() {
-        return Rotation2d.fromDegrees(gyro.getYaw().getValue());
+        return Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
     }
 
     public void resetModulesToAbsolute(){
@@ -254,23 +181,12 @@ public void setDriveOffsets(){
         speedMultiplier = 1;
     }
 
-    public void enableVisionControl() {
-        visionControl = true;
-    }
-    public void setStop() {
-        speedMultiplier = 0;
-    }
-
     public void setLocationReached(){
         positionReached = true;
     }
 
     public boolean isLocationReached(){
         return positionReached;
-    }
-
-    public void disableVisionControl() {
-        visionControl = false;
     }
 
     public void periodicValues(){
@@ -326,59 +242,32 @@ public void setDriveOffsets(){
             rotation = 0;
         }
 
-        driveAuto(
-            new Translation2d(xCorrection, yCorrection).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation, 
-            true, 
-            false
-        );
     }
 
-    public void visionAlign() {
-        if (visionToggle) {
-            setHeading(new Rotation2d(Math.toDegrees(m_vision.getYawOfBestTarget())));
-        }
-        visionToggle = false;
-        thetaController.setSetpoint(0);
-        double rotation = thetaController.calculate(getPose().getRotation().getDegrees());
+    // public void visionAlign() {
+    //     if (visionToggle) {
+    //         setHeading(new Rotation2d(Math.toDegrees(m_vision.getYawOfBestTarget())));
+    //     }
+    //     visionToggle = false;
+    //     thetaController.setSetpoint(0);
+    //     double rotation = thetaController.calculate(getPose().getRotation().getDegrees());
 
-        if(thetaController.atSetpoint()){
-            rotation = 0;
-        }
+    //     if(thetaController.atSetpoint()){
+    //         rotation = 0;
+    //     }
 
-        driveAuto(
-            new Translation2d(0, 0).times(Constants.Swerve.maxAutoSpeed), 
-            -rotation, 
-            true, 
-            false
-        );
-    }
-
-    public void visionAndPosePeriodic() {
-        m_vision.getPoseEstimate().ifPresent(estimatedRobotPose -> visionPose = estimatedRobotPose);
-
-        SmartDashboard.putNumber("Vision X Pose", visionPose.estimatedPose.getX());
-        SmartDashboard.putNumber("Vision Y Pose", visionPose.estimatedPose.getY());
-
-        swervePoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
-
-        SmartDashboard.putNumber("Vision Angle", visionPose.estimatedPose.toPose2d().getRotation().getDegrees());
-        SmartDashboard.putNumber("Best Target Angle", m_vision.getYawOfBestTarget());
-    }
-
+    //     driveAuto(
+    //         new Translation2d(0, 0).times(Constants.Swerve.maxAutoSpeed), 
+    //         -rotation, 
+    //         true, 
+    //         false
+    //     );
+    // }
     public void periodic(DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        visionAndPosePeriodic();
-        if (visionControl) {
-            // visionDriveToPoint(getPose().getX(), getPose().getY(), 178);
-            visionAlign();
-        }
-        else {
-            teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
-            visionToggle = true;
-        }
+        teleopSwerve(translationSup, strafeSup, rotationSup, robotCentricSup);
+          
         SmartDashboard.putNumber("X Pose", getPose().getX());
         SmartDashboard.putNumber("Y Pose", getPose().getY());
         SmartDashboard.putNumber("Drive Angle", getPose().getRotation().getDegrees());
-        SmartDashboard.putBoolean("Vision Toggle", visionToggle);
     }
 }

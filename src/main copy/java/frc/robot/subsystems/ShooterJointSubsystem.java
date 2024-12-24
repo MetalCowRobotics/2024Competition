@@ -1,20 +1,23 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import java.text.DecimalFormat;
 
-import com.revrobotics.CANSparkLowLevel;
-
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 public class ShooterJointSubsystem {
 
     private static ShooterJointSubsystem instance = new ShooterJointSubsystem();
-    private CANSparkMax shooterJointMotor;
+    private SparkMax shooterJointMotor;
 
     private PIDController pidController;
 
@@ -27,7 +30,6 @@ public class ShooterJointSubsystem {
 
     private double nominalVoltage = 12.6;
     private double rampTime = 0.250;
-    private CANSparkMax.IdleMode idleMode = CANSparkMax.IdleMode.kBrake;
     private int stallCurrentLimit = 30;
     private int freeCurrentLimit = 30;
     private double maxRPM = 6200;
@@ -41,13 +43,20 @@ public class ShooterJointSubsystem {
 
     private ShooterJointSubsystem() {
         dFormatter = new DecimalFormat("#.#");
-        shooterJointMotor = new CANSparkMax(17, CANSparkLowLevel.MotorType.kBrushless);
-        shooterJointMotor.enableVoltageCompensation(nominalVoltage);
-        shooterJointMotor.setOpenLoopRampRate(rampTime);
-        shooterJointMotor.setClosedLoopRampRate(rampTime);
-        shooterJointMotor.setInverted(false);
-        shooterJointMotor.setIdleMode(idleMode);
-        shooterJointMotor.setSmartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+        shooterJointMotor = new SparkMax(17, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig config = new SparkMaxConfig();
+
+        config.voltageCompensation(nominalVoltage);
+
+        config.openLoopRampRate(rampTime);
+        config.closedLoopRampRate(rampTime);
+        config.inverted(false);
+        config.idleMode(IdleMode.kBrake);
+        config.smartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+
+        shooterJointMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
         boreInput = new DigitalInput(2);
         boreEncoder = new DutyCycleEncoder(boreInput);
         maxSetpoint = maxRPM / 5820;
@@ -83,7 +92,7 @@ public class ShooterJointSubsystem {
     }
 
     public double getCurrentAngle() {
-        return -((boreEncoder.getAbsolutePosition() * 360) - 150);
+        return -((boreEncoder.get() * 360) - 150);
     }
 
     public void setTarget(double target) {

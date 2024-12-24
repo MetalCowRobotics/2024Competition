@@ -1,17 +1,18 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem {
     private static IntakeSubsystem instance = new IntakeSubsystem();
-    private CANSparkMax intakeMotor;
+    private SparkMax intakeMotor;
     private boolean intakeEnabled;
     private double speed = 0;
     private DigitalInput intakeSensor;
@@ -19,16 +20,18 @@ public class IntakeSubsystem {
     private boolean driving = false;
     private boolean readyToLift = false;
     private PowerDistribution pdp = new PowerDistribution(0,ModuleType.kCTRE);
-    private Timer timer = new Timer();
-    private Timer startUp = new Timer();
-    // private double expectedTime = 0.18;
-    private double expectedTime = 0.0;
     private boolean notedetected = false;
     private boolean retractReady = false;
 
     private IntakeSubsystem() {
-        intakeMotor = new CANSparkMax(15, CANSparkLowLevel.MotorType.kBrushless);
-        intakeMotor.setInverted(true);
+        intakeMotor = new SparkMax(15, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig config = new SparkMaxConfig();
+
+        config.inverted(true);
+
+        intakeMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
         intakeSensor = new DigitalInput(1);
         intakeEnabled = false;
         alreadyStopped = false;
@@ -59,7 +62,6 @@ public class IntakeSubsystem {
             stopintake();
             readyToLift = true;
             //intakeMotor.set(0);
-            LED.runOrange();
             alreadyStopped = true;
        }
         if(intakeEnabled)
